@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Product - POS System{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4>{{ 'Edit' if product else 'Add' }} Product</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Product Name</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="name" 
+                                   name="name" 
+                                   value="{{ product.name if product else '' }}"
+                                   required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" 
+                                      id="description" 
+                                      name="description" 
+                                      rows="3">{{ product.description if product else '' }}</textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="price" class="form-label">Price (UGX)</label>
+                            <input type="number" 
+                                   class="form-control" 
+                                   id="price" 
+                                   name="price" 
+                                   step="100" 
+                                   min="0" 
+                                   value="{{ product.price if product else '' }}"
+                                   required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="unit" class="form-label">Unit</label>
+                            <select class="form-control" id="unit" name="unit" required>
+                                <option value="">Select unit</option>
+                                <option value="kgs" {% if product and product.unit == 'kgs' %}selected{% endif %}>Kilograms (kgs)</option>
+                                <option value="ltrs" {% if product and product.unit == 'ltrs' %}selected{% endif %}>Liters (ltrs)</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="stock" class="form-label">Current Stock</label>
+                            <input type="number" 
+                                   class="form-control" 
+                                   id="stock" 
+                                   name="stock" 
+                                   step="0.01" 
+                                   min="0" 
+                                   value="{{ "%.2f"|format(product.stock) if product else '0.00' }}"
+                                   required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="max_stock" class="form-label">Maximum Stock Capacity</label>
+                            <input type="number" 
+                                   class="form-control" 
+                                   id="max_stock" 
+                                   name="max_stock" 
+                                   step="0.01" 
+                                   min="0" 
+                                   value="{{ "%.2f"|format(product.max_stock) if product else '' }}"
+                                   required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="reorder_point" class="form-label">Reorder Point</label>
+                            <input type="number" 
+                                   class="form-control" 
+                                   id="reorder_point" 
+                                   name="reorder_point" 
+                                   step="0.01" 
+                                   min="0" 
+                                   value="{{ "%.2f"|format(product.reorder_point) if product else '' }}"
+                                   required>
+                            <div class="form-text">Stock level at which you want to be alerted to reorder</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Category</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="category" 
+                                   name="category" 
+                                   value="{{ product.category if product else '' }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="image_url" class="form-label">Image URL</label>
+                            <input type="url" 
+                                   class="form-control" 
+                                   id="image_url" 
+                                   name="image_url" 
+                                   value="{{ product.image_url if product else '' }}">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">{{ 'Update' if product else 'Add' }} Product</button>
+                        <a href="{{ url_for('admin') }}" class="btn btn-secondary">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Validate that reorder point is less than max stock
+    const maxStockInput = document.getElementById('max_stock');
+    const reorderPointInput = document.getElementById('reorder_point');
+    
+    function validateStockLevels() {
+        const maxStock = parseFloat(maxStockInput.value);
+        const reorderPoint = parseFloat(reorderPointInput.value);
+        
+        if (reorderPoint >= maxStock) {
+            reorderPointInput.setCustomValidity('Reorder point must be less than maximum stock');
+        } else {
+            reorderPointInput.setCustomValidity('');
+        }
+    }
+    
+    maxStockInput.addEventListener('input', validateStockLevels);
+    reorderPointInput.addEventListener('input', validateStockLevels);
+    
+    // Initial validation
+    validateStockLevels();
+});
+</script>
+{% endblock %} 

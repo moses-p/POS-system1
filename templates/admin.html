@@ -1,0 +1,275 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2>Admin Dashboard</h2>
+        </div>
+        <div class="col text-end">
+            <a href="{{ url_for('add_product') }}" class="btn btn-primary me-2">
+                <i class="fas fa-plus"></i> Add New Product
+            </a>
+            <a href="{{ url_for('reports') }}" class="btn btn-success">
+                <i class="fas fa-chart-line"></i> Advanced Reports
+            </a>
+        </div>
+    </div>
+
+    <!-- Sales Chart -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="card-title mb-0">Daily Sales Overview (Last 7 Days)</h5>
+        </div>
+        <div class="card-body">
+            <canvas id="salesChart" 
+                    data-dates='{{ dates | tojson | safe }}'
+                    data-sales='{{ sales_data | tojson | safe }}'></canvas>
+        </div>
+    </div>
+
+    <!-- Product Statistics -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Today's Total Sales</h5>
+                    <h2 class="card-text">UGX {{ "%.2f"|format(today_sales) }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Products</h5>
+                    <h2 class="card-text">{{ total_products }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Low Stock Products</h5>
+                    <h2 class="card-text">{{ low_stock_products }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Out of Stock</h5>
+                    <h2 class="card-text">{{ out_of_stock_products }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Stock Movements -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="card-title mb-0">Recent Stock Movements</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Type</th>
+                            <th>Quantity</th>
+                            <th>Remaining Stock</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for movement in recent_movements %}
+                        <tr>
+                            <td>{{ movement.product.name }}</td>
+                            <td>{{ movement.type }}</td>
+                            <td>{{ movement.quantity }} {{ movement.product.unit }}</td>
+                            <td>{{ movement.remaining_stock }} {{ movement.product.unit }}</td>
+                            <td>{{ movement.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Management Section -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="card-title mb-0">Product Management</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Stock Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                        <tr>
+                            <td>{{ product.name }}</td>
+                            <td>{{ product.category }}</td>
+                            <td>
+                                <div class="input-group">
+                                    <input type="number" class="form-control form-control-sm" value="{{ product.price }}" id="price-{{ product.id }}" style="max-width: 100px;">
+                                    <button class="btn btn-sm btn-outline-secondary" data-product-id="{{ product.id }}" onclick="updatePrice(this.getAttribute('data-product-id'))">Update</button>
+                                </div>
+                            </td>
+                            <td>{{ "%.2f"|format(product.stock) }} {{ product.unit }}</td>
+                            <td>
+                                {% if product.stock_status == 'low' %}
+                                <span class="badge bg-danger">Low Stock</span>
+                                {% elif product.stock_status == 'high' %}
+                                <span class="badge bg-success">High Stock</span>
+                                {% else %}
+                                <span class="badge bg-primary">Normal</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{{ url_for('edit_product', product_id=product.id) }}" class="btn btn-sm btn-primary">Edit</a>
+                                    <a href="{{ url_for('restock_product', product_id=product.id) }}" class="btn btn-sm btn-success">Restock</a>
+                                    <a href="{{ url_for('price_history', product_id=product.id) }}" class="btn btn-sm btn-info">Price History</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Users -->
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">Admin Users</h5>
+            <a href="{{ url_for('create_admin') }}" class="btn btn-primary btn-sm">
+                <i class="fas fa-user-plus"></i> Add Admin User
+            </a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for admin in admin_users %}
+                        <tr>
+                            <td>{{ admin.username }}</td>
+                            <td>{{ admin.email }}</td>
+                            <td>
+                                {% if admin.id != current_user.id %}
+                                <button class="btn btn-danger btn-sm">Delete</button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const canvas = document.getElementById('salesChart');
+    const dates = JSON.parse(canvas.dataset.dates);
+    const salesData = JSON.parse(canvas.dataset.sales);
+    
+    // Destroy any existing chart
+    if (window.salesChart && typeof window.salesChart.destroy === 'function') {
+        window.salesChart.destroy();
+    }
+    
+    const ctx = canvas.getContext('2d');
+    window.salesChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: dates,
+            datasets: [{
+                label: 'Daily Sales (UGX)',
+                data: salesData,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Amount (UGX)'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Date'
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return 'UGX ' + context.parsed.y.toFixed(2);
+                        }
+                    }
+                }
+            }
+        }
+    });
+});
+
+// Function to update product price
+function updatePrice(productId) {
+    const priceInput = document.getElementById(`price-${productId}`);
+    const newPrice = priceInput.value;
+    
+    if (!newPrice || isNaN(newPrice) || parseFloat(newPrice) <= 0) {
+        alert('Please enter a valid price');
+        return;
+    }
+    
+    // Create a form and submit it
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = `/quick_price_update/${productId}`;
+    
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'price';
+    input.value = newPrice;
+    
+    form.appendChild(input);
+    document.body.appendChild(form);
+    form.submit();
+}
+</script>
+{% endblock %}
+{% endblock %} 

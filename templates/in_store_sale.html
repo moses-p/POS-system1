@@ -1,0 +1,609 @@
+{% extends "base.html" %}
+
+{% block title %}In-Store Sale{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Online Orders Alert -->
+    <div id="onlineOrdersAlert" class="alert alert-warning alert-dismissible fade d-none" role="alert">
+        <i class="fas fa-bell me-2"></i>
+        <strong>New Online Orders!</strong> <span id="onlineOrderCount">0</span> order(s) waiting to be processed.
+        <button type="button" class="btn btn-sm btn-primary ms-3" data-bs-toggle="modal" data-bs-target="#onlineOrdersModal">
+            View Orders
+        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    
+    <div class="row mb-3">
+        <div class="col">
+            <h2>Create In-Store Sale</h2>
+        </div>
+    </div>
+    
+    <form method="POST" action="{{ url_for('in_store_sale') }}" id="saleForm">
+        <!-- First row: Customer Info -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card" id="customerInfoCard">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Customer Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="customer_name" class="form-label">Customer Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="customer_name" name="customer_name" placeholder="Walk-in Customer" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="customer_phone" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                <input type="tel" class="form-control" id="customer_phone" name="customer_phone" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="customer_email" class="form-label">Email (Optional)</label>
+                                <input type="email" class="form-control" id="customer_email" name="customer_email">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="customer_address" class="form-label">Address (Optional)</label>
+                                <textarea class="form-control" id="customer_address" name="customer_address" rows="1"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Second row: Products and Order Summary side by side -->
+        <div class="row mb-4">
+            <!-- Products section (left side) -->
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Products</h5>
+                            <div class="input-group" style="width: 300px;">
+                                <input type="text" class="form-control" id="productSearch" placeholder="Search products...">
+                                <button class="btn btn-outline-secondary" type="button">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row row-cols-1 row-cols-md-3 g-3">
+                            {% for product in products %}
+                            <div class="col product-item" data-name="{{ product.name|lower }}" data-category="{{ product.category|lower if product.category else '' }}">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h6 class="card-title">{{ product.name }}</h6>
+                                        <p class="card-text">
+                                            <small class="text-muted">{{ product.category }}</small><br>
+                                            <strong>Price: {{ "%.2f"|format(product.price) }} UGX</strong><br>
+                                            <small>In Stock: {{ "%.2f"|format(product.stock) }} {{ product.unit }}</small>
+                                        </p>
+                                        <div class="input-group mt-2">
+                                            <span class="input-group-text">Qty</span>
+                                            <input type="number" class="form-control" min="0" max="{{ product.stock }}" 
+                                                   name="quantity-{{ product.id }}" 
+                                                   id="quantity-{{ product.id }}" 
+                                                   value="0"
+                                                   data-product-id="{{ product.id }}"
+                                                   data-product-name="{{ product.name }}"
+                                                   data-product-price="{{ product.price }}"
+                                                   data-product-stock="{{ product.stock }}"
+                                                   onchange="updateOrderSummary(this)">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Order Summary section (right side) -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Order Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table" id="orderSummary">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Qty</th>
+                                    <th>Price</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Order items will be added dynamically -->
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" class="text-end"><strong>Grand Total:</strong></td>
+                                    <td><strong id="grandTotal">0.00 UGX</strong></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary" id="completeSaleBtn" disabled>Complete Sale</button>
+                        <button type="button" class="btn btn-secondary" onclick="resetForm()">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Customer Information Modal -->
+<div class="modal fade" id="customerInfoModal" tabindex="-1" aria-labelledby="customerInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="customerInfoModalLabel">Enter Customer Information</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Please enter customer information to proceed with the order.</p>
+                <div class="mb-3">
+                    <label for="modal_customer_name" class="form-label">Customer Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="modal_customer_name">
+                </div>
+                <div class="mb-3">
+                    <label for="modal_customer_phone" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                    <input type="tel" class="form-control" id="modal_customer_phone">
+                </div>
+                <div class="mb-3">
+                    <label for="modal_customer_email" class="form-label">Email (Optional)</label>
+                    <input type="email" class="form-control" id="modal_customer_email">
+                </div>
+                <div class="mb-3">
+                    <label for="modal_customer_address" class="form-label">Address (Optional)</label>
+                    <textarea class="form-control" id="modal_customer_address" rows="2"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveCustomerInfo()">Save and Continue</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Online Orders Modal -->
+<div class="modal fade" id="onlineOrdersModal" tabindex="-1" aria-labelledby="onlineOrdersModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="onlineOrdersModalLabel">Pending Online Orders</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-striped" id="onlineOrdersTable">
+                        <thead>
+                            <tr>
+                                <th>Order #</th>
+                                <th>Customer</th>
+                                <th>Contact</th>
+                                <th>Address</th>
+                                <th>Date</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Orders will be added dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="noOrdersMessage" class="text-center py-3 d-none">
+                    <p>No pending online orders.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="refreshOrdersBtn" onclick="refreshOrders()">
+                    <i class="fas fa-sync-alt me-1"></i> Refresh
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Product search functionality
+    document.getElementById('productSearch').addEventListener('keyup', function() {
+        const searchTerm = this.value.toLowerCase();
+        const productItems = document.querySelectorAll('.product-item');
+        
+        productItems.forEach(item => {
+            const productName = item.dataset.name;
+            const productCategory = item.dataset.category;
+            
+            if (productName.includes(searchTerm) || productCategory.includes(searchTerm)) {
+                item.style.display = '';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+    
+    // Check for pending online orders
+    let lastOrderCount = 0;
+    // Fix the notification sound reference to use the correct file extension (.wav instead of .mp3)
+    let notificationSound = new Audio('/static/sounds/notification.wav');
+    
+    // Add sound when adding items to cart
+    function playAddToCartSound() {
+        try {
+            // Play a short beep sound when adding items
+            const beep = new Audio('/static/sounds/notification.wav');
+            beep.volume = 0.5; // Lower volume for adding items
+            beep.play();
+        } catch(e) {
+            console.error("Error playing sound:", e);
+        }
+    }
+    
+    // Play a more significant alarm for new orders
+    function playNewOrderAlarm() {
+        try {
+            // Play notification sound 3 times for emphasis
+            notificationSound.volume = 1.0; // Full volume
+            notificationSound.play();
+            
+            // Flash the notification alert
+            const alertElement = document.getElementById('onlineOrdersAlert');
+            if (alertElement) {
+                // Flash the alert 5 times
+                let flashCount = 0;
+                const flashInterval = setInterval(() => {
+                    alertElement.style.opacity = alertElement.style.opacity === '0.3' ? '1' : '0.3';
+                    flashCount++;
+                    if (flashCount >= 10) {
+                        clearInterval(flashInterval);
+                        alertElement.style.opacity = '1';
+                    }
+                }, 300);
+                
+                // Also open the modal automatically if enabled
+                if (localStorage.getItem('autoOpenNewOrders') === 'true') {
+                    const orderModal = new bootstrap.Modal(document.getElementById('onlineOrdersModal'));
+                    orderModal.show();
+                }
+            }
+        } catch(e) {
+            console.error("Error playing notification sound:", e);
+        }
+    }
+    
+    // Update order summary when quantity changes
+    function updateOrderSummary(input) {
+        const quantity = parseInt(input.value) || 0;
+        const productId = input.dataset.productId;
+        const productName = input.dataset.productName;
+        const productPrice = parseFloat(input.dataset.productPrice);
+        const productStock = parseFloat(input.dataset.productStock);
+        
+        // Validate quantity against stock
+        if (quantity > productStock) {
+            alert(`Only ${productStock} units available for ${productName}`);
+            input.value = productStock;
+            return;
+        }
+        
+        // Get or create row in summary table
+        let row = document.getElementById(`summary-row-${productId}`);
+        const tbody = document.querySelector('#orderSummary tbody');
+        
+        if (quantity <= 0) {
+            // Remove row if quantity is 0
+            if (row) {
+                row.remove();
+            }
+        } else {
+            // Calculate total for this item
+            const total = quantity * productPrice;
+            
+            if (!row) {
+                // Create new row
+                row = document.createElement('tr');
+                row.id = `summary-row-${productId}`;
+                row.innerHTML = `
+                    <td>${productName}</td>
+                    <td>${quantity}</td>
+                    <td>${productPrice.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                    <td>${total.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                `;
+                tbody.appendChild(row);
+                
+                // Play sound when adding a new product
+                playAddToCartSound();
+                
+                // Show customer info modal immediately when adding a new product
+                if (!hasCustomerInfo()) {
+                    const customerInfoModal = new bootstrap.Modal(document.getElementById('customerInfoModal'));
+                    customerInfoModal.show();
+                }
+            } else {
+                // Update existing row
+                row.innerHTML = `
+                    <td>${productName}</td>
+                    <td>${quantity}</td>
+                    <td>${productPrice.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                    <td>${total.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                `;
+            }
+        }
+        
+        // Update grand total
+        updateGrandTotal();
+        
+        // Check if any products are in the cart
+        const hasProducts = document.querySelectorAll('#orderSummary tbody tr').length > 0;
+        
+        // Enable or disable the Complete Sale button
+        document.getElementById('completeSaleBtn').disabled = !hasProducts || !hasCustomerInfo();
+    }
+    
+    // Check if customer info is filled
+    function hasCustomerInfo() {
+        const name = document.getElementById('customer_name').value.trim();
+        const phone = document.getElementById('customer_phone').value.trim();
+        return name !== '' && phone !== '';
+    }
+    
+    // Save customer info from modal to the form
+    function saveCustomerInfo() {
+        const modalName = document.getElementById('modal_customer_name').value.trim();
+        const modalPhone = document.getElementById('modal_customer_phone').value.trim();
+        const modalEmail = document.getElementById('modal_customer_email').value.trim();
+        const modalAddress = document.getElementById('modal_customer_address').value.trim();
+        
+        if (modalName === '' || modalPhone === '') {
+            alert('Please enter customer name and phone number.');
+            return;
+        }
+        
+        // Transfer values to the main form
+        document.getElementById('customer_name').value = modalName;
+        document.getElementById('customer_phone').value = modalPhone;
+        document.getElementById('customer_email').value = modalEmail;
+        document.getElementById('customer_address').value = modalAddress;
+        
+        // Highlight the customer info section
+        document.getElementById('customerInfoCard').classList.add('border-success');
+        setTimeout(() => {
+            document.getElementById('customerInfoCard').classList.remove('border-success');
+        }, 2000);
+        
+        // Close the modal
+        bootstrap.Modal.getInstance(document.getElementById('customerInfoModal')).hide();
+        
+        // Enable the Complete Sale button
+        document.getElementById('completeSaleBtn').disabled = false;
+    }
+    
+    // Form validation before submission
+    document.getElementById('saleForm').addEventListener('submit', function(event) {
+        const hasProducts = document.querySelectorAll('#orderSummary tbody tr').length > 0;
+        
+        if (!hasProducts) {
+            event.preventDefault();
+            alert('Please add at least one product to the order.');
+            return;
+        }
+        
+        if (!hasCustomerInfo()) {
+            event.preventDefault();
+            const customerInfoModal = new bootstrap.Modal(document.getElementById('customerInfoModal'));
+            customerInfoModal.show();
+            return;
+        }
+    });
+    
+    // Calculate and update grand total
+    function updateGrandTotal() {
+        let grandTotal = 0;
+        const rows = document.querySelectorAll('#orderSummary tbody tr');
+        
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            const rowTotal = parseFloat(cells[3].textContent.replace(/,/g, ''));
+            grandTotal += rowTotal;
+        });
+        
+        document.getElementById('grandTotal').textContent = grandTotal.toLocaleString('en-US', {minimumFractionDigits: 2}) + ' UGX';
+    }
+    
+    // Reset the form
+    function resetForm() {
+        const quantityInputs = document.querySelectorAll('input[type="number"]');
+        quantityInputs.forEach(input => {
+            input.value = 0;
+        });
+        
+        document.querySelector('#orderSummary tbody').innerHTML = '';
+        document.getElementById('grandTotal').textContent = '0.00 UGX';
+        
+        // Clear customer info
+        document.getElementById('customer_name').value = '';
+        document.getElementById('customer_phone').value = '';
+        document.getElementById('customer_email').value = '';
+        document.getElementById('customer_address').value = '';
+        
+        // Disable the Complete Sale button
+        document.getElementById('completeSaleBtn').disabled = true;
+    }
+    
+    function refreshOrders() {
+        // Add visual feedback during refresh
+        const refreshBtn = document.getElementById('refreshOrdersBtn');
+        const originalText = refreshBtn.innerHTML;
+        
+        refreshBtn.disabled = true;
+        refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Refreshing...';
+        
+        // Clear the table while refreshing
+        document.querySelector('#onlineOrdersTable tbody').innerHTML = '';
+        
+        // Call API with a timeout to ensure UI feedback
+        fetch('/api/pending_orders')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Update the display with new data
+                updateOrdersDisplay(data);
+                
+                // Flash feedback for successful refresh
+                refreshBtn.innerHTML = '<i class="fas fa-check me-1"></i> Updated!';
+                setTimeout(() => {
+                    refreshBtn.innerHTML = originalText;
+                    refreshBtn.disabled = false;
+                }, 1000);
+            })
+            .catch(error => {
+                console.error('Error refreshing orders:', error);
+                // Show error in the button
+                refreshBtn.innerHTML = '<i class="fas fa-exclamation-triangle me-1"></i> Failed!';
+                
+                // Display error message in table
+                const tbody = document.querySelector('#onlineOrdersTable tbody');
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="text-center text-danger">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            Failed to refresh orders. Please try again.
+                        </td>
+                    </tr>
+                `;
+                
+                setTimeout(() => {
+                    refreshBtn.innerHTML = originalText;
+                    refreshBtn.disabled = false;
+                }, 2000);
+            });
+    }
+    
+    // Separate function to update the orders display
+    function updateOrdersDisplay(data) {
+        const orderCount = data.count;
+        document.getElementById('onlineOrderCount').textContent = orderCount;
+        
+        if (orderCount > 0) {
+            document.getElementById('onlineOrdersAlert').classList.add('show');
+            document.getElementById('onlineOrdersAlert').classList.remove('d-none');
+            
+            // If there are new orders since last check, play sound
+            if (orderCount > lastOrderCount) {
+                playNewOrderAlarm();
+            }
+            
+            // Populate the orders table
+            const tbody = document.querySelector('#onlineOrdersTable tbody');
+            tbody.innerHTML = '';
+            
+            data.orders.forEach(order => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>#${order.id}</td>
+                    <td>${order.customer_name}</td>
+                    <td>
+                        <strong>Phone:</strong> ${order.customer_phone}<br>
+                        <strong>Email:</strong> ${order.customer_email || 'N/A'}
+                    </td>
+                    <td>${order.customer_address || 'N/A'}</td>
+                    <td>${order.order_date}</td>
+                    <td>${order.items_count} item(s)</td>
+                    <td>${order.total_amount.toLocaleString('en-US', {minimumFractionDigits: 2})} UGX</td>
+                    <td>
+                        <a href="/receipt/${order.id}" class="btn btn-sm btn-info" target="_blank">View</a>
+                        <button onclick="markOrderProcessed(${order.id})" class="btn btn-sm btn-success">Mark Processed</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            document.getElementById('noOrdersMessage').classList.add('d-none');
+        } else {
+            document.getElementById('onlineOrdersAlert').classList.remove('show');
+            document.getElementById('onlineOrdersAlert').classList.add('d-none');
+            document.getElementById('noOrdersMessage').classList.remove('d-none');
+            document.querySelector('#onlineOrdersTable tbody').innerHTML = '';
+        }
+        
+        lastOrderCount = orderCount;
+    }
+    
+    function checkOnlineOrders() {
+        fetch('/api/pending_orders')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                updateOrdersDisplay(data);
+            })
+            .catch(error => {
+                console.error('Error checking online orders:', error);
+                // Don't show error in the alert area during automatic checks
+            });
+    }
+    
+    // Check for online orders on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        checkOnlineOrders();
+        
+        // Check for new orders more frequently (every 20 seconds) for better responsiveness
+        setInterval(checkOnlineOrders, 20000);
+        
+        // Prefill modal fields when shown
+        document.getElementById('customerInfoModal').addEventListener('show.bs.modal', function() {
+            document.getElementById('modal_customer_name').value = document.getElementById('customer_name').value;
+            document.getElementById('modal_customer_phone').value = document.getElementById('customer_phone').value;
+            document.getElementById('modal_customer_email').value = document.getElementById('customer_email').value;
+            document.getElementById('modal_customer_address').value = document.getElementById('customer_address').value;
+        });
+    });
+    
+    // Add the markOrderProcessed function to the script section
+    function markOrderProcessed(orderId) {
+        if (confirm(`Are you sure you want to mark order #${orderId} as processed?`)) {
+            fetch(`/mark_order_processed/${orderId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show success message
+                    alert(data.message);
+                    // Refresh the orders list
+                    refreshOrders();
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error marking order as processed:', error);
+                alert('An error occurred while processing the order.');
+            });
+        }
+    }
+</script>
+{% endblock %} 

@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+
+{% block title %}My Sales{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-3">
+        <div class="col-md-8">
+            <h2>My Sales History</h2>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="{{ url_for('in_store_sale') }}" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>New Sale
+            </a>
+        </div>
+    </div>
+
+    <!-- Sales Overview -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-shopping-cart fa-2x text-primary"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="card-title">Total Orders</h5>
+                            <h3 class="mb-0">{{ orders|length }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-money-bill-wave fa-2x text-success"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="card-title">Total Sales</h5>
+                            <h3 class="mb-0">{{ total_sales|round(2) }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-cash-register fa-2x text-warning"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="card-title">In-Store</h5>
+                            <h3 class="mb-0">{{ in_store_count }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-globe fa-2x text-info"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="card-title">Online</h5>
+                            <h3 class="mb-0">{{ online_count }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Orders List -->
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Sales History</h5>
+                <div class="input-group" style="width: 300px;">
+                    <input type="text" class="form-control" id="orderSearch" placeholder="Search orders...">
+                    <button class="btn btn-outline-secondary" type="button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            {% if orders %}
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>Order #</th>
+                                <th>Date</th>
+                                <th>Customer</th>
+                                <th>Type</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                            <tr class="order-row" data-customer="{{ order.customer_name|lower if order.customer_name else 'unknown' }}">
+                                <td>{{ order.id }}</td>
+                                <td>{{ order.order_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td>
+                                    {% if order.customer_name %}
+                                        {{ order.customer_name }}
+                                    {% elif order.customer %}
+                                        {{ order.customer.username }}
+                                    {% else %}
+                                        Unknown
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if order.order_type == 'in-store' %}
+                                        <span class="badge bg-primary">In-Store</span>
+                                    {% elif order.order_type == 'online' %}
+                                        <span class="badge bg-info">Online</span>
+                                    {% elif order.order_type == 'offline-sync' %}
+                                        <span class="badge bg-warning">Offline Sync</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ order.order_type }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ order.items|length }}</td>
+                                <td>{{ order.total_amount|round(2) }}</td>
+                                <td>
+                                    {% if order.status == 'pending' %}
+                                        <span class="badge bg-warning">Pending</span>
+                                    {% elif order.status == 'completed' %}
+                                        <span class="badge bg-success">Completed</span>
+                                    {% elif order.status == 'cancelled' %}
+                                        <span class="badge bg-danger">Cancelled</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ order.status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="{{ url_for('print_receipt', order_id=order.id) }}" class="btn btn-primary" target="_blank">
+                                            <i class="fas fa-receipt"></i>
+                                        </a>
+                                        {% if order.status == 'pending' %}
+                                            <button type="button" class="btn btn-success mark-completed" data-order-id="{{ order.id }}">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    <p>You haven't made any sales yet. Start by creating a new in-store sale.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Order search functionality
+    document.getElementById('orderSearch').addEventListener('keyup', function() {
+        const searchTerm = this.value.toLowerCase();
+        const orderRows = document.querySelectorAll('.order-row');
+        
+        orderRows.forEach(row => {
+            let matchFound = false;
+            
+            // Search in all cells
+            row.querySelectorAll('td').forEach(cell => {
+                if (cell.textContent.toLowerCase().includes(searchTerm)) {
+                    matchFound = true;
+                }
+            });
+            
+            // Customer data attribute
+            if (row.dataset.customer && row.dataset.customer.includes(searchTerm)) {
+                matchFound = true;
+            }
+            
+            row.style.display = matchFound ? '' : 'none';
+        });
+    });
+    
+    // Mark order as completed
+    document.querySelectorAll('.mark-completed').forEach(button => {
+        button.addEventListener('click', function() {
+            const orderId = this.dataset.orderId;
+            if (confirm('Mark this order as completed?')) {
+                fetch(`/mark_order_processed/${orderId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Order marked as completed!');
+                        location.reload();
+                    } else {
+                        alert('Error: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    alert('An error occurred: ' + error);
+                });
+            }
+        });
+    });
+</script>
+{% endblock %} 

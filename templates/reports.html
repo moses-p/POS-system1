@@ -1,0 +1,752 @@
+{% extends "base.html" %}
+
+{% block title %}Sales Reports{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Sales Reports</h2>
+    
+    <!-- Date Range Selector for Daily Report -->
+    <div class="card mb-4" id="dailyDateSelector">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="startDate" class="form-label">Start Date</label>
+                    <input type="date" class="form-control" id="startDate">
+                </div>
+                <div class="col-md-4">
+                    <label for="endDate" class="form-label">End Date</label>
+                    <input type="date" class="form-control" id="endDate">
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button class="btn btn-primary" id="updateDailyReportBtn">Update Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loading Indicator -->
+    <div id="loadingIndicator" class="text-center d-none mb-4">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2">Loading report data...</p>
+    </div>
+    
+    <!-- Error Alert -->
+    <div id="errorAlert" class="alert alert-danger d-none mb-4">
+        <strong>Error:</strong> <span id="errorMessage"></span>
+    </div>
+    
+    <!-- Report Type Selector -->
+    <ul class="nav nav-tabs" id="reportTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="daily-tab" data-bs-toggle="tab" data-bs-target="#daily" type="button" role="tab" aria-controls="daily" aria-selected="true">Daily</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="weekly-tab" data-bs-toggle="tab" data-bs-target="#weekly" type="button" role="tab" aria-controls="weekly" aria-selected="false">Weekly</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="monthly-tab" data-bs-toggle="tab" data-bs-target="#monthly" type="button" role="tab" aria-controls="monthly" aria-selected="false">Monthly</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="yearly-tab" data-bs-toggle="tab" data-bs-target="#yearly" type="button" role="tab" aria-controls="yearly" aria-selected="false">Yearly</button>
+        </li>
+    </ul>
+    
+    <!-- Report Content -->
+    <div class="tab-content" id="reportTabsContent">
+        <!-- Daily Report -->
+        <div class="tab-pane fade show active" id="daily" role="tabpanel" aria-labelledby="daily-tab">
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title">Daily Sales Report</h5>
+                    <div>
+                        <canvas id="dailyChart" height="300"></canvas>
+                    </div>
+                    <div class="table-responsive mt-4">
+                        <table class="table table-striped" id="dailyTable">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Sales (UGX)</th>
+                                    <th>Profit (UGX)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Daily data will be inserted here -->
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Total</th>
+                                    <th id="dailySalesTotal">0</th>
+                                    <th id="dailyProfitTotal">0</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Weekly Report -->
+        <div class="tab-pane fade" id="weekly" role="tabpanel" aria-labelledby="weekly-tab">
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title">Weekly Sales Report</h5>
+                    <div>
+                        <canvas id="weeklyChart" height="300"></canvas>
+                    </div>
+                    <div class="table-responsive mt-4">
+                        <table class="table table-striped" id="weeklyTable">
+                            <thead>
+                                <tr>
+                                    <th>Week</th>
+                                    <th>Sales (UGX)</th>
+                                    <th>Profit (UGX)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Weekly data will be inserted here -->
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Total</th>
+                                    <th id="weeklySalesTotal">0</th>
+                                    <th id="weeklyProfitTotal">0</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Monthly Report -->
+        <div class="tab-pane fade" id="monthly" role="tabpanel" aria-labelledby="monthly-tab">
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title">Monthly Sales Report</h5>
+                    <div>
+                        <canvas id="monthlyChart" height="300"></canvas>
+                    </div>
+                    <div class="table-responsive mt-4">
+                        <table class="table table-striped" id="monthlyTable">
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Sales (UGX)</th>
+                                    <th>Profit (UGX)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Monthly data will be inserted here -->
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Total</th>
+                                    <th id="monthlySalesTotal">0</th>
+                                    <th id="monthlyProfitTotal">0</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Yearly Report -->
+        <div class="tab-pane fade" id="yearly" role="tabpanel" aria-labelledby="yearly-tab">
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title">Yearly Sales Report</h5>
+                    <div>
+                        <canvas id="yearlyChart" height="300"></canvas>
+                    </div>
+                    <div class="table-responsive mt-4">
+                        <table class="table table-striped" id="yearlyTable">
+                            <thead>
+                                <tr>
+                                    <th>Year</th>
+                                    <th>Sales (UGX)</th>
+                                    <th>Profit (UGX)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Yearly data will be inserted here -->
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Total</th>
+                                    <th id="yearlySalesTotal">0</th>
+                                    <th id="yearlyProfitTotal">0</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Initialize the charts
+    let dailyChart, weeklyChart, monthlyChart, yearlyChart;
+    let reportsLoaded = {
+        daily: false,
+        weekly: false,
+        monthly: false,
+        yearly: false
+    };
+    
+    // Set default dates to last 30 days
+    document.addEventListener('DOMContentLoaded', function() {
+        const today = new Date();
+        const thirtyDaysAgo = new Date(today);
+        thirtyDaysAgo.setDate(today.getDate() - 30);
+        
+        document.getElementById('endDate').valueAsDate = today;
+        document.getElementById('startDate').valueAsDate = thirtyDaysAgo;
+        
+        // Load initial reports
+        loadDailyReport();
+        
+        // Add event listeners for tab changes
+        const tabElements = document.querySelectorAll('button[data-bs-toggle="tab"]');
+        tabElements.forEach(tab => {
+            tab.addEventListener('shown.bs.tab', function(event) {
+                const targetId = event.target.id;
+                
+                if (targetId === 'weekly-tab' && !reportsLoaded.weekly) {
+                    loadWeeklyReport();
+                } else if (targetId === 'monthly-tab' && !reportsLoaded.monthly) {
+                    loadMonthlyReport();
+                } else if (targetId === 'yearly-tab' && !reportsLoaded.yearly) {
+                    loadYearlyReport();
+                }
+            });
+        });
+        
+        // Add event listener for update button
+        document.getElementById('updateDailyReportBtn').addEventListener('click', loadDailyReport);
+    });
+    
+    function showLoading() {
+        document.getElementById('loadingIndicator').classList.remove('d-none');
+        document.getElementById('errorAlert').classList.add('d-none');
+    }
+    
+    function hideLoading() {
+        document.getElementById('loadingIndicator').classList.add('d-none');
+    }
+    
+    function showError(message) {
+        const errorAlert = document.getElementById('errorAlert');
+        document.getElementById('errorMessage').textContent = message;
+        errorAlert.classList.remove('d-none');
+    }
+    
+    function loadDailyReport() {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        
+        if (!startDate || !endDate) {
+            showError('Please select start and end dates');
+            return;
+        }
+        
+        showLoading();
+        
+        fetch(`/api/sales/daily?start_date=${startDate}&end_date=${endDate}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                hideLoading();
+                updateDailyChart(data);
+                updateDailyTable(data);
+                reportsLoaded.daily = true;
+            })
+            .catch(error => {
+                hideLoading();
+                console.error('Error loading daily report:', error);
+                showError(`Failed to load daily report: ${error.message}`);
+            });
+    }
+    
+    function loadWeeklyReport() {
+        showLoading();
+        
+        fetch('/api/sales/weekly')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                hideLoading();
+                updateWeeklyChart(data);
+                updateWeeklyTable(data);
+                reportsLoaded.weekly = true;
+            })
+            .catch(error => {
+                hideLoading();
+                console.error('Error loading weekly report:', error);
+                showError(`Failed to load weekly report: ${error.message}`);
+            });
+    }
+    
+    function loadMonthlyReport() {
+        showLoading();
+        
+        fetch('/api/sales/monthly')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                hideLoading();
+                updateMonthlyChart(data);
+                updateMonthlyTable(data);
+                reportsLoaded.monthly = true;
+            })
+            .catch(error => {
+                hideLoading();
+                console.error('Error loading monthly report:', error);
+                showError(`Failed to load monthly report: ${error.message}`);
+            });
+    }
+    
+    function loadYearlyReport() {
+        showLoading();
+        
+        fetch('/api/sales/yearly')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                hideLoading();
+                updateYearlyChart(data);
+                updateYearlyTable(data);
+                reportsLoaded.yearly = true;
+            })
+            .catch(error => {
+                hideLoading();
+                console.error('Error loading yearly report:', error);
+                showError(`Failed to load yearly report: ${error.message}`);
+            });
+    }
+    
+    function updateDailyChart(data) {
+        const ctx = document.getElementById('dailyChart').getContext('2d');
+        
+        if (dailyChart) {
+            dailyChart.destroy();
+        }
+        
+        dailyChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: data.dates,
+                datasets: [
+                    {
+                        label: 'Sales',
+                        data: data.sales,
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Profit',
+                        data: data.profit,
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += new Intl.NumberFormat('en-US', {
+                                        style: 'currency',
+                                        currency: 'UGX',
+                                        minimumFractionDigits: 0
+                                    }).format(context.parsed.y);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Amount (UGX)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    function updateWeeklyChart(data) {
+        const ctx = document.getElementById('weeklyChart').getContext('2d');
+        
+        if (weeklyChart) {
+            weeklyChart.destroy();
+        }
+        
+        weeklyChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: data.weeks,
+                datasets: [
+                    {
+                        label: 'Sales',
+                        data: data.sales,
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Profit',
+                        data: data.profit,
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += new Intl.NumberFormat('en-US', {
+                                        style: 'currency',
+                                        currency: 'UGX',
+                                        minimumFractionDigits: 0
+                                    }).format(context.parsed.y);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Amount (UGX)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Week'
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    function updateMonthlyChart(data) {
+        const ctx = document.getElementById('monthlyChart').getContext('2d');
+        
+        if (monthlyChart) {
+            monthlyChart.destroy();
+        }
+        
+        monthlyChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: data.months,
+                datasets: [
+                    {
+                        label: 'Sales',
+                        data: data.sales,
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Profit',
+                        data: data.profit,
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += new Intl.NumberFormat('en-US', {
+                                        style: 'currency',
+                                        currency: 'UGX',
+                                        minimumFractionDigits: 0
+                                    }).format(context.parsed.y);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Amount (UGX)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Month'
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    function updateYearlyChart(data) {
+        const ctx = document.getElementById('yearlyChart').getContext('2d');
+        
+        if (yearlyChart) {
+            yearlyChart.destroy();
+        }
+        
+        yearlyChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: data.years,
+                datasets: [
+                    {
+                        label: 'Sales',
+                        data: data.sales,
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Profit',
+                        data: data.profit,
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += new Intl.NumberFormat('en-US', {
+                                        style: 'currency',
+                                        currency: 'UGX',
+                                        minimumFractionDigits: 0
+                                    }).format(context.parsed.y);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Amount (UGX)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Year'
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    function updateDailyTable(data) {
+        const tbody = document.querySelector('#dailyTable tbody');
+        tbody.innerHTML = '';
+        
+        let totalSales = 0;
+        let totalProfit = 0;
+        
+        data.dates.forEach((date, index) => {
+            const sales = data.sales[index];
+            const profit = data.profit[index];
+            
+            totalSales += sales;
+            totalProfit += profit;
+            
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${date}</td>
+                <td>${sales.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                <td>${profit.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+            `;
+            tbody.appendChild(row);
+        });
+        
+        document.getElementById('dailySalesTotal').textContent = totalSales.toLocaleString('en-US', {minimumFractionDigits: 2});
+        document.getElementById('dailyProfitTotal').textContent = totalProfit.toLocaleString('en-US', {minimumFractionDigits: 2});
+    }
+    
+    function updateWeeklyTable(data) {
+        const tbody = document.querySelector('#weeklyTable tbody');
+        tbody.innerHTML = '';
+        
+        let totalSales = 0;
+        let totalProfit = 0;
+        
+        data.weeks.forEach((week, index) => {
+            const sales = data.sales[index];
+            const profit = data.profit[index];
+            
+            totalSales += sales;
+            totalProfit += profit;
+            
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${week}</td>
+                <td>${sales.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                <td>${profit.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+            `;
+            tbody.appendChild(row);
+        });
+        
+        document.getElementById('weeklySalesTotal').textContent = totalSales.toLocaleString('en-US', {minimumFractionDigits: 2});
+        document.getElementById('weeklyProfitTotal').textContent = totalProfit.toLocaleString('en-US', {minimumFractionDigits: 2});
+    }
+    
+    function updateMonthlyTable(data) {
+        const tbody = document.querySelector('#monthlyTable tbody');
+        tbody.innerHTML = '';
+        
+        let totalSales = 0;
+        let totalProfit = 0;
+        
+        data.months.forEach((month, index) => {
+            const sales = data.sales[index];
+            const profit = data.profit[index];
+            
+            totalSales += sales;
+            totalProfit += profit;
+            
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${month}</td>
+                <td>${sales.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                <td>${profit.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+            `;
+            tbody.appendChild(row);
+        });
+        
+        document.getElementById('monthlySalesTotal').textContent = totalSales.toLocaleString('en-US', {minimumFractionDigits: 2});
+        document.getElementById('monthlyProfitTotal').textContent = totalProfit.toLocaleString('en-US', {minimumFractionDigits: 2});
+    }
+    
+    function updateYearlyTable(data) {
+        const tbody = document.querySelector('#yearlyTable tbody');
+        tbody.innerHTML = '';
+        
+        let totalSales = 0;
+        let totalProfit = 0;
+        
+        data.years.forEach((year, index) => {
+            const sales = data.sales[index];
+            const profit = data.profit[index];
+            
+            totalSales += sales;
+            totalProfit += profit;
+            
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${year}</td>
+                <td>${sales.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                <td>${profit.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+            `;
+            tbody.appendChild(row);
+        });
+        
+        document.getElementById('yearlySalesTotal').textContent = totalSales.toLocaleString('en-US', {minimumFractionDigits: 2});
+        document.getElementById('yearlyProfitTotal').textContent = totalProfit.toLocaleString('en-US', {minimumFractionDigits: 2});
+    }
+</script>
+{% endblock %} 

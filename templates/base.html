@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>{% block title %}{% endblock %} - Inventory Management System</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Point of Sale system with online and offline capabilities">
+    <meta name="theme-color" content="#2c3e50">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="POS System">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/icons/icon-152x152.png') }}">
+    
+    <!-- iOS splash screens -->
+    <link rel="apple-touch-startup-image" href="{{ url_for('static', filename='images/splash/apple-splash-2048-2732.png') }}" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="{{ url_for('static', filename='images/splash/apple-splash-1668-2388.png') }}" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="{{ url_for('static', filename='images/splash/apple-splash-1536-2048.png') }}" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="{{ url_for('static', filename='images/splash/apple-splash-1125-2436.png') }}" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="{{ url_for('static', filename='images/splash/apple-splash-750-1334.png') }}" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="{{ url_for('static', filename='images/splash/apple-splash-640-1136.png') }}" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --background-color: #f8f9fa;
+            --text-color: #2c3e50;
+            --card-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            --card-shadow-hover: 0 4px 8px rgba(0,0,0,0.2);
+            --header-height: 60px;
+            --footer-height: 180px;
+            --container-padding: 15px;
+        }
+        
+        * {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+        
+        html, body {
+            height: 100%;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .content-wrapper {
+            flex: 1 0 auto;
+        }
+        
+        main {
+            min-height: 75vh;
+        }
+        
+        .footer {
+            color: white;
+            margin-top: auto;
+        }
+        
+        .navbar {
+            background-color: var(--primary-color) !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            height: var(--header-height);
+            padding: 0;
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.3rem;
+            color: white !important;
+            padding-left: var(--container-padding);
+        }
+        
+        .nav-link {
+            color: rgba(255,255,255,0.9) !important;
+            transition: color 0.3s ease;
+            padding: 0.5rem 0.8rem;
+            position: relative;
+        }
+        
+        .nav-link:hover {
+            color: white !important;
+        }
+        
+        .nav-link:active {
+            transform: scale(0.98);
+        }
+        
+        /* Add touch feedback */
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .nav-link:active::before {
+            opacity: 1;
+        }
+        
+        .card {
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            height: 100%;
+        }
+        
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--card-shadow-hover);
+        }
+        
+        .card-body {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-body > .btn {
+            margin-top: auto;
+        }
+        
+        .btn {
+            border-radius: 6px;
+            padding: 8px 16px;
+            font-weight: 500;
+            transition: all 0.2s;
+            touch-action: manipulation;
+        }
+        
+        .btn:active {
+            transform: scale(0.98);
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+        }
+        
+        .btn-danger {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+            border-color: #c0392b;
+        }
+        
+        .alert {
+            border-radius: 8px;
+            border: none;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .container {
+            max-width: 1200px;
+            padding: 0 var(--container-padding);
+        }
+        
+        .cart-icon {
+            position: relative;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            min-width: 18px;
+            text-align: center;
+        }
+        
+        /* PWA Install Prompt */
+        #installPrompt {
+            display: none;
+            padding: 10px 15px;
+            background-color: var(--secondary-color);
+            color: white;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        }
+        
+        /* Connection status indicator */
+        #connectionStatus {
+            margin-left: 10px;
+        }
+        
+        .online .badge {
+            animation: fadeIn 0.5s;
+        }
+        
+        .offline .badge {
+            animation: pulse 1.5s infinite;
+        }
+        
+        /* Form controls */
+        .form-control {
+            border-radius: 6px;
+            border: 1px solid #ced4da;
+            padding: 10px 12px;
+            height: auto;
+        }
+        
+        .form-control:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        }
+        
+        /* Table responsive styling */
+        .table-responsive {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .table {
+            margin-bottom: 0;
+        }
+        
+        .table th {
+            background-color: rgba(0,0,0,0.03);
+            white-space: nowrap;
+        }
+        
+        /* Touch-friendly table rows */
+        .table-hover tbody tr {
+            transition: background-color 0.2s;
+            cursor: pointer;
+        }
+        
+        .table-hover tbody tr:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+        
+        /* Better scrolling on iOS */
+        .table-responsive {
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        /* Media Queries */
+        @media (max-width: 767.98px) {
+            :root {
+                --footer-height: 280px;
+            }
+            
+            .navbar-brand {
+                font-size: 1.1rem;
+            }
+            
+            .btn {
+                padding: 10px 16px; /* Larger touch targets on mobile */
+            }
+            
+            .nav-link {
+                padding: 12px 15px;
+            }
+            
+            /* Improve table experience on mobile */
+            .table thead {
+                font-size: 0.9rem;
+            }
+            
+            .table tbody {
+                font-size: 0.95rem;
+            }
+            
+            /* Full-width cards on mobile */
+            .card {
+                margin-bottom: 15px;
+            }
+            
+            .footer {
+                text-align: center;
+            }
+            
+            .footer h5 {
+                margin-top: 15px;
+            }
+        }
+        
+        /* Landscape orientation adjustments */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .navbar {
+                --header-height: 50px;
+            }
+        }
+        
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            body.auto-dark-mode {
+                --background-color: #121212;
+                --text-color: #f1f1f1;
+                --card-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                --card-shadow-hover: 0 4px 8px rgba(0,0,0,0.4);
+                background-color: var(--background-color);
+                color: var(--text-color);
+            }
+            
+            body.auto-dark-mode .card,
+            body.auto-dark-mode .modal-content,
+            body.auto-dark-mode .form-control,
+            body.auto-dark-mode .alert {
+                background-color: #1e1e1e;
+                color: #f1f1f1;
+                border-color: #333;
+            }
+            
+            body.auto-dark-mode .table {
+                color: #f1f1f1;
+            }
+            
+            body.auto-dark-mode .table th {
+                background-color: rgba(255,255,255,0.05);
+            }
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        
+        /* Better iOS scrolling */
+        * {
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        /* Remove tap delay on IE */
+        html {
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+        }
+    </style>
+    
+    <!-- Platform-specific CSS adjustments -->
+    <style id="platform-css"></style>
+    
+    <script>
+        // Function to handle authentication and page cache issues
+        function handleAuthCache() {
+            // Check if we need to force refresh based on auth state changes
+            if (sessionStorage.getItem('auth_state_changed') === 'true') {
+                // Clear the flag
+                sessionStorage.removeItem('auth_state_changed');
+                
+                // Check if we haven't already reloaded to avoid loops
+                if (!sessionStorage.getItem('page_reloaded')) {
+                    sessionStorage.setItem('page_reloaded', 'true');
+                    
+                    // Force reload the page without cache
+                    window.location.reload(true);
+                } else {
+                    // Clear the reloaded flag after 5 seconds
+                    setTimeout(() => {
+                        sessionStorage.removeItem('page_reloaded');
+                    }, 5000);
+                }
+            }
+            
+            // Listen for auth changes
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'auth_action_performed' && e.newValue === 'true') {
+                    sessionStorage.setItem('auth_state_changed', 'true');
+                }
+            });
+        }
+        
+        // Run on page load
+        document.addEventListener('DOMContentLoaded', handleAuthCache);
+    </script>
+</head>
+<body class="d-flex flex-column h-100">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}">
+                <i class="fas fa-store me-2"></i><span>POS System</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">
+                            <i class="fas fa-home me-1"></i>Home
+                        </a>
+                    </li>
+                    
+                    <!-- Cart link for all users -->
+                    <li class="nav-item">
+                        <a class="nav-link cart-icon" href="{{ url_for('view_cart') }}">
+                            <i class="fas fa-shopping-cart me-1"></i>Cart
+                            <span class="cart-count" id="cartCount">0</span>
+                        </a>
+                    </li>
+                    
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.is_admin %}
+                            <!-- Admin-only navigation -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('admin') }}">
+                                    <i class="fas fa-cog me-1"></i>Admin Panel
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('reports') }}">
+                                    <i class="fas fa-chart-bar me-1"></i>Reports
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('inventory_management') }}">
+                                    <i class="fas fa-boxes me-1"></i>Inventory
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('admin') }}#staff">
+                                    <i class="fas fa-users-cog me-1"></i>Manage Staff
+                                </a>
+                            </li>
+                        {% elif current_user.is_staff %}
+                            <!-- Staff-only navigation -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('in_store_sale') }}">
+                                    <i class="fas fa-cash-register me-1"></i>Sale
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('my_sales') }}">
+                                    <i class="fas fa-receipt me-1"></i>My Sales
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav">
+                    <!-- Connection status indicator -->
+                    <li class="nav-item" id="connectionStatus">
+                        <!-- Will be populated by JavaScript -->
+                    </li>
+                    
+                    {% if current_user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('profile') }}">
+                                <i class="fas fa-user me-1"></i>
+                                {% if current_user.is_admin %}Admin{% elif current_user.is_staff %}Staff{% else %}User{% endif %}: {{ current_user.username }}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('logout') }}">
+                                <i class="fas fa-sign-out-alt me-1"></i>Logout
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('login') }}">
+                                <i class="fas fa-sign-in-alt me-1"></i>Login
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('register') }}">
+                                <i class="fas fa-user-plus me-1"></i>Register
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-shrink-0 flex-grow-1">
+        <div class="container mt-3 mb-4">
+            <!-- Notification area for offline transactions -->
+            <div id="offlineNotifications" class="d-none">
+                <!-- Will be populated by JavaScript when offline transactions exist -->
+            </div>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category if category != 'message' else 'info' }} alert-dismissible fade show">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-dark">
+        <div class="container text-center">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>About Us</h5>
+                    <p>Your trusted POS system for efficient business management.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ url_for('index') }}" class="text-white">Home</a></li>
+                        {% if current_user.is_authenticated %}
+                            {% if current_user.is_admin %}
+                                <li><a href="{{ url_for('admin') }}" class="text-white">Admin Panel</a></li>
+                                <li><a href="{{ url_for('reports') }}" class="text-white">Reports</a></li>
+                                <li><a href="{{ url_for('admin') }}#staff" class="text-white">Manage Staff</a></li>
+                            {% elif current_user.is_staff %}
+                                <li><a href="{{ url_for('in_store_sale') }}" class="text-white">Sale</a></li>
+                                <li><a href="{{ url_for('my_sales') }}" class="text-white">My Sales</a></li>
+                            {% endif %}
+                            <li><a href="{{ url_for('profile') }}" class="text-white">My Profile</a></li>
+                            <li><a href="{{ url_for('logout') }}" class="text-white">Logout</a></li>
+                        {% else %}
+                            <li><a href="{{ url_for('login') }}" class="text-white">Login</a></li>
+                            <li><a href="{{ url_for('register') }}" class="text-white">Register</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact Us</h5>
+                    <p>
+                        <i class="fas fa-envelope me-2"></i>support@possystem.com<br>
+                        <i class="fas fa-phone me-2"></i>(555) 123-4567
+                    </p>
+                </div>
+            </div>
+            <hr class="my-3">
+            <p class="mb-0">&copy; 2025 POS System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- PWA Install Prompt -->
+    <div id="installPrompt">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div>
+                <i class="fas fa-download me-2"></i>
+                Install this app on your device for offline use
+            </div>
+            <div>
+                <button id="installButton" class="btn btn-sm btn-light">Install</button>
+                <button id="dismissInstall" class="btn btn-sm btn-outline-light ms-2">Not now</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    
+    <!-- Service worker handling with fallback icons -->
+    <script src="{{ url_for('static', filename='js/manifest-fix.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/service-worker-update.js') }}"></script>
+    
+    <!-- Main application JavaScript -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    
+    <!-- Platform detection and optimization -->
+    <script>
+        // Detect platform and apply specific styles
+        function detectPlatform() {
+            const platformCSS = document.getElementById('platform-css');
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            
+            // iOS detection
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                document.body.classList.add('ios-device');
+                platformCSS.innerHTML = `
+                    .ios-device .btn {
+                        padding-top: 9px;
+                        padding-bottom: 7px;
+                    }
+                    .ios-device .form-control {
+                        padding-top: 11px;
+                        padding-bottom: 9px;
+                    }
+                    .ios-device select.form-control {
+                        height: 38px;
+                    }
+                `;
+            }
+            
+            // Android detection
+            if (/android/i.test(userAgent)) {
+                document.body.classList.add('android-device');
+                platformCSS.innerHTML = `
+                    .android-device .form-control:focus {
+                        outline: none;
+                    }
+                    .android-device .navbar-nav .nav-link {
+                        padding-top: 11px;
+                        padding-bottom: 9px;
+                    }
+                `;
+            }
+            
+            // Touch device detection
+            if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+                document.body.classList.add('touch-device');
+            }
+            
+            // Dark mode detection
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.body.classList.add('auto-dark-mode');
+            }
+        }
+        
+        // Run platform detection on load
+        document.addEventListener('DOMContentLoaded', detectPlatform);
+        
+        // Watch for dark mode changes
+        if (window.matchMedia) {
+            const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            if (darkModeMediaQuery.addEventListener) {
+                darkModeMediaQuery.addEventListener('change', (e) => {
+                    if (e.matches) {
+                        document.body.classList.add('auto-dark-mode');
+                    } else {
+                        document.body.classList.remove('auto-dark-mode');
+                    }
+                });
+            }
+        }
+    </script>
+    
+    <!-- PWA Installation Logic -->
+    <script>
+        // Initialize PWA install prompt
+        let deferredPrompt;
+        const installPrompt = document.getElementById('installPrompt');
+        const installButton = document.getElementById('installButton');
+        const dismissButton = document.getElementById('dismissInstall');
+        
+        // Check if user has dismissed the prompt before
+        const promptDismissed = localStorage.getItem('installPromptDismissed');
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent the mini-infobar from appearing on mobile
+            e.preventDefault();
+            // Stash the event so it can be triggered later
+            deferredPrompt = e;
+            // Show the install prompt if not dismissed
+            if (!promptDismissed) {
+                installPrompt.style.display = 'block';
+            }
+        });
+        
+        // Installation button click handler
+        installButton.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            
+            // Show the install prompt
+            deferredPrompt.prompt();
+            // Wait for the user to respond to the prompt
+            const { outcome } = await deferredPrompt.userChoice;
+            
+            // We've used the prompt, and can't use it again, discard it
+            deferredPrompt = null;
+            
+            // Hide our install UI
+            installPrompt.style.display = 'none';
+        });
+        
+        // Dismiss button click handler
+        dismissButton.addEventListener('click', () => {
+            installPrompt.style.display = 'none';
+            // Remember that user dismissed the prompt
+            localStorage.setItem('installPromptDismissed', 'true');
+        });
+        
+        // Don't show the install prompt again if the app is installed
+        window.addEventListener('appinstalled', () => {
+            installPrompt.style.display = 'none';
+            deferredPrompt = null;
+        });
+    </script>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html> 

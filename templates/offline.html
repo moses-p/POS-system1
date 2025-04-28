@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline - POS System</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --background-color: #f8f9fa;
+            --text-color: #2c3e50;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 600px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+        
+        .icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            color: var(--accent-color);
+        }
+        
+        p {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+            margin: 8px;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--secondary-color);
+            color: var(--secondary-color);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .feature {
+            margin-top: 30px;
+            padding: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .feature h2 {
+            color: var(--primary-color);
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">🌐</div>
+        <h1>You're offline</h1>
+        <p>It seems like you've lost your internet connection. Don't worry, you can still use many features of the POS System in offline mode.</p>
+        
+        <button onclick="tryReconnect()" class="btn">Try to reconnect</button>
+        <a href="/" class="btn btn-outline">Go to Home Page</a>
+        
+        <div class="feature">
+            <h2>Available Offline Functions:</h2>
+            <p>
+                • View and manage inventory<br>
+                • Create in-store sales<br>
+                • View recent transactions<br>
+                • Process new orders (they will sync when back online)
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Function to check if we're back online
+        function tryReconnect() {
+            if (navigator.onLine) {
+                window.location.reload();
+            } else {
+                alert("Still offline. Please check your internet connection and try again.");
+            }
+        }
+        
+        // Listen for online event
+        window.addEventListener('online', function() {
+            window.location.reload();
+        });
+    </script>
+</body>
+</html> 

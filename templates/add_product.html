@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+
+{% block title %}Add Product - POS System{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Add New Product</h2>
+    <form method="POST" action="{{ url_for('add_product') }}">
+        <div class="form-group mb-3">
+            <label for="name">Product Name*</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+            <small class="form-text text-muted">Start typing to see grocery item suggestions</small>
+        </div>
+        <div class="form-group mb-3">
+            <label for="description">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+        </div>
+        <div class="row">
+            <div class="col-md-8 form-group mb-3">
+                <label for="price">Price*</label>
+                <input type="number" class="form-control" id="price" name="price" step="0.01" required>
+            </div>
+            <div class="col-md-4 form-group mb-3">
+                <label for="currency">Currency</label>
+                <select class="form-control" id="currency" name="currency">
+                    {% for currency_code, currency_name in currencies %}
+                    <option value="{{ currency_code }}" {% if currency_code == 'UGX' %}selected{% endif %}>{{ currency_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 form-group mb-3">
+                <label for="category_group">Category Group</label>
+                <select class="form-control" id="category_group" onchange="updateSubcategories()">
+                    <option value="">-- Select Category Group --</option>
+                    {% for category_id, category_name, subcategories in grocery_categories %}
+                    <option value="{{ category_id }}">{{ category_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6 form-group mb-3">
+                <label for="category">Category*</label>
+                <select class="form-control" id="category" name="category" required>
+                    <option value="">-- Select Category --</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group mb-3">
+            <label for="stock">Initial Stock</label>
+            <input type="number" class="form-control" id="stock" name="stock" step="0.01" value="0">
+        </div>
+        <div class="form-group mb-3">
+            <label for="max_stock">Maximum Stock</label>
+            <input type="number" class="form-control" id="max_stock" name="max_stock" step="0.01" value="0">
+        </div>
+        <div class="form-group mb-3">
+            <label for="reorder_point">Reorder Point</label>
+            <input type="number" class="form-control" id="reorder_point" name="reorder_point" step="0.01" value="0">
+        </div>
+        <div class="form-group mb-3">
+            <label for="unit">Unit</label>
+            <select class="form-control" id="unit" name="unit" required>
+                {% for unit_code, unit_name in units %}
+                <option value="{{ unit_code }}">{{ unit_name }}</option>
+                {% endfor %}
+            </select>
+            <small class="form-text text-muted">Select the unit of measurement for this product.</small>
+        </div>
+        <div class="form-group mb-3">
+            <label for="image_url">Image URL</label>
+            <input type="url" class="form-control" id="image_url" name="image_url">
+        </div>
+        <div class="form-group mb-3">
+            <label for="barcode">Barcode (Optional)</label>
+            <input type="text" class="form-control" id="barcode" name="barcode">
+            <small class="form-text text-muted">Leave empty if no barcode is available</small>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Product</button>
+        <a href="{{ url_for('admin') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Validate that reorder point is less than max stock
+    const maxStockInput = document.getElementById('max_stock');
+    const reorderPointInput = document.getElementById('reorder_point');
+    
+    function validateStockLevels() {
+        const maxStock = parseFloat(maxStockInput.value);
+        const reorderPoint = parseFloat(reorderPointInput.value);
+        
+        if (reorderPoint >= maxStock) {
+            reorderPointInput.setCustomValidity('Reorder point must be less than maximum stock');
+        } else {
+            reorderPointInput.setCustomValidity('');
+        }
+    }
+    
+    maxStockInput.addEventListener('input', validateStockLevels);
+    reorderPointInput.addEventListener('input', validateStockLevels);
+
+    // Initialize grocery categories data
+    var groceryCategories = {{ grocery_categories|tojson|safe }};
+    var groceryItems = {{ grocery_items|tojson|safe }};
+    
+    // Create a flat list of all grocery items for easier lookup
+    var allGroceryItems = {};
+    
+    // Flatten grocery items into a lookup object by name
+    Object.keys(groceryItems).forEach(function(category) {
+        groceryItems[category].forEach(function(item) {
+            allGroceryItems[item.name] = item;
+        });
+    });
+    
+    // Product name autocomplete
+    var nameInput = document.getElementById('name');
+    var descriptionInput = document.getElementById('description');
+    var categoryGroupSelect = document.getElementById('category_group');
+    var categorySelect = document.getElementById('category');
+    var unitSelect = document.getElementById('unit');
+    
+    // Create datalist for autocomplete
+    var datalist = document.createElement('datalist');
+    datalist.id = 'grocery-items';
+    
+    // Add all item names to datalist
+    Object.keys(allGroceryItems).forEach(function(itemName) {
+        var option = document.createElement('option');
+        option.value = itemName;
+        datalist.appendChild(option);
+    });
+    
+    document.body.appendChild(datalist);
+    
+    // Connect datalist to input
+    nameInput.setAttribute('list', 'grocery-items');
+    
+    // Auto-fill fields when product name is selected
+    nameInput.addEventListener('change', function() {
+        var selectedItem = allGroceryItems[this.value];
+        
+        if (selectedItem) {
+            // Fill description
+            descriptionInput.value = selectedItem.description;
+            
+            // Fill unit
+            Array.from(unitSelect.options).forEach(function(option) {
+                if (option.value === selectedItem.unit) {
+                    unitSelect.value = selectedItem.unit;
+                }
+            });
+            
+            // Fill category group
+            Array.from(categoryGroupSelect.options).forEach(function(option) {
+                if (option.value === selectedItem.category_group) {
+                    categoryGroupSelect.value = selectedItem.category_group;
+                    // Trigger category update
+                    updateSubcategories();
+                    
+                    // Need a small delay for subcategories to populate
+                    setTimeout(function() {
+                        // Fill category
+                        Array.from(categorySelect.options).forEach(function(option) {
+                            if (option.value === selectedItem.category) {
+                                categorySelect.value = selectedItem.category;
+                            }
+                        });
+                    }, 100);
+                }
+            });
+        }
+    });
+});
+
+// Update subcategories when category group changes
+function updateSubcategories() {
+    var categoryGroup = document.getElementById('category_group').value;
+    var categorySelect = document.getElementById('category');
+    var groceryCategories = {{ grocery_categories|tojson|safe }};
+    
+    // Clear current options
+    categorySelect.innerHTML = '<option value="">-- Select Category --</option>';
+    
+    if (categoryGroup) {
+        // Find the selected category group
+        var selectedGroup = null;
+        for (var i = 0; i < groceryCategories.length; i++) {
+            if (groceryCategories[i][0] === categoryGroup) {
+                selectedGroup = groceryCategories[i];
+                break;
+            }
+        }
+        
+        if (selectedGroup && selectedGroup[2]) {
+            // Add subcategories as options
+            selectedGroup[2].forEach(function(subcategory) {
+                var option = document.createElement('option');
+                option.value = subcategory[0];
+                option.textContent = subcategory[1];
+                categorySelect.appendChild(option);
+            });
+        }
+    }
+}
+</script>
+{% endblock %} 

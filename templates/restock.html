@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Restock Product</h4>
+                </div>
+                <div class="card-body">
+                    <h5>{{ product.name }}</h5>
+                    <p>Current stock: {{ "%.2f"|format(product.stock) }} {{ product.unit }}</p>
+                    <p>Maximum capacity: {{ "%.2f"|format(product.max_stock) }} {{ product.unit }}</p>
+                    <div class="progress mb-3">
+                        <div class="progress-bar bg-{{ 'danger' if product.stock_percentage < 20 else 'warning' if product.stock_percentage < 50 else 'success' }}"
+                             role="progressbar"
+                             style="width: {{ product.stock_percentage }}%"
+                             aria-valuenow="{{ product.stock_percentage }}"
+                             aria-valuemin="0"
+                             aria-valuemax="100">
+                            {{ "%.1f"|format(product.stock_percentage) }}%
+                        </div>
+                    </div>
+                    
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="quantity" class="form-label">Quantity to add ({{ product.unit }})</label>
+                            <input type="number" 
+                                   class="form-control" 
+                                   id="quantity" 
+                                   name="quantity" 
+                                   step="0.01" 
+                                   min="0.01" 
+                                   max="{{ product.max_stock - product.stock }}"
+                                   required>
+                            <div class="form-text">
+                                Maximum amount you can add: {{ "%.2f"|format(product.max_stock - product.stock) }} {{ product.unit }}
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Restock</button>
+                        <a href="{{ url_for('admin') }}" class="btn btn-secondary">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
