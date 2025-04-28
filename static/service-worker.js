@@ -1,12 +1,12 @@
 // Service Worker for POS System
 // Handles caching and offline functionality
 
-const CACHE_NAME = 'pos-system-v2'; // Increment cache version
+const CACHE_NAME = 'pos-system-v3'; // Increment cache version to force refresh
+const CACHE_VERSION = new Date().toISOString(); // Add timestamp for cache busting
 const OFFLINE_URL = '/offline.html';
 
-// Files to cache for offline use
+// Files to cache for offline use - static files only
 const ASSETS_TO_CACHE = [
-  '/',
   '/offline.html',
   '/static/js/app.js',
   '/static/js/service-worker-update.js',
@@ -19,6 +19,22 @@ const ASSETS_TO_CACHE = [
   // Bootstrap and other third-party assets are cached separately
 ];
 
+// Dynamic routes that should NEVER be cached
+const NEVER_CACHE_ROUTES = [
+  '/',
+  '/admin',
+  '/cart',
+  '/checkout',
+  '/profile',
+  '/login',
+  '/inventory_management',
+  '/add_product',
+  '/in_store_sale',
+  '/reports',
+  '/index',
+  '/edit_product'
+];
+
 // Flag to know if icon database is ready
 let iconDBReady = false;
 
@@ -27,6 +43,31 @@ self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'ICON_STORAGE_READY') {
     iconDBReady = true;
     console.log('Icon storage is ready');
+  }
+  
+  // Force refresh on content update
+  if (event.data && event.data.type === 'CONTENT_UPDATED') {
+    console.log('Content update detected, refreshing caches');
+    event.waitUntil(
+      caches.keys().then(cacheNames => {
+        return Promise.all(
+          cacheNames.filter(cacheName => {
+            return cacheName.startsWith('pos-system-');
+          }).map(cacheName => {
+            return caches.delete(cacheName);
+          })
+        );
+      }).then(() => {
+        // Notify all clients to refresh
+        return self.clients.matchAll().then(clients => {
+          clients.forEach(client => {
+            client.postMessage({
+              type: 'REFRESH_PAGE'
+            });
+          });
+        });
+      })
+    );
   }
 });
 
@@ -42,18 +83,26 @@ self.addEventListener('install', event => {
   );
 });
 
-// Activate event - clean up old caches
+// Activate event - clean up old caches and claim clients immediately
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.filter(cacheName => {
-          return cacheName !== CACHE_NAME;
-        }).map(cacheName => {
-          return caches.delete(cacheName);
-        })
-      );
-    }).then(() => self.clients.claim())
+    caches.keys()
+      .then(cacheNames => {
+        return Promise.all(
+          cacheNames
+            .filter(cacheName => {
+              return cacheName.startsWith('pos-system-') && cacheName !== CACHE_NAME;
+            })
+            .map(cacheName => {
+              console.log('Deleting old cache:', cacheName);
+              return caches.delete(cacheName);
+            })
+        );
+      })
+      .then(() => {
+        // Claim any clients immediately to update service worker
+        return self.clients.claim();
+      })
   );
 });
 
@@ -77,6 +126,24 @@ self.addEventListener('fetch', event => {
         })
       );
     }
+    return;
+  }
+
+  // Check if URL should never be cached
+  const url = new URL(event.request.url);
+  const shouldNeverCache = NEVER_CACHE_ROUTES.some(route => {
+    return url.pathname === route || url.pathname.endsWith(route);
+  });
+  
+  // Dynamic page requested - NEVER cache, always go to network
+  if (shouldNeverCache || url.pathname === '/' || event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .catch(() => {
+          // If network fails, serve the offline page
+          return caches.match(OFFLINE_URL);
+        })
+    );
     return;
   }
 
@@ -138,7 +205,24 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // Handle other requests
+  // Handle API requests - never cache these, always go to network
+  if (event.request.url.includes('/api/')) {
+    event.respondWith(
+      fetch(event.request)
+        .catch(error => {
+          // Network unavailable
+          return new Response(JSON.stringify({ 
+            error: 'You are offline',
+            offline: true
+          }), {
+            headers: { 'Content-Type': 'application/json' }
+          });
+        })
+    );
+    return;
+  }
+
+  // Handle static assets - use cache-first strategy
   event.respondWith(
     caches.match(event.request)
       .then(cachedResponse => {

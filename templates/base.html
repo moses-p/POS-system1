@@ -6,6 +6,9 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
+    <!-- Version tag for cache busting -->
+    <meta name="app-version" content="{{ version }}">
+    <meta name="app-timestamp" content="{{ timestamp }}">
     <title>{% block title %}{% endblock %} - Inventory Management System</title>
     
     <!-- PWA Meta Tags -->
@@ -29,6 +32,12 @@
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Add version parameter to static resources for cache busting -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v={{ version }}&t={{ timestamp }}">
+    
+    <!-- Custom styles specific to each page -->
+    {% block styles %}{% endblock %}
     <style>
         :root {
             --primary-color: #2c3e50;

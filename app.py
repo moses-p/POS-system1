@@ -12,6 +12,10 @@ from dotenv import load_dotenv
 from functools import wraps
 from flask_migrate import Migrate
 import sqlite3
+import uuid  # For generating version IDs
+
+# Generate a version ID for this app instance - changes on server restart
+APP_VERSION = str(uuid.uuid4())[:8]
 
 # Simple relativedelta alternative to add months
 def add_months(dt, months):
@@ -63,21 +67,32 @@ def shutdown_session(exception=None):
 # Enable debug mode
 app.debug = True
 
+# Custom render_template that adds version parameter
+def versioned_render_template(*args, **kwargs):
+    # Add version to all templates for cache busting
+    if 'version' not in kwargs:
+        kwargs['version'] = APP_VERSION
+    
+    # Add timestamp for additional cache busting
+    kwargs['timestamp'] = datetime.now().timestamp()
+    
+    return render_template(*args, **kwargs)
+
 # Add error handlers
 @app.errorhandler(500)
 def internal_error(error):
     logger.error(f'Server Error: {error}')
     db.session.rollback()
-    return render_template('error.html', error=error), 500
+    return versioned_render_template('error.html', error=error), 500
 
 @app.errorhandler(404)
 def not_found_error(error):
-    return render_template('error.html', error=error), 404
+    return versioned_render_template('error.html', error=error), 404
 
 @app.errorhandler(Exception)
 def handle_exception(e):
     logger.error(f'Unhandled Exception: {str(e)}')
-    return render_template('error.html', error=str(e)), 500
+    return versioned_render_template('error.html', error=str(e)), 500
 
 # Add security headers and disable caching
 @app.after_request
@@ -90,6 +105,10 @@ def add_headers(response):
     response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '0'
+    
+    # Add ETag based on version + timestamp for client-side cache validation
+    if 'text/html' in response.content_type:
+        response.headers['ETag'] = f'"{APP_VERSION}-{datetime.now().timestamp()}"'
     
     return response
 
@@ -230,15 +249,29 @@ def load_user(user_id):
 
 @app.route('/')
 def index():
-    try:
-        logger.debug('Accessing index route')
-        products = Product.query.all()
-        logger.debug(f'Found {len(products)} products')
-        is_mobile_device = is_mobile()
-        return render_template('index.html', products=products, is_mobile=is_mobile_device)
-    except Exception as e:
-        logger.error(f'Error in index route: {str(e)}')
-        return render_template('error.html', error=str(e)), 500
+    # Improved version with product categories
+    products = Product.query.order_by(Product.name).all()
+    categories = get_grocery_categories()
+    
+    # Group products by category
+    categorized_products = {}
+    for product in products:
+        if product.category not in categorized_products:
+            categorized_products[product.category] = []
+        categorized_products[product.category].append(product)
+    
+    # Create flat category list for dropdown
+    flat_categories = []
+    for category_group in categories:
+        group_id, group_name, subcategories = category_group
+        for subcat_id, subcat_name in subcategories:
+            flat_categories.append((subcat_id, subcat_name, group_name))
+    
+    return versioned_render_template('index.html', 
+                           products=products,
+                           categorized_products=categorized_products,
+                           categories=categories,
+                           flat_categories=flat_categories)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
