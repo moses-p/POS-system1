@@ -42,28 +42,37 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Setup update detection for service worker
 function setupServiceWorkerUpdates(registration) {
+    // Flag to track if we've triggered a refresh
+    let refreshTriggered = false;
+    
     // Check for updates every 2 minutes
     setInterval(() => {
-        registration.update()
-            .then(() => {
-                // If new service worker is installing, prepare for refresh
-                if (registration.installing) {
-                    console.log('New service worker is installing...');
-                    sessionStorage.setItem('pendingRefresh', 'true');
-                }
-            })
-            .catch(error => {
-                console.error('Error checking for service worker updates:', error);
-            });
+        if (!refreshTriggered) {
+            registration.update()
+                .then(() => {
+                    // If new service worker is installing, prepare for refresh
+                    if (registration.installing && !refreshTriggered) {
+                        console.log('New service worker is installing...');
+                        sessionStorage.setItem('pendingRefresh', 'true');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error checking for service worker updates:', error);
+                });
+        }
     }, 120000); // 2 minutes
     
     // Look for service worker updates on page load
     registration.addEventListener('updatefound', () => {
+        if (refreshTriggered) return; // Prevent multiple updates
+        
         const newWorker = registration.installing;
         
         newWorker.addEventListener('statechange', () => {
             // When the new service worker is activated
-            if (newWorker.state === 'activated') {
+            if (newWorker.state === 'activated' && !refreshTriggered) {
+                refreshTriggered = true; // Prevent multiple refreshes
+                
                 // Notify all open tabs about the update
                 if (navigator.serviceWorker.controller) {
                     navigator.serviceWorker.controller.postMessage({
@@ -71,8 +80,11 @@ function setupServiceWorkerUpdates(registration) {
                     });
                 }
                 
-                // Force reload of current page to use the new service worker
-                window.location.reload();
+                // Don't automatically reload - let user choose
+                // window.location.reload();
+                
+                // Instead, show update notification
+                showUpdateNotification();
             }
         });
     });
@@ -80,23 +92,51 @@ function setupServiceWorkerUpdates(registration) {
 
 // Setup message listeners for communication with service worker
 function setupServiceWorkerMessages() {
+    // Track last update notification time to prevent spam
+    let lastUpdateTime = 0;
+    const UPDATE_COOLDOWN = 30000; // 30 seconds
+
     navigator.serviceWorker.addEventListener('message', event => {
+        const now = Date.now();
+        
         // Handle messages from service worker
-        if (event.data && event.data.type === 'REFRESH_PAGE') {
-            console.log('Received refresh request from service worker');
+        if (event.data) {
+            // Handle traditional refresh message
+            if (event.data.type === 'REFRESH_PAGE') {
+                // Only refresh if we haven't shown an update recently
+                if (now - lastUpdateTime > UPDATE_COOLDOWN) {
+                    lastUpdateTime = now;
+                    
+                    console.log('Received refresh request from service worker');
+                    
+                    // Only refresh if user is not in the middle of something important
+                    const isFormActive = document.querySelector('form:focus-within') !== null;
+                    const hasUnsavedChanges = window.unsavedChanges || false;
+                    
+                    if (!isFormActive && !hasUnsavedChanges) {
+                        // Don't automatically refresh, just show notification
+                        // window.location.reload();
+                        showUpdateNotification();
+                    } else {
+                        // Set flag to refresh when user finishes their current task
+                        sessionStorage.setItem('pendingRefresh', 'true');
+                        
+                        // Show a notification that an update is available
+                        showUpdateNotification();
+                    }
+                }
+            }
             
-            // Only refresh if user is not in the middle of something important
-            const isFormActive = document.querySelector('form:focus-within') !== null;
-            const hasUnsavedChanges = window.unsavedChanges || false;
-            
-            if (!isFormActive && !hasUnsavedChanges) {
-                window.location.reload();
-            } else {
-                // Set flag to refresh when user finishes their current task
-                sessionStorage.setItem('pendingRefresh', 'true');
-                
-                // Show a notification that an update is available
-                showUpdateNotification();
+            // Handle the new update available message
+            if (event.data.type === 'UPDATE_AVAILABLE') {
+                // Only show notification if we haven't shown one recently
+                if (now - lastUpdateTime > UPDATE_COOLDOWN) {
+                    lastUpdateTime = now;
+                    console.log('Received update notification from service worker');
+                    
+                    // Show update notification without automatic refresh
+                    showUpdateNotification();
+                }
             }
         }
     });

@@ -16,6 +16,8 @@ import uuid  # For generating version IDs
 
 # Generate a version ID for this app instance - changes on server restart
 APP_VERSION = str(uuid.uuid4())[:8]
+# Use a stable timestamp that only changes when the server restarts
+APP_TIMESTAMP = str(int(datetime.now().timestamp()))
 
 # Simple relativedelta alternative to add months
 def add_months(dt, months):
@@ -73,8 +75,8 @@ def versioned_render_template(*args, **kwargs):
     if 'version' not in kwargs:
         kwargs['version'] = APP_VERSION
     
-    # Add timestamp for additional cache busting
-    kwargs['timestamp'] = datetime.now().timestamp()
+    # Use stable timestamp instead of generating a new one each time
+    kwargs['timestamp'] = APP_TIMESTAMP
     
     return render_template(*args, **kwargs)
 
@@ -106,9 +108,9 @@ def add_headers(response):
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '0'
     
-    # Add ETag based on version + timestamp for client-side cache validation
+    # Add ETag based on stable version only (not changing timestamp)
     if 'text/html' in response.content_type:
-        response.headers['ETag'] = f'"{APP_VERSION}-{datetime.now().timestamp()}"'
+        response.headers['ETag'] = f'"{APP_VERSION}"'
     
     return response
 

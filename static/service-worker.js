@@ -2,8 +2,10 @@
 // Handles caching and offline functionality
 
 const CACHE_NAME = 'pos-system-v3'; // Increment cache version to force refresh
-const CACHE_VERSION = new Date().toISOString(); // Add timestamp for cache busting
 const OFFLINE_URL = '/offline.html';
+
+// Don't add volatile timestamps that change with every request
+// const CACHE_VERSION = new Date().toISOString(); 
 
 // Files to cache for offline use - static files only
 const ASSETS_TO_CACHE = [
@@ -45,29 +47,42 @@ self.addEventListener('message', (event) => {
     console.log('Icon storage is ready');
   }
   
-  // Force refresh on content update
+  // Force refresh on content update - add rate limiting
   if (event.data && event.data.type === 'CONTENT_UPDATED') {
-    console.log('Content update detected, refreshing caches');
-    event.waitUntil(
-      caches.keys().then(cacheNames => {
-        return Promise.all(
-          cacheNames.filter(cacheName => {
-            return cacheName.startsWith('pos-system-');
-          }).map(cacheName => {
-            return caches.delete(cacheName);
-          })
-        );
-      }).then(() => {
-        // Notify all clients to refresh
-        return self.clients.matchAll().then(clients => {
-          clients.forEach(client => {
-            client.postMessage({
-              type: 'REFRESH_PAGE'
+    // Check if we've refreshed recently to prevent loops
+    const lastRefresh = self.lastRefreshTime || 0;
+    const now = Date.now();
+    const ONE_MINUTE = 60 * 1000;
+    
+    // Only refresh if it's been at least a minute since last refresh
+    if (now - lastRefresh > ONE_MINUTE) {
+      console.log('Content update detected, refreshing caches');
+      self.lastRefreshTime = now;
+      
+      event.waitUntil(
+        caches.keys().then(cacheNames => {
+          return Promise.all(
+            cacheNames.filter(cacheName => {
+              return cacheName.startsWith('pos-system-');
+            }).map(cacheName => {
+              return caches.delete(cacheName);
+            })
+          );
+        }).then(() => {
+          // Don't automatically notify clients to refresh
+          // Only refresh specific resources
+          return self.clients.matchAll().then(clients => {
+            clients.forEach(client => {
+              client.postMessage({
+                type: 'UPDATE_AVAILABLE'
+              });
             });
           });
-        });
-      })
-    );
+        })
+      );
+    } else {
+      console.log('Ignoring refresh request - too soon since last refresh');
+    }
   }
 });
 
