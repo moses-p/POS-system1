@@ -1,0 +1,26 @@
+# Build artifacts
+build/
+dist/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.env
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Virtual environments
+env/
+venv/
+ENV/
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Except our specific spec file
+!pos_app.spec 
