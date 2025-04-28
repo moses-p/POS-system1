@@ -24,6 +24,51 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize cart functionality
     initCartFunctionality();
+    
+    // Add timestamp to prevent browser caching
+    const addTimestampToLinks = () => {
+        document.querySelectorAll('a').forEach(link => {
+            // Skip external links and special links
+            if (link.href.startsWith(window.location.origin) && 
+                !link.href.includes('#') && 
+                !link.getAttribute('data-no-cache')) {
+                
+                let url = new URL(link.href);
+                url.searchParams.set('_t', new Date().getTime());
+                link.href = url.toString();
+            }
+        });
+    };
+    
+    // Run initially and observe DOM changes
+    addTimestampToLinks();
+    
+    // Create an observer to handle dynamically added links
+    const observer = new MutationObserver(mutations => {
+        mutations.forEach(mutation => {
+            if (mutation.type === 'childList') {
+                addTimestampToLinks();
+            }
+        });
+    });
+    
+    // Start observing
+    observer.observe(document.body, { 
+        childList: true,
+        subtree: true
+    });
+
+    // Prevent back/forward cache (bfcache)
+    window.addEventListener('pageshow', function(event) {
+        if (event.persisted) {
+            window.location.reload();
+        }
+    });
+    
+    // Force refresh when navigating back
+    window.addEventListener('popstate', function() {
+        window.location.reload();
+    });
 });
 
 // Online/Offline status detection and UI updates

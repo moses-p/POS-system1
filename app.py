@@ -51,6 +51,14 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your-secret-key-here')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///pos.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SESSION_TYPE'] = 'filesystem'  # Store sessions in files
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=5)  # Session expiration time
+
+# Ensure all database operations are committed
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    db.session.commit()
+    db.session.remove()
 
 # Enable debug mode
 app.debug = True
@@ -71,12 +79,18 @@ def handle_exception(e):
     logger.error(f'Unhandled Exception: {str(e)}')
     return render_template('error.html', error=str(e)), 500
 
-# Add security headers
+# Add security headers and disable caching
 @app.after_request
-def add_security_headers(response):
+def add_headers(response):
     response.headers['X-Content-Type-Options'] = 'nosniff'
     response.headers['X-Frame-Options'] = 'SAMEORIGIN'
     response.headers['X-XSS-Protection'] = '1; mode=block'
+    
+    # Disable caching to prevent state reverting issues
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    
     return response
 
 db = SQLAlchemy(app)
