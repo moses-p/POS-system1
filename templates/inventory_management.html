@@ -154,7 +154,7 @@
                     <tbody>
                         {% for movement in recent_movements %}
                         <tr>
-                            <td>{{ movement.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td>{{ movement.timestamp.strftime('%Y-%m-%d %H:%M') if movement.timestamp else 'N/A' }}</td>
                             <td>{{ movement.product.name }}</td>
                             <td>
                                 {% if movement.movement_type == 'sale' %}
@@ -200,9 +200,7 @@
     </div>
 </div>
 {% endfor %}
-{% endblock %}
 
-{% block scripts %}
 <script>
     // Product search functionality
     document.getElementById('productSearch').addEventListener('keyup', function() {

@@ -45,7 +45,7 @@
                     <tbody>
                         {% for change in price_changes %}
                         <tr>
-                            <td>{{ change.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td>{{ change.timestamp.strftime('%Y-%m-%d %H:%M') if change.timestamp else 'N/A' }}</td>
                             <td>{{ "%.2f"|format(change.old_price) }}</td>
                             <td>{{ "%.2f"|format(change.new_price) }}</td>
                             <td>

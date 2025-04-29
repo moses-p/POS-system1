@@ -1,0 +1,253 @@
+{% extends 'base.html' %}
+
+{% block title %}Order #{{ order.id }} - Details{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">Order #{{ order.id }}</h1>
+        <div class="d-flex">
+            <a href="{{ url_for('staff_orders') }}" class="btn btn-outline-secondary me-2">
+                <i class="bi bi-arrow-left"></i> Back to Orders
+            </a>
+            
+            {% if order.status in ['pending', 'processing'] %}
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateStatusModal">
+                <i class="bi bi-pencil-square"></i> Update Status
+            </button>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Order Items</h5>
+                    {% if order.status == 'pending' or order.status == 'processing' %}
+                    <span class="badge bg-primary">{{ order.status|capitalize }}</span>
+                    {% elif order.status == 'completed' %}
+                    <span class="badge bg-success">Completed</span>
+                    {% elif order.status == 'cancelled' %}
+                    <span class="badge bg-danger">Cancelled</span>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Unit Price</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in order.items %}
+                                <tr>
+                                    <td>{{ item.product.name }}</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>{{ "UGX {:,.0f}".format(item.price) }}</td>
+                                    <td>{{ "UGX {:,.0f}".format(item.subtotal) }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" class="text-end fw-bold">Subtotal:</td>
+                                    <td>{{ "UGX {:,.0f}".format(order.total_amount) }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="text-end fw-bold">Tax ({{ tax_rate * 100 }}%):</td>
+                                    <td>{{ "UGX {:,.0f}".format(order.total_amount * tax_rate) }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="text-end fw-bold">Total:</td>
+                                    <td class="fw-bold">{{ "UGX {:,.0f}".format(order.total_amount * (1 + tax_rate)) }}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Order Information</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Order Date:</span>
+                            <span class="text-muted">{{ order.order_date.strftime('%Y-%m-%d %H:%M') if order.order_date else 'N/A' }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Order Type:</span>
+                            <span class="badge bg-secondary">{{ order.order_type|capitalize }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Status:</span>
+                            {% if order.status == 'pending' %}
+                                <span class="badge bg-warning">Pending</span>
+                            {% elif order.status == 'processing' %}
+                                <span class="badge bg-info">Processing</span>
+                            {% elif order.status == 'completed' %}
+                                <span class="badge bg-success">Completed</span>
+                            {% elif order.status == 'cancelled' %}
+                                <span class="badge bg-danger">Cancelled</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ order.status|capitalize }}</span>
+                            {% endif %}
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Payment Method:</span>
+                            <span class="text-muted">{{ order.payment_method|capitalize }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Payment Status:</span>
+                            {% if order.payment_status == 'paid' %}
+                                <span class="badge bg-success">Paid</span>
+                            {% elif order.payment_status == 'pending' %}
+                                <span class="badge bg-warning">Pending</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ order.payment_status|capitalize }}</span>
+                            {% endif %}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            {% if order.order_type == 'online' %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Customer Details</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>Name:</strong> {{ order.customer_name }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Phone:</strong> {{ order.customer_phone }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Email:</strong> {{ order.customer_email }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Address:</strong> {{ order.delivery_address }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+            
+            <div class="card">
+                <div class="card-header">
+                    <h5>Order Timeline</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex">
+                            <div class="me-3">
+                                <div class="bg-success rounded-circle" style="width: 15px; height: 15px;"></div>
+                                <div class="timeline-line"></div>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Order Placed</h6>
+                                <small class="text-muted">{{ order.order_date.strftime('%Y-%m-%d %H:%M') if order.order_date else 'N/A' }}</small>
+                            </div>
+                        </li>
+                        
+                        {% if order.status in ['processing', 'completed'] %}
+                        <li class="list-group-item d-flex">
+                            <div class="me-3">
+                                <div class="bg-success rounded-circle" style="width: 15px; height: 15px;"></div>
+                                <div class="timeline-line"></div>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Processing Started</h6>
+                                <small class="text-muted">{{ order.updated_at.strftime('%Y-%m-%d %H:%M') if order.updated_at else 'N/A' }}</small>
+                            </div>
+                        </li>
+                        {% endif %}
+                        
+                        {% if order.status == 'completed' %}
+                        <li class="list-group-item d-flex">
+                            <div class="me-3">
+                                <div class="bg-success rounded-circle" style="width: 15px; height: 15px;"></div>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Order Completed</h6>
+                                <small class="text-muted">{{ order.completed_at.strftime('%Y-%m-%d %H:%M') if order.completed_at else 'N/A' }}</small>
+                            </div>
+                        </li>
+                        {% endif %}
+                        
+                        {% if order.status == 'cancelled' %}
+                        <li class="list-group-item d-flex">
+                            <div class="me-3">
+                                <div class="bg-danger rounded-circle" style="width: 15px; height: 15px;"></div>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Order Cancelled</h6>
+                                <small class="text-muted">{{ order.updated_at.strftime('%Y-%m-%d %H:%M') if order.updated_at else 'N/A' }}</small>
+                            </div>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Update Status Modal -->
+<div class="modal fade" id="updateStatusModal" tabindex="-1" aria-labelledby="updateStatusModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateStatusModalLabel">Update Order Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ url_for('staff_update_order_status', order_id=order.id) }}" method="POST">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="status" class="form-label">New Status</label>
+                        <select name="status" id="status" class="form-select" required>
+                            <option value="">Select status</option>
+                            {% if order.status == 'pending' %}
+                                <option value="processing">Processing</option>
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
+                            {% elif order.status == 'processing' %}
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Notes (Optional)</label>
+                        <textarea name="notes" id="notes" class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Status</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+.timeline-line {
+    height: 30px;
+    width: 2px;
+    background: #dee2e6;
+    margin-left: 6px;
+}
+</style>
+{% endblock %} 

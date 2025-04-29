@@ -103,16 +103,16 @@ self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys()
       .then(cacheNames => {
-        return Promise.all(
+      return Promise.all(
           cacheNames
             .filter(cacheName => {
               return cacheName.startsWith('pos-system-') && cacheName !== CACHE_NAME;
             })
             .map(cacheName => {
               console.log('Deleting old cache:', cacheName);
-              return caches.delete(cacheName);
-            })
-        );
+          return caches.delete(cacheName);
+        })
+      );
       })
       .then(() => {
         // Claim any clients immediately to update service worker

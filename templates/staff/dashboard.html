@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block title %}Staff Dashboard{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4">Staff Dashboard</h1>
+    
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Pending Orders</h5>
+                    <p class="card-text display-4">{{ order_counts.pending }}</p>
+                    <a href="{{ url_for('staff_orders') }}?status=pending" class="btn btn-light">View Orders</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Processing Orders</h5>
+                    <p class="card-text display-4">{{ order_counts.processing }}</p>
+                    <a href="{{ url_for('staff_orders') }}?status=processing" class="btn btn-light">View Orders</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Completed Orders</h5>
+                    <p class="card-text display-4">{{ order_counts.completed }}</p>
+                    <a href="{{ url_for('staff_orders') }}?status=completed" class="btn btn-light">View Orders</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between">
+                    <h5>Pending Orders</h5>
+                    <a href="{{ url_for('staff_orders') }}?status=pending" class="btn btn-sm btn-primary">View All</a>
+                </div>
+                <div class="card-body">
+                    {% if pending_orders %}
+                        <div class="list-group">
+                            {% for order in pending_orders[:5] %}
+                                <a href="{{ url_for('staff_order_detail', order_id=order.id) }}" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Order #{{ order.id }}</h6>
+                                        <small>{{ order.order_date.strftime('%Y-%m-%d %H:%M') if order.order_date else 'N/A' }}</small>
+                                    </div>
+                                    <p class="mb-1">{{ "UGX {:,.0f}".format(order.total_amount) }}</p>
+                                    <small>{{ order.order_type|capitalize }} order</small>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p>No pending orders.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5>Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('in_store_sale') }}" class="btn btn-primary">Create New In-Store Sale</a>
+                        <a href="{{ url_for('staff_orders') }}" class="btn btn-secondary">View All Orders</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header d-flex justify-content-between">
+            <h5>Recent Orders</h5>
+            <a href="{{ url_for('staff_orders') }}" class="btn btn-sm btn-primary">View All</a>
+        </div>
+        <div class="card-body">
+            {% if recent_orders %}
+                <div class="list-group">
+                    {% for order in recent_orders %}
+                    <a href="{{ url_for('staff_order_detail', order_id=order.id) }}" class="list-group-item list-group-item-action flex-column align-items-start {% if not order.viewed %}list-group-item-info{% endif %}">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">Order #{{ order.id }}</h5>
+                            <small>{{ order.order_date.strftime('%Y-%m-%d %H:%M') if order.order_date else 'N/A' }}</small>
+                        </div>
+                        <p class="mb-1">{{ "UGX {:,.0f}".format(order.total_amount) }} - {{ order.order_type|capitalize }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small>{{ order.customer_name or 'Guest customer' }}</small>
+                            {% if order.status == 'pending' %}
+                            <span class="badge bg-warning">Pending</span>
+                            {% elif order.status == 'processing' %}
+                            <span class="badge bg-info">Processing</span>
+                            {% elif order.status == 'completed' %}
+                            <span class="badge bg-success">Completed</span>
+                            {% elif order.status == 'cancelled' %}
+                            <span class="badge bg-danger">Cancelled</span>
+                            {% else %}
+                            <span class="badge bg-secondary">{{ order.status|capitalize }}</span>
+                            {% endif %}
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% if recent_orders|length >= 5 %}
+                <div class="text-center mt-3">
+                    <a href="{{ url_for('staff_orders') }}" class="btn btn-outline-primary">View All Orders</a>
+                </div>
+                {% endif %}
+            {% else %}
+                <div class="alert alert-info">No recent orders.</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

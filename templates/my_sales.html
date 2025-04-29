@@ -3,230 +3,169 @@
 {% block title %}My Sales{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <div class="row mb-3">
-        <div class="col-md-8">
-            <h2>My Sales History</h2>
+<div class="container py-4">
+    <!-- Page header with improved spacing and alignment -->
+    <div class="row mb-4 align-items-center">
+        <div class="col-md-6">
+            <h1 class="h3 mb-0">My Sales Dashboard</h1>
+            <p class="text-muted">Sales performance summary for {{ current_user.name }}</p>
         </div>
-        <div class="col-md-4 text-end">
-            <a href="{{ url_for('in_store_sale') }}" class="btn btn-primary">
-                <i class="fas fa-plus me-2"></i>New Sale
+        <div class="col-md-6 text-md-end">
+            <a href="{{ url_for('staff_dashboard') }}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Dashboard
             </a>
         </div>
     </div>
-
-    <!-- Sales Overview -->
+    
+    <!-- Quick stats cards in a row - more visual impact -->
     <div class="row mb-4">
-        <div class="col-md-3">
-            <div class="card bg-light">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-shrink-0">
-                            <i class="fas fa-shopping-cart fa-2x text-primary"></i>
-                        </div>
-                        <div class="flex-grow-1 ms-3">
-                            <h5 class="card-title">Total Orders</h5>
-                            <h3 class="mb-0">{{ orders|length }}</h3>
-                        </div>
-                    </div>
+        <div class="col-md-3 col-sm-6 mb-3 mb-md-0">
+            <div class="card h-100 border-primary">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-primary">Today's Sales</h5>
+                    <h2 class="display-4 fw-bold mb-0">{{ daily_summary.count }}</h2>
+                    <p class="card-text text-muted"><small>{{ now().strftime('%d %b %Y') if now() else 'Today' }}</small></p>
                 </div>
             </div>
         </div>
-        
-        <div class="col-md-3">
-            <div class="card bg-light">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-shrink-0">
-                            <i class="fas fa-money-bill-wave fa-2x text-success"></i>
-                        </div>
-                        <div class="flex-grow-1 ms-3">
-                            <h5 class="card-title">Total Sales</h5>
-                            <h3 class="mb-0">{{ total_sales|round(2) }}</h3>
-                        </div>
-                    </div>
+        <div class="col-md-3 col-sm-6 mb-3 mb-md-0">
+            <div class="card h-100 border-success">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-success">Today's Revenue</h5>
+                    <h2 class="display-4 fw-bold mb-0">{{ "{:,.0f}".format(daily_summary.amount) }}</h2>
+                    <p class="card-text text-muted"><small>UGX</small></p>
                 </div>
             </div>
         </div>
-        
-        <div class="col-md-3">
-            <div class="card bg-light">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-shrink-0">
-                            <i class="fas fa-cash-register fa-2x text-warning"></i>
-                        </div>
-                        <div class="flex-grow-1 ms-3">
-                            <h5 class="card-title">In-Store</h5>
-                            <h3 class="mb-0">{{ in_store_count }}</h3>
-                        </div>
-                    </div>
+        <div class="col-md-3 col-sm-6 mb-3 mb-md-0">
+            <div class="card h-100 border-info">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-info">Monthly Sales</h5>
+                    <h2 class="display-4 fw-bold mb-0">{{ monthly_summary.count }}</h2>
+                    <p class="card-text text-muted"><small>This Month</small></p>
                 </div>
             </div>
         </div>
-        
-        <div class="col-md-3">
-            <div class="card bg-light">
+        <div class="col-md-3 col-sm-6">
+            <div class="card h-100 border-warning">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-warning">Monthly Revenue</h5>
+                    <h2 class="display-4 fw-bold mb-0">{{ "{:,.0f}".format(monthly_summary.amount) }}</h2>
+                    <p class="card-text text-muted"><small>UGX</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Monthly target with improved visual feedback -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
                 <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-shrink-0">
-                            <i class="fas fa-globe fa-2x text-info"></i>
-                        </div>
-                        <div class="flex-grow-1 ms-3">
-                            <h5 class="card-title">Online</h5>
-                            <h3 class="mb-0">{{ online_count }}</h3>
-                        </div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="card-title mb-0">Monthly Target Progress</h5>
+                        <h6 class="text-muted mb-0">Target: UGX {{ "{:,.0f}".format(monthly_target) }}</h6>
+                    </div>
+                    <div class="progress" style="height: 20px;">
+                        <div class="progress-bar bg-success" role="progressbar" 
+                             style="width: {{ monthly_percentage }}%;"
+                             aria-valuenow="{{ monthly_percentage }}"
+                             aria-valuemin="0"
+                             aria-valuemax="100">{{ monthly_percentage }}%</div>
+                    </div>
+                    <div class="mt-2 text-end">
+                        <span class="badge {% if monthly_percentage < 50 %}bg-danger{% elif monthly_percentage < 80 %}bg-warning{% else %}bg-success{% endif %}">
+                            {{ monthly_percentage }}% of target achieved
+                        </span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Orders List -->
-    <div class="card">
-        <div class="card-header">
-            <div class="d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Sales History</h5>
-                <div class="input-group" style="width: 300px;">
-                    <input type="text" class="form-control" id="orderSearch" placeholder="Search orders...">
-                    <button class="btn btn-outline-secondary" type="button">
-                        <i class="fas fa-search"></i>
-                    </button>
+    
+    <!-- Recent sales with improved table styling -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Recent Sales</h5>
+                    {% if recent_sales %}
+                    <a href="#" class="btn btn-sm btn-outline-primary">View All Sales</a>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    {% if recent_sales %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Order #</th>
+                                    <th>Date</th>
+                                    <th>Customer</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in recent_sales %}
+                                <tr>
+                                    <td><a href="{{ url_for('my_sales_order_detail', order_id=order.id) }}" class="text-decoration-none">#{{ order.id }}</a></td>
+                                    <td>{{ order.order_date.strftime('%d %b %Y, %H:%M') if order.order_date else 'N/A' }}</td>
+                                    <td>
+                                        {% if order.customer_name %}
+                                            {{ order.customer_name }}
+                                        {% elif order.customer %}
+                                            {{ order.customer.name }}
+                                        {% else %}
+                                            <span class="text-muted">Guest</span>
+                                        {% endif %}
+                                    </td>
+                                    <td><span class="fw-bold">UGX {{ "{:,.0f}".format(order.total_amount) }}</span></td>
+                                    <td>
+                                        {% if order.status == 'pending' %}
+                                            <span class="badge bg-warning text-dark">Pending</span>
+                                        {% elif order.status == 'processing' %}
+                                            <span class="badge bg-info text-dark">Processing</span>
+                                        {% elif order.status == 'completed' %}
+                                            <span class="badge bg-success">Completed</span>
+                                        {% elif order.status == 'cancelled' %}
+                                            <span class="badge bg-danger">Cancelled</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ order.status|capitalize }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-end">
+                                        <a href="{{ url_for('my_sales_order_detail', order_id=order.id) }}" class="btn btn-sm btn-outline-primary me-1" title="View Details">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a href="{{ url_for('print_receipt', order_id=order.id) }}" class="btn btn-sm btn-outline-secondary" target="_blank" title="Print Receipt">
+                                            <i class="bi bi-printer"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>You haven't made any sales yet.
+                    </div>
+                    {% endif %}
                 </div>
             </div>
-        </div>
-        <div class="card-body">
-            {% if orders %}
-                <div class="table-responsive">
-                    <table class="table table-hover table-striped">
-                        <thead>
-                            <tr>
-                                <th>Order #</th>
-                                <th>Date</th>
-                                <th>Customer</th>
-                                <th>Type</th>
-                                <th>Items</th>
-                                <th>Total</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for order in orders %}
-                            <tr class="order-row" data-customer="{{ order.customer_name|lower if order.customer_name else 'unknown' }}">
-                                <td>{{ order.id }}</td>
-                                <td>{{ order.order_date.strftime('%Y-%m-%d %H:%M') }}</td>
-                                <td>
-                                    {% if order.customer_name %}
-                                        {{ order.customer_name }}
-                                    {% elif order.customer %}
-                                        {{ order.customer.username }}
-                                    {% else %}
-                                        Unknown
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {% if order.order_type == 'in-store' %}
-                                        <span class="badge bg-primary">In-Store</span>
-                                    {% elif order.order_type == 'online' %}
-                                        <span class="badge bg-info">Online</span>
-                                    {% elif order.order_type == 'offline-sync' %}
-                                        <span class="badge bg-warning">Offline Sync</span>
-                                    {% else %}
-                                        <span class="badge bg-secondary">{{ order.order_type }}</span>
-                                    {% endif %}
-                                </td>
-                                <td>{{ order.items|length }}</td>
-                                <td>{{ order.total_amount|round(2) }}</td>
-                                <td>
-                                    {% if order.status == 'pending' %}
-                                        <span class="badge bg-warning">Pending</span>
-                                    {% elif order.status == 'completed' %}
-                                        <span class="badge bg-success">Completed</span>
-                                    {% elif order.status == 'cancelled' %}
-                                        <span class="badge bg-danger">Cancelled</span>
-                                    {% else %}
-                                        <span class="badge bg-secondary">{{ order.status }}</span>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    <div class="btn-group btn-group-sm">
-                                        <a href="{{ url_for('print_receipt', order_id=order.id) }}" class="btn btn-primary" target="_blank">
-                                            <i class="fas fa-receipt"></i>
-                                        </a>
-                                        {% if order.status == 'pending' %}
-                                            <button type="button" class="btn btn-success mark-completed" data-order-id="{{ order.id }}">
-                                                <i class="fas fa-check"></i>
-                                            </button>
-                                        {% endif %}
-                                    </div>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            {% else %}
-                <div class="alert alert-info">
-                    <p>You haven't made any sales yet. Start by creating a new in-store sale.</p>
-                </div>
-            {% endif %}
         </div>
     </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    // Order search functionality
-    document.getElementById('orderSearch').addEventListener('keyup', function() {
-        const searchTerm = this.value.toLowerCase();
-        const orderRows = document.querySelectorAll('.order-row');
-        
-        orderRows.forEach(row => {
-            let matchFound = false;
-            
-            // Search in all cells
-            row.querySelectorAll('td').forEach(cell => {
-                if (cell.textContent.toLowerCase().includes(searchTerm)) {
-                    matchFound = true;
-                }
-            });
-            
-            // Customer data attribute
-            if (row.dataset.customer && row.dataset.customer.includes(searchTerm)) {
-                matchFound = true;
-            }
-            
-            row.style.display = matchFound ? '' : 'none';
-        });
-    });
-    
-    // Mark order as completed
-    document.querySelectorAll('.mark-completed').forEach(button => {
-        button.addEventListener('click', function() {
-            const orderId = this.dataset.orderId;
-            if (confirm('Mark this order as completed?')) {
-                fetch(`/mark_order_processed/${orderId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Order marked as completed!');
-                        location.reload();
-                    } else {
-                        alert('Error: ' + data.error);
-                    }
-                })
-                .catch(error => {
-                    alert('An error occurred: ' + error);
-                });
-            }
-        });
+    $(document).ready(function() {
+        // Add active class to the My Sales nav item
+        $('a[href="{{ url_for("my_sales") }}"]').addClass('active');
     });
 </script>
 {% endblock %} 

@@ -1,118 +1,221 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Receipt</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt - Order #{{ order.id }}</title>
     <style>
         body {
             font-family: 'Courier New', monospace;
-            width: 80mm;
-            margin: 0 auto;
-            padding: 10px;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
         }
-        .header {
-            text-align: center;
-            margin-bottom: 10px;
+        
+        .receipt-container {
+            width: 80mm; /* Standard receipt width */
+            margin: 20px auto;
+            background: white;
+            padding: 15px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
         }
-        .store-name {
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .store-info {
-            font-size: 12px;
-        }
-        .receipt-info {
-            margin: 10px 0;
-            font-size: 12px;
-        }
-        .items {
-            width: 100%;
-            margin: 10px 0;
-        }
-        .item-row {
-            display: flex;
-            justify-content: space-between;
-            margin: 5px 0;
-            font-size: 12px;
-        }
-        .total {
-            margin-top: 10px;
-            border-top: 1px dashed #000;
-            padding-top: 10px;
-            text-align: right;
-            font-weight: bold;
-        }
-        .footer {
-            margin-top: 20px;
-            text-align: center;
-            font-size: 10px;
-        }
-        .customer-info {
-            margin-top: 10px;
-            font-size: 12px;
-        }
+        
         @media print {
-            body {
+            .receipt-container {
                 width: 80mm;
                 margin: 0;
-                padding: 10px;
+                padding: 0;
+                box-shadow: none;
             }
+            
             .no-print {
                 display: none;
             }
         }
+        
+        .receipt-header {
+            text-align: center;
+            margin-bottom: 15px;
+            border-bottom: 1px dashed #ccc;
+            padding-bottom: 10px;
+        }
+        
+        .receipt-header h1 {
+            font-size: 18px;
+            margin: 0 0 5px 0;
+        }
+        
+        .receipt-header p {
+            font-size: 12px;
+            margin: 3px 0;
+        }
+        
+        .receipt-body {
+            font-size: 12px;
+        }
+        
+        .receipt-info {
+            margin-bottom: 15px;
+        }
+        
+        .receipt-info div {
+            margin-bottom: 5px;
+        }
+        
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        
+        .items-table th {
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            padding: 5px 0;
+        }
+        
+        .items-table td {
+            padding: 5px 0;
+            vertical-align: top;
+        }
+        
+        .items-table .qty {
+            width: 10%;
+            text-align: center;
+        }
+        
+        .items-table .desc {
+            width: 60%;
+        }
+        
+        .items-table .amount {
+            width: 30%;
+            text-align: right;
+        }
+        
+        .receipt-totals {
+            text-align: right;
+            border-top: 1px dashed #ccc;
+            padding-top: 10px;
+        }
+        
+        .receipt-totals div {
+            margin-bottom: 5px;
+        }
+        
+        .receipt-footer {
+            text-align: center;
+            margin-top: 15px;
+            border-top: 1px dashed #ccc;
+            padding-top: 10px;
+            font-size: 12px;
+        }
+        
+        .receipt-footer p {
+            margin: 5px 0;
+        }
+        
+        .print-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 20px 0;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        
+        .back-button {
+            background: #777;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 20px 10px 20px 0;
+            cursor: pointer;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="store-name">POS System</div>
-        <div class="store-info">
-            <div>123 Main Street</div>
-            <div>Kampala, Uganda</div>
-            <div>Tel: +256 123 456 789</div>
+    <div class="receipt-container">
+        <div class="receipt-header">
+            <h1>GreenGrocer</h1>
+            <p>Quality Fresh Produce</p>
+            <p>Kampala, Uganda</p>
+            <p>Tel: +256 123 456 789</p>
+        </div>
+        
+        <div class="receipt-body">
+            <div class="receipt-info">
+                <div><strong>RECEIPT</strong></div>
+                <div>Order #: {{ order.id }}</div>
+                <div>Date: {{ order.order_date.strftime('%Y-%m-%d %H:%M:%S') if order.order_date else 'N/A' }}</div>
+                <div>Customer: {{ order.customer_name or 'Guest' }}</div>
+                <div>Type: {{ order.order_type|capitalize }}</div>
+            </div>
+            
+            <table class="items-table">
+                <thead>
+                    <tr>
+                        <th class="qty">Qty</th>
+                        <th class="desc">Description</th>
+                        <th class="amount">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.items %}
+                    <tr>
+                        <td class="qty">{{ item.quantity }}</td>
+                        <td class="desc">{{ item.product.name }}</td>
+                        <td class="amount">{{ "{:,.0f}".format(item.price * item.quantity) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <div class="receipt-totals">
+                <div>Subtotal: UGX {{ "{:,.0f}".format(order.total_amount) }}</div>
+                <div>Tax ({{ "{:.1f}".format(tax_rate * 100) }}%): UGX {{ "{:,.0f}".format(order.total_amount * tax_rate) }}</div>
+                <div><strong>Total: UGX {{ "{:,.0f}".format(order.total_amount * (1 + tax_rate)) }}</strong></div>
+            </div>
+            
+            <div class="receipt-footer">
+                <p>Thank you for shopping with us!</p>
+                <p>Please come again</p>
+                <p>*** This is a computer generated receipt ***</p>
+            </div>
         </div>
     </div>
-
-    <div class="receipt-info">
-        <div>Receipt #: {{ order.id }}</div>
-        <div>Date: {{ order.order_date.strftime('%Y-%m-%d %H:%M:%S') }}</div>
-        <div>Order Type: {{ order.order_type.title() }}</div>
-        <div>Sales Person: {{ order.created_by.username if order.created_by else 'Online Order' }}</div>
-    </div>
-
-    <div class="customer-info">
-        <div><strong>Customer:</strong></div>
-        <div>Name: {{ order.customer_name or (order.customer.username if order.customer else 'Walk-in Customer') }}</div>
-        {% if order.customer_phone %}
-        <div>Phone: {{ order.customer_phone }}</div>
+    
+    <div class="no-print" style="text-align: center;">
+        {% if current_user.is_authenticated %}
+            {% if current_user.is_staff %}
+                <a href="{{ url_for('staff_order_detail', order_id=order.id) }}" class="back-button">Back to Order</a>
+            {% elif current_user.is_admin %}
+                <a href="{{ url_for('staff_order_detail', order_id=order.id) }}" class="back-button">Back to Order</a>
+            {% else %}
+                <a href="{{ url_for('order_confirmation', order_id=order.id) }}" class="back-button">Back to Order</a>
+            {% endif %}
+        {% else %}
+            <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
         {% endif %}
-        {% if order.customer_email %}
-        <div>Email: {{ order.customer_email or (order.customer.email if order.customer else '') }}</div>
-        {% endif %}
-        {% if order.customer_address %}
-        <div>Address: {{ order.customer_address }}</div>
-        {% endif %}
+        <button onclick="window.print()" class="print-button">Print Receipt</button>
     </div>
-
-    <div class="items">
-        {% for item in order.items %}
-        <div class="item-row">
-            <div>{{ item.product.name }} x{{ item.quantity }}</div>
-            <div>UGX {{ "{:,.0f}".format(item.price * item.quantity) }}</div>
-        </div>
-        {% endfor %}
-    </div>
-
-    <div class="total">
-        Total: UGX {{ "{:,.0f}".format(order.total_amount) }}
-    </div>
-
-    <div class="footer">
-        <div>Thank you for your purchase!</div>
-        <div>Please come again</div>
-    </div>
-
-    <div class="no-print" style="margin-top: 20px; text-align: center;">
-        <button onclick="window.print()">Print Receipt</button>
-    </div>
+    
+    <script>
+        // Auto print when page loads
+        window.onload = function() {
+            // Uncomment this line to automatically print the receipt when the page loads
+            // window.print();
+        };
+    </script>
 </body>
 </html> 

@@ -69,6 +69,14 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('popstate', function() {
         window.location.reload();
     });
+
+    // Initialize cart syncing
+    initCartSync();
+    
+    // Setup event listeners
+    setupAddToCartButtons();
+    setupQuantityButtons();
+    setupFormValidation();
 });
 
 // Online/Offline status detection and UI updates
@@ -672,4 +680,268 @@ function storeOrderOffline(orderData) {
     request.onerror = function() {
         alert("Error saving order locally. Please try again.");
     };
+}
+
+// Sync cart data with server periodically
+function initCartSync() {
+    // Sync cart on page load
+    syncCart();
+    
+    // Setup periodic sync every 30 seconds
+    setInterval(syncCart, 30000);
+}
+
+// Sync cart data with the server
+function syncCart() {
+    // Only run on pages with cart elements
+    if (document.getElementById('cart-count') || document.getElementById('cart-total')) {
+        fetch('/sync_cart', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            credentials: 'same-origin'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update cart count badge
+                const cartCountBadge = document.getElementById('cart-count');
+                if (cartCountBadge) {
+                    cartCountBadge.textContent = data.cart_count;
+                }
+                
+                // Update cart total if on cart page
+                const cartTotalElement = document.getElementById('cart-total');
+                if (cartTotalElement) {
+                    cartTotalElement.textContent = formatCurrency(data.cart_total);
+                }
+            }
+        })
+        .catch(error => console.error('Error syncing cart:', error));
+    }
+}
+
+// Setup "Add to Cart" buttons
+function setupAddToCartButtons() {
+    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+            const productId = this.getAttribute('data-product-id');
+            
+            // Show loading state
+            this.disabled = true;
+            this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding...';
+            
+            fetch(`/add_to_cart/${productId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({})
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Reset button
+                this.disabled = false;
+                this.innerHTML = 'Add to Cart';
+                
+                if (data.success) {
+                    // Update cart count badge
+                    const cartCountBadge = document.getElementById('cart-count');
+                    if (cartCountBadge) {
+                        cartCountBadge.textContent = data.cart_count;
+                    }
+                    
+                    // Show success toast
+                    showToast(`Added ${data.product_name} to cart!`, 'success');
+                } else {
+                    // Show error toast
+                    showToast(data.error || 'Error adding to cart', 'danger');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                this.disabled = false;
+                this.innerHTML = 'Add to Cart';
+                showToast('Error adding to cart', 'danger');
+            });
+        });
+    });
+}
+
+// Setup quantity update buttons on cart page
+function setupQuantityButtons() {
+    // Quantity increment/decrement
+    document.querySelectorAll('.quantity-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const input = this.parentElement.querySelector('.quantity-input');
+            const itemId = input.getAttribute('data-item-id');
+            const action = this.getAttribute('data-action');
+            
+            let currentValue = parseInt(input.value, 10);
+            
+            if (action === 'increase') {
+                currentValue++;
+            } else if (action === 'decrease' && currentValue > 1) {
+                currentValue--;
+            }
+            
+            input.value = currentValue;
+            
+            // Update cart on server
+            updateCartItem(itemId, currentValue);
+        });
+    });
+    
+    // Manual quantity input
+    document.querySelectorAll('.quantity-input').forEach(input => {
+        input.addEventListener('change', function() {
+            const itemId = this.getAttribute('data-item-id');
+            let quantity = parseInt(this.value, 10);
+            
+            // Validate quantity
+            if (isNaN(quantity) || quantity < 1) {
+                quantity = 1;
+                this.value = 1;
+            }
+            
+            // Update cart on server
+            updateCartItem(itemId, quantity);
+        });
+    });
+}
+
+// Update cart item quantity
+function updateCartItem(itemId, quantity) {
+    fetch(`/update_cart/${itemId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({ quantity: quantity })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update cart count badge
+            const cartCountBadge = document.getElementById('cart-count');
+            if (cartCountBadge) {
+                cartCountBadge.textContent = data.cart_count;
+            }
+            
+            // Update cart total
+            const cartTotalElement = document.getElementById('cart-total');
+            if (cartTotalElement) {
+                cartTotalElement.textContent = formatCurrency(data.cart_total);
+            }
+            
+            // Update item subtotal if applicable
+            const itemSubtotalElement = document.querySelector(`.item-subtotal[data-item-id="${itemId}"]`);
+            if (itemSubtotalElement) {
+                const priceElement = document.querySelector(`.item-price[data-item-id="${itemId}"]`);
+                if (priceElement) {
+                    const price = parseFloat(priceElement.getAttribute('data-price'));
+                    const subtotal = price * quantity;
+                    itemSubtotalElement.textContent = formatCurrency(subtotal);
+                }
+            }
+            
+            // Show success message
+            showToast('Cart updated', 'success');
+        } else {
+            // Show error message
+            showToast(data.error || 'Error updating cart', 'danger');
+            
+            // Reset quantity to previous value if error
+            const input = document.querySelector(`.quantity-input[data-item-id="${itemId}"]`);
+            if (input) {
+                // Fetch current quantity from server
+                syncCart();
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showToast('Error updating cart', 'danger');
+    });
+}
+
+// Setup form validation for checkout and customer forms
+function setupFormValidation() {
+    const forms = document.querySelectorAll('.needs-validation');
+    
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            
+            form.classList.add('was-validated');
+        }, false);
+    });
+}
+
+// Helper function to format currency
+function formatCurrency(amount) {
+    // Use locale from HTML lang attribute or default to 'en-US'
+    const locale = document.documentElement.lang || 'en-US';
+    
+    // Get currency from meta tag or default to 'UGX'
+    const currencyMeta = document.querySelector('meta[name="currency"]');
+    const currency = currencyMeta ? currencyMeta.getAttribute('content') : 'UGX';
+    
+    return new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency: currency
+    }).format(amount);
+}
+
+// Helper function to show toast notifications
+function showToast(message, type = 'info') {
+    // Check if toast container exists, create if not
+    let toastContainer = document.querySelector('.toast-container');
+    if (!toastContainer) {
+        toastContainer = document.createElement('div');
+        toastContainer.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+        document.body.appendChild(toastContainer);
+    }
+    
+    // Create toast element
+    const toastId = 'toast-' + Date.now();
+    const toast = document.createElement('div');
+    toast.className = `toast bg-${type} text-white`;
+    toast.setAttribute('id', toastId);
+    toast.setAttribute('role', 'alert');
+    toast.setAttribute('aria-live', 'assertive');
+    toast.setAttribute('aria-atomic', 'true');
+    
+    toast.innerHTML = `
+        <div class="toast-header bg-${type} text-white">
+            <strong class="me-auto">POS System</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            ${message}
+        </div>
+    `;
+    
+    // Add toast to container
+    toastContainer.appendChild(toast);
+    
+    // Initialize and show toast
+    const bsToast = new bootstrap.Toast(toast, {
+        autohide: true,
+        delay: 3000
+    });
+    bsToast.show();
+    
+    // Remove toast after it's hidden
+    toast.addEventListener('hidden.bs.toast', function() {
+        this.remove();
+    });
 } 

@@ -46,5 +46,37 @@ def update_schema():
     
     print("Database update complete.")
 
+def update_db():
+    try:
+        # Connect to the database
+        conn = sqlite3.connect('instance/pos.db')
+        cursor = conn.cursor()
+        
+        # Check if columns already exist
+        cursor.execute("PRAGMA table_info('order')")
+        columns = cursor.fetchall()
+        column_names = [column[1] for column in columns]
+        
+        print("Current columns:", column_names)
+        
+        # Add viewed column if it doesn't exist
+        if 'viewed' not in column_names:
+            print("Adding 'viewed' column...")
+            cursor.execute('ALTER TABLE "order" ADD COLUMN viewed BOOLEAN DEFAULT 0')
+            
+        # Add viewed_at column if it doesn't exist
+        if 'viewed_at' not in column_names:
+            print("Adding 'viewed_at' column...")
+            cursor.execute('ALTER TABLE "order" ADD COLUMN viewed_at TIMESTAMP')
+        
+        # Commit changes
+        conn.commit()
+        conn.close()
+        
+        print('Database schema updated successfully.')
+    except Exception as e:
+        print(f'Error updating database: {str(e)}')
+
 if __name__ == '__main__':
-    update_schema() 
+    update_schema()
+    update_db() 

@@ -1,18 +1,32 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, abort, session, send_from_directory
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import datetime, timedelta
-# Comment out the problematic import and provide an alternative implementation
-# from dateutil.relativedelta import relativedelta
 import os
-import sys
+import uuid
+import json
+import time
+import base64
 import logging
-from dotenv import load_dotenv
-from functools import wraps
-from flask_migrate import Migrate
+import requests
+import hashlib
+import mimetypes
 import sqlite3
-import uuid  # For generating version IDs
+import tempfile
+import sys
+from datetime import datetime, timedelta, date
+from types import SimpleNamespace
+from flask import Flask, render_template, redirect, request, url_for, flash, jsonify, session, abort, send_file, make_response, g, send_from_directory
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask_bcrypt import Bcrypt
+from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.urls import url_parse
+from sqlalchemy import text
+from werkzeug.utils import secure_filename
+from functools import wraps
+from itsdangerous import URLSafeTimedSerializer, BadSignature
+from PIL import Image, ImageOps
+import qrcode
+from io import BytesIO
+from flask_cors import CORS
 
 # Generate a version ID for this app instance - changes on server restart
 APP_VERSION = str(uuid.uuid4())[:8]
@@ -34,8 +48,6 @@ logging.basicConfig(
     handlers=[logging.StreamHandler(sys.stdout)]
 )
 logger = logging.getLogger(__name__)
-
-load_dotenv()
 
 def admin_required(f):
     @wraps(f)
@@ -203,6 +215,7 @@ class PriceChange(db.Model):
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    reference_number = db.Column(db.String(50), unique=True, nullable=True)
     customer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     order_date = db.Column(db.DateTime, default=datetime.utcnow)
     total_amount = db.Column(db.Float, nullable=False)
@@ -220,17 +233,30 @@ class Order(db.Model):
     # Who created the order (staff member or system for online orders)
     created_by_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     
+    # Status change timestamps
+    updated_at = db.Column(db.DateTime, nullable=True)
+    completed_at = db.Column(db.DateTime, nullable=True)
+    
+    # Order notification status - explicitly define these columns
+    viewed = db.Column(db.Boolean, default=False)
+    viewed_at = db.Column(db.DateTime, nullable=True)
+    
     # Relationships with clear names
     customer = db.relationship('User', foreign_keys=[customer_id], backref='orders')
     created_by = db.relationship('User', foreign_keys=[created_by_id], backref='created_orders')
 
 class OrderItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
+    order_id = db.Column(db.Integer, db.ForeignKey('order.id', ondelete='CASCADE'), nullable=False)
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Float, nullable=False)
     product = db.relationship('Product', backref='order_items')
+    
+    # Added to calculate subtotal
+    @property
+    def subtotal(self):
+        return self.quantity * self.price
 
 class Cart(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -302,17 +328,38 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        if current_user.is_admin:
+            return redirect(url_for('admin'))
+        elif current_user.is_staff:
+            return redirect(url_for('staff_dashboard'))
+        else:
+            return redirect(url_for('index'))
+    
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
+        remember = 'remember' in request.form
+        
         user = User.query.filter_by(username=username).first()
         
         if user and user.check_password(password):
-            login_user(user)
-            return redirect(url_for('index'))
-        
-        flash('Invalid username or password')
-    return render_template('login.html')
+            login_user(user, remember=remember)
+            next_page = request.args.get('next')
+            
+            if not next_page or url_parse(next_page).netloc != '':
+                if user.is_admin:
+                    next_page = url_for('admin')
+                elif user.is_staff:
+                    next_page = url_for('staff_dashboard')
+                else:
+                    next_page = url_for('index')
+            
+            return redirect(next_page)
+        else:
+            flash('Invalid username or password')
+    
+    return versioned_render_template('login.html')
 
 @app.route('/logout')
 @login_required
@@ -498,25 +545,95 @@ def manage_staff():
         username = request.form.get('username')
         email = request.form.get('email')
         password = request.form.get('password')
+        is_admin = 'is_admin' in request.form
         
         if User.query.filter_by(username=username).first():
             flash('Username already exists', 'danger')
-            return redirect(url_for('admin', _anchor='staff'))
+            return redirect(url_for('manage_staff'))
         
         if User.query.filter_by(email=email).first():
             flash('Email already registered', 'danger')
-            return redirect(url_for('admin', _anchor='staff'))
+            return redirect(url_for('manage_staff'))
         
-        user = User(username=username, email=email, is_staff=True)
+        user = User(username=username, email=email, is_staff=True, is_admin=is_admin)
         user.set_password(password)
         db.session.add(user)
         db.session.commit()
         
         flash('Staff user created successfully', 'success')
-        return redirect(url_for('admin', _anchor='staff'))
+        return redirect(url_for('manage_staff'))
     
     staff_users = User.query.filter_by(is_staff=True).all()
     return render_template('manage_staff.html', staff_users=staff_users)
+
+@app.route('/admin/delete_staff/<int:user_id>', methods=['POST'])
+@login_required
+@admin_required
+def delete_staff(user_id):
+    user = User.query.get_or_404(user_id)
+    
+    # Don't allow deleting your own account
+    if user.id == current_user.id:
+        flash('You cannot delete your own account', 'danger')
+        return redirect(url_for('manage_staff'))
+    
+    username = user.username
+    db.session.delete(user)
+    db.session.commit()
+    
+    flash(f'Staff user "{username}" has been deleted', 'success')
+    return redirect(url_for('manage_staff'))
+
+@app.route('/admin/edit_staff/<int:user_id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def edit_staff(user_id):
+    user = User.query.get_or_404(user_id)
+    
+    if request.method == 'POST':
+        email = request.form.get('email')
+        new_password = request.form.get('new_password')
+        is_admin = 'is_admin' in request.form
+        
+        # Check if email is already in use by another user
+        if email != user.email:
+            existing_user = User.query.filter(User.email == email, User.id != user.id).first()
+            if existing_user:
+                flash('Email is already in use by another user', 'danger')
+                return redirect(url_for('edit_staff', user_id=user.id))
+            
+            user.email = email
+        
+        # Update password if provided
+        if new_password:
+            user.set_password(new_password)
+        
+        # Update admin status
+        user.is_admin = is_admin
+        
+        db.session.commit()
+        flash('Staff user updated successfully', 'success')
+        return redirect(url_for('manage_staff'))
+    
+    return render_template('edit_staff.html', user=user)
+
+@app.route('/admin/toggle_admin/<int:user_id>', methods=['POST'])
+@login_required
+@admin_required
+def toggle_admin(user_id):
+    user = User.query.get_or_404(user_id)
+    
+    # Don't allow removing admin from your own account
+    if user.id == current_user.id:
+        flash('You cannot remove admin privileges from your own account', 'danger')
+        return redirect(url_for('manage_staff'))
+    
+    user.is_admin = not user.is_admin
+    db.session.commit()
+    
+    status = 'granted' if user.is_admin else 'removed'
+    flash(f'Admin privileges {status} for {user.username}', 'success')
+    return redirect(url_for('manage_staff'))
 
 @app.route('/cart')
 def view_cart():
@@ -542,6 +659,18 @@ def view_cart():
             if not current_user.is_authenticated:
                 session['cart_id'] = cart.id
         
+        # Validate cart items and remove any invalid ones
+        invalid_items = []
+        for item in cart.items:
+            if not item.product or item.product.stock <= 0 or item.quantity <= 0:
+                invalid_items.append(item)
+        
+        if invalid_items:
+            for item in invalid_items:
+                db.session.delete(item)
+            db.session.commit()
+            flash('Some items were removed from your cart because they are no longer available', 'warning')
+        
         # Get cart items and calculate total
         cart_items = CartItem.query.filter_by(cart_id=cart.id).all()
         total_amount = sum(item.quantity * item.product.price for item in cart_items)
@@ -555,7 +684,9 @@ def view_cart():
 @app.route('/add_to_cart/<int:product_id>', methods=['POST'])
 def add_to_cart(product_id):
     try:
+        # Lock to prevent race conditions by getting the latest product data
         product = Product.query.get_or_404(product_id)
+        
         if product.stock <= 0:
             return jsonify({'success': False, 'error': 'Product out of stock'}), 400
 
@@ -603,8 +734,11 @@ def add_to_cart(product_id):
             if customer_address:
                 session['customer_address'] = customer_address
         
-        # Add or update cart item
+        # Add or update cart item with fresh stock check
+        product = Product.query.get_or_404(product_id)  # Re-query to get most up-to-date stock
+        
         cart_item = CartItem.query.filter_by(cart_id=cart.id, product_id=product_id).first()
+        
         if cart_item:
             if cart_item.quantity + 1 > product.stock:
                 return jsonify({'success': False, 'error': 'Not enough stock available'}), 400
@@ -616,7 +750,19 @@ def add_to_cart(product_id):
             db.session.add(cart_item)
         
         db.session.commit()
-        return jsonify({'success': True, 'message': 'Product added to cart'})
+        
+        # Return cart count and total in the response for UI update
+        cart_items = CartItem.query.filter_by(cart_id=cart.id).all()
+        cart_count = sum(item.quantity for item in cart_items)
+        cart_total = sum(item.quantity * item.product.price for item in cart_items)
+        
+        return jsonify({
+            'success': True, 
+            'message': 'Product added to cart',
+            'cart_count': cart_count,
+            'cart_total': cart_total,
+            'product_name': product.name
+        })
     except Exception as e:
         db.session.rollback()
         logger.error(f'Error adding to cart: {str(e)}')
@@ -624,101 +770,143 @@ def add_to_cart(product_id):
 
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
-    # Get the correct cart - same logic as in view_cart
-    cart = None
-    if current_user.is_authenticated:
-        cart = Cart.query.filter_by(user_id=current_user.id, status='active').first()
-    else:
-        # For anonymous users, use session to track cart
-        cart_id = session.get('cart_id')
-        if cart_id:
-            cart = Cart.query.get(cart_id)
-            if cart and cart.status != 'active':
-                cart = None
-
-    if not cart or not cart.items:
-        flash('Your cart is empty', 'error')
-        return redirect(url_for('view_cart'))
-
-    if request.method == 'GET':
-        # Calculate total for display
-        total_amount = sum(item.quantity * item.product.price for item in cart.items)
-        
-        # Pass stored customer info to the template
-        customer_info = {
-            'name': session.get('customer_name', ''),
-            'phone': session.get('customer_phone', ''),
-            'email': session.get('customer_email', ''),
-            'address': session.get('customer_address', '')
-        }
-        
-        return render_template('checkout.html', cart=cart, total_amount=total_amount, customer_info=customer_info)
-
-    # POST method - process the checkout
     try:
-        # Calculate total and check stock
-        total_amount = 0
+        # Get the correct cart - same logic as in view_cart
+        cart = None
+        if current_user.is_authenticated:
+            cart = Cart.query.filter_by(user_id=current_user.id, status='active').first()
+        else:
+            # For anonymous users, use session to track cart
+            cart_id = session.get('cart_id')
+            if cart_id:
+                cart = Cart.query.get(cart_id)
+                if cart and cart.status != 'active':
+                    cart = None
+
+        if not cart or not cart.items:
+            flash('Your cart is empty', 'error')
+            return redirect(url_for('view_cart'))
+
+        # Validate cart items and remove any invalid ones
+        invalid_items = []
         for item in cart.items:
-            if item.quantity > item.product.stock:
-                flash(f'Not enough stock for {item.product.name}', 'error')
+            if not item.product or item.product.stock <= 0 or item.quantity <= 0:
+                invalid_items.append(item)
+        
+        if invalid_items:
+            for item in invalid_items:
+                db.session.delete(item)
+            db.session.commit()
+            flash('Some items were removed from your cart because they are no longer available', 'warning')
+            if not cart.items:
+                flash('Your cart is now empty', 'error')
                 return redirect(url_for('view_cart'))
-            total_amount += item.quantity * item.product.price
 
-        # Get customer information
-        customer_name = request.form.get('customer_name', session.get('customer_name', ''))
-        customer_email = request.form.get('customer_email', session.get('customer_email', ''))
-        customer_phone = request.form.get('customer_phone', session.get('customer_phone', ''))
-        customer_address = request.form.get('customer_address', session.get('customer_address', ''))
+        if request.method == 'GET':
+            # Calculate total for display
+            try:
+                # Ensure we calculate with the most up-to-date product prices
+                total_amount = sum(item.quantity * item.product.price for item in cart.items)
+            except Exception as calc_err:
+                logger.error(f"Error calculating cart total: {str(calc_err)}")
+                total_amount = 0
+                for item in cart.items:
+                    try:
+                        item_total = item.quantity * item.product.price
+                        total_amount += item_total
+                    except:
+                        # Skip items that can't be calculated
+                        pass
+            
+            # Pass stored customer info to the template
+            customer_info = {
+                'name': session.get('customer_name', ''),
+                'phone': session.get('customer_phone', ''),
+                'email': session.get('customer_email', ''),
+                'address': session.get('customer_address', '')
+            }
+            
+            return render_template('checkout.html', cart=cart, total_amount=total_amount, customer_info=customer_info)
 
-        # Create order with customer_id and contact info
-        order = Order(
-            total_amount=total_amount,
-            customer_id=current_user.id if current_user.is_authenticated else None,
-            order_date=datetime.utcnow(),
-            customer_name=customer_name,
-            customer_email=customer_email,
-            customer_phone=customer_phone,
-            customer_address=customer_address,
-            order_type='online',
-            status='pending',  # Set status to pending for online orders
-            created_by_id=current_user.id if current_user.is_authenticated else None
-        )
-        db.session.add(order)
-        db.session.commit()  # Commit to get order ID
-
-        # Process items and update stock
-        for item in cart.items:
-            # Create order item
-            order_item = OrderItem(
-                order_id=order.id,
-                product_id=item.product_id,
-                quantity=item.quantity,
-                price=item.product.price
-            )
-            db.session.add(order_item)
-
-            # Update product stock and record movement
-            item.product.update_stock(item.quantity, 'sale')
-
-        # Mark cart as completed
-        cart.status = 'completed'
-        
-        db.session.commit()
-        flash('Order placed successfully!', 'success')
-        
-        # Redirect to receipt page
-        return redirect(url_for('print_receipt', order_id=order.id))
-
+        # POST method - process the checkout
+        try:
+            # Get customer information
+            customer_data = {
+                'customer_name': request.form.get('customer_name', session.get('customer_name', '')),
+                'customer_email': request.form.get('customer_email', session.get('customer_email', '')),
+                'customer_phone': request.form.get('customer_phone', session.get('customer_phone', '')),
+                'customer_address': request.form.get('customer_address', session.get('customer_address', ''))
+            }
+            
+            # Prepare items data from cart
+            items_data = []
+            for item in cart.items:
+                if not item.product:
+                    continue
+                    
+                # Fetch the latest product data to ensure stock accuracy
+                product = Product.query.get(item.product_id)
+                if not product:
+                    continue
+                    
+                # Verify stock availability
+                if item.quantity > product.stock:
+                    flash(f'Not enough stock for {product.name}. Only {product.stock} available.', 'error')
+                    return redirect(url_for('view_cart'))
+                    
+                # Add item to the list
+                items_data.append({
+                    'product_id': product.id,
+                    'quantity': item.quantity,
+                    'price': product.price,
+                    'name': product.name
+                })
+            
+            # Use the centralized function to create the order
+            order, error = create_order(customer_data, items_data, 'online')
+            
+            if error:
+                # If it's a detected duplicate, we can still proceed to the receipt
+                if "duplicate order" in error.lower() and order:
+                    flash('It appears this order was already processed!', 'info')
+                    # Mark cart as completed
+                    cart.status = 'completed'
+                    db.session.commit()
+                    return redirect(url_for('print_receipt', order_id=order.id))
+                else:
+                    # For other errors, show error and return to cart
+                    flash(error, 'error')
+                    return redirect(url_for('view_cart'))
+            
+            # Mark cart as completed
+            cart.status = 'completed'
+            db.session.commit()
+            
+            # Store the order ID in session to prevent duplicates
+            session['last_order_id'] = order.id
+            
+            flash('Order placed successfully!', 'success')
+            
+            # Redirect to receipt page
+            return redirect(url_for('print_receipt', order_id=order.id))
+            
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f'Error during checkout: {str(e)}')
+            flash(f'Error during checkout: {str(e)}', 'error')
+            return redirect(url_for('view_cart'))
     except Exception as e:
-        db.session.rollback()
-        logger.error(f'Error during checkout: {str(e)}')
-        flash('An error occurred during checkout', 'error')
-        return redirect(url_for('view_cart'))
+        logger.error(f'Error accessing cart: {str(e)}')
+        flash(f'Error processing your request: {str(e)}', 'error')
+        return redirect(url_for('index'))
 
 @app.route('/receipt/<int:order_id>')
 def print_receipt(order_id):
     order = Order.query.get_or_404(order_id)
-    return render_template('receipt.html', order=order)
+    # Add tax rate for receipt calculations
+    tax_rate = 0.18  # 18% VAT
+    # Pass current_user to template even for anonymous users
+    return render_template('receipt.html', order=order, tax_rate=tax_rate, current_user=current_user)
 
 @app.route('/order/<int:order_id>')
 @login_required
@@ -766,7 +954,18 @@ def update_cart(item_id):
             cart_item.quantity = new_quantity
         
         db.session.commit()
-        return jsonify({'success': True, 'message': 'Cart updated successfully'})
+        
+        # Calculate new cart total after update
+        cart = Cart.query.get(cart_item.cart_id)
+        cart_total = sum(item.quantity * item.product.price for item in cart.items)
+        cart_count = sum(item.quantity for item in cart.items)
+        
+        return jsonify({
+            'success': True, 
+            'message': 'Cart updated successfully',
+            'cart_total': cart_total,
+            'cart_count': cart_count
+        })
     except Exception as e:
         db.session.rollback()
         logger.error(f'Error updating cart: {str(e)}')
@@ -954,12 +1153,24 @@ def daily_sales():
         end_date_str = request.args.get('end_date')
         
         if start_date_str and end_date_str:
-            start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
-            end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+            try:
+                start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+                end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+            except ValueError as e:
+                logger.error(f'Invalid date format: {str(e)}')
+                return jsonify({'error': f'Invalid date format. Use YYYY-MM-DD format. Details: {str(e)}'}), 400
         else:
             end_date = datetime.now().date()
             start_date = end_date - timedelta(days=29)  # Last 30 days
         
+        # Ensure date range is valid
+        if start_date > end_date:
+            return jsonify({'error': 'Start date must be before end date'}), 400
+            
+        # Limit to reasonable date range (maximum 1 year)
+        if (end_date - start_date).days > 365:
+            return jsonify({'error': 'Date range too large. Maximum range is 1 year'}), 400
+            
         # Generate list of dates
         dates = []
         current_date = start_date
@@ -972,18 +1183,18 @@ def daily_sales():
         profit_data = []
         
         for date in dates:
-            # Get total sales for the day
-            daily_orders = Order.query.filter(
+            # Get total sales for the day using more efficient query
+            daily_sales = db.session.query(db.func.sum(Order.total_amount)).filter(
                 db.func.date(Order.order_date) == date
-            ).all()
+            ).scalar()
             
-            daily_total = sum(order.total_amount for order in daily_orders)
-            sales_data.append(float(daily_total))
+            daily_total = float(daily_sales) if daily_sales else 0.0
+            sales_data.append(daily_total)
             
             # Calculate profit (simplified as 20% of sales)
             # In a real system, you would use actual cost data for each product
             daily_profit = daily_total * 0.2
-            profit_data.append(float(daily_profit))
+            profit_data.append(daily_profit)
         
         dates_str = [date.strftime('%Y-%m-%d') for date in dates]
         
@@ -994,8 +1205,11 @@ def daily_sales():
         })
     
     except Exception as e:
+        # Log detailed error information
+        import traceback
         logger.error(f'Error in daily sales API: {str(e)}')
-        return jsonify({'error': str(e)}), 500
+        logger.error(traceback.format_exc())
+        return jsonify({'error': f'Server error: {str(e)}'}), 500
 
 @app.route('/api/sales/weekly', methods=['GET'])
 @login_required
@@ -1003,7 +1217,12 @@ def daily_sales():
 def weekly_sales():
     try:
         # Get number of weeks to show (default 12 weeks)
-        weeks = int(request.args.get('weeks', 12))
+        try:
+            weeks = int(request.args.get('weeks', 12))
+            if weeks <= 0 or weeks > 52:
+                return jsonify({'error': 'Weeks must be between 1 and 52'}), 400
+        except ValueError:
+            return jsonify({'error': 'Invalid weeks parameter'}), 400
         
         # Calculate start and end dates
         end_date = datetime.now().date()
@@ -1021,18 +1240,18 @@ def weekly_sales():
             week_start = current_date
             week_end = min(week_start + timedelta(days=6), end_date)
             
-            # Get orders for the week
-            weekly_orders = Order.query.filter(
+            # Get orders for the week using more efficient query
+            weekly_total = db.session.query(db.func.sum(Order.total_amount)).filter(
                 db.func.date(Order.order_date) >= week_start,
                 db.func.date(Order.order_date) <= week_end
-            ).all()
+            ).scalar()
             
-            weekly_total = sum(order.total_amount for order in weekly_orders)
-            sales_data.append(float(weekly_total))
+            weekly_total = float(weekly_total) if weekly_total else 0.0
+            sales_data.append(weekly_total)
             
             # Calculate profit (simplified as 20% of sales)
             weekly_profit = weekly_total * 0.2
-            profit_data.append(float(weekly_profit))
+            profit_data.append(weekly_profit)
             
             # Format week label
             week_label = f"{week_start.strftime('%Y-%m-%d')} to {week_end.strftime('%Y-%m-%d')}"
@@ -1048,8 +1267,11 @@ def weekly_sales():
         })
     
     except Exception as e:
+        # Log detailed error information
+        import traceback
         logger.error(f'Error in weekly sales API: {str(e)}')
-        return jsonify({'error': str(e)}), 500
+        logger.error(traceback.format_exc())
+        return jsonify({'error': f'Server error: {str(e)}'}), 500
 
 @app.route('/api/sales/monthly', methods=['GET'])
 @login_required
@@ -1057,7 +1279,12 @@ def weekly_sales():
 def monthly_sales():
     try:
         # Get number of months to show (default 12 months)
-        months = int(request.args.get('months', 12))
+        try:
+            months = int(request.args.get('months', 12))
+            if months <= 0 or months > 36:
+                return jsonify({'error': 'Months must be between 1 and 36'}), 400
+        except ValueError:
+            return jsonify({'error': 'Invalid months parameter'}), 400
         
         # Calculate start and end dates
         end_date = datetime.now().date().replace(day=1)
@@ -1069,26 +1296,33 @@ def monthly_sales():
         
         # Process each month
         for i in range(months-1, -1, -1):
-            # Calculate month dates
-            current_month = add_months(end_date, -i)
-            next_month = add_months(current_month, 1)
-            
-            # Get orders for the month
-            monthly_orders = Order.query.filter(
-                db.func.date(Order.order_date) >= current_month,
-                db.func.date(Order.order_date) < next_month
-            ).all()
-            
-            monthly_total = sum(order.total_amount for order in monthly_orders)
-            sales_data.append(float(monthly_total))
-            
-            # Calculate profit (simplified as 20% of sales)
-            monthly_profit = monthly_total * 0.2
-            profit_data.append(float(monthly_profit))
-            
-            # Format month label
-            month_label = current_month.strftime('%B %Y')
-            months_data.append(month_label)
+            try:
+                # Calculate month dates
+                current_month = add_months(end_date, -i)
+                next_month = add_months(current_month, 1)
+                
+                # Get orders for the month using more efficient query
+                monthly_total = db.session.query(db.func.sum(Order.total_amount)).filter(
+                    db.func.date(Order.order_date) >= current_month,
+                    db.func.date(Order.order_date) < next_month
+                ).scalar()
+                
+                monthly_total = float(monthly_total) if monthly_total else 0.0
+                sales_data.append(monthly_total)
+                
+                # Calculate profit (simplified as 20% of sales)
+                monthly_profit = monthly_total * 0.2
+                profit_data.append(monthly_profit)
+                
+                # Format month label
+                month_label = current_month.strftime('%B %Y')
+                months_data.append(month_label)
+            except Exception as month_err:
+                logger.error(f'Error processing month {i}: {str(month_err)}')
+                # Add zero values for months with errors to maintain data array length
+                sales_data.append(0.0)
+                profit_data.append(0.0)
+                months_data.append(f"Error: Month -{i}")
         
         return jsonify({
             'months': months_data,
@@ -1097,8 +1331,11 @@ def monthly_sales():
         })
     
     except Exception as e:
+        # Log detailed error information
+        import traceback
         logger.error(f'Error in monthly sales API: {str(e)}')
-        return jsonify({'error': str(e)}), 500
+        logger.error(traceback.format_exc())
+        return jsonify({'error': f'Server error: {str(e)}'}), 500
 
 @app.route('/api/sales/yearly', methods=['GET'])
 @login_required
@@ -1106,7 +1343,12 @@ def monthly_sales():
 def yearly_sales():
     try:
         # Get number of years to show (default 5 years)
-        years_count = int(request.args.get('years', 5))
+        try:
+            years_count = int(request.args.get('years', 5))
+            if years_count <= 0 or years_count > 10:
+                return jsonify({'error': 'Years must be between 1 and 10'}), 400
+        except ValueError:
+            return jsonify({'error': 'Invalid years parameter'}), 400
         
         # Calculate start and end years
         current_year = datetime.now().year
@@ -1122,18 +1364,18 @@ def yearly_sales():
             year_start = datetime(year, 1, 1).date()
             year_end = datetime(year, 12, 31).date()
             
-            # Get orders for the year
-            yearly_orders = Order.query.filter(
+            # Get orders for the year using more efficient query
+            yearly_total = db.session.query(db.func.sum(Order.total_amount)).filter(
                 db.func.date(Order.order_date) >= year_start,
                 db.func.date(Order.order_date) <= year_end
-            ).all()
+            ).scalar()
             
-            yearly_total = sum(order.total_amount for order in yearly_orders)
-            sales_data.append(float(yearly_total))
+            yearly_total = float(yearly_total) if yearly_total else 0.0
+            sales_data.append(yearly_total)
             
             # Calculate profit (simplified as 20% of sales)
             yearly_profit = yearly_total * 0.2
-            profit_data.append(float(yearly_profit))
+            profit_data.append(yearly_profit)
             
             # Add year label
             years_data.append(str(year))
@@ -1145,8 +1387,11 @@ def yearly_sales():
         })
     
     except Exception as e:
+        # Log detailed error information
+        import traceback
         logger.error(f'Error in yearly sales API: {str(e)}')
-        return jsonify({'error': str(e)}), 500
+        logger.error(traceback.format_exc())
+        return jsonify({'error': f'Server error: {str(e)}'}), 500
 
 @app.route('/quick_price_update/<int:product_id>', methods=['POST'])
 @login_required
@@ -1264,59 +1509,62 @@ def in_store_sale():
     if request.method == 'POST':
         try:
             # Get customer information
-            customer_name = request.form.get('customer_name', '')
-            customer_email = request.form.get('customer_email', '')
-            customer_phone = request.form.get('customer_phone', '')
-            customer_address = request.form.get('customer_address', '')
+            customer_data = {
+                'customer_name': request.form.get('customer_name', ''),
+                'customer_email': request.form.get('customer_email', ''),
+                'customer_phone': request.form.get('customer_phone', ''),
+                'customer_address': request.form.get('customer_address', '')
+            }
             
-            # Create a new order
-            order = Order(
-                total_amount=0,  # Will calculate based on items
-                customer_name=customer_name,
-                customer_email=customer_email,
-                customer_phone=customer_phone,
-                customer_address=customer_address,
-                order_type='in-store',
-                created_by_id=current_user.id
-            )
-            db.session.add(order)
-            db.session.commit()  # Commit to get order ID
+            # Prepare items data
+            items_data = []
             
-            # Process order items
-            total_amount = 0
             for product in products:
                 quantity_str = request.form.get(f'quantity-{product.id}', '0')
                 if not quantity_str or not quantity_str.strip():
                     continue
+                
+                try:
+                    quantity = int(quantity_str)
+                except ValueError:
+                    continue
                     
-                quantity = int(quantity_str)
                 if quantity <= 0:
                     continue
                 
-                if quantity > product.stock:
-                    flash(f'Not enough stock for {product.name}. Only {product.stock} available.', 'error')
+                # Re-query to get fresh stock value
+                fresh_product = Product.query.get(product.id)
+                if not fresh_product:
+                    continue
+                    
+                if quantity > fresh_product.stock:
+                    flash(f'Not enough stock for {fresh_product.name}. Only {fresh_product.stock} available.', 'error')
                     continue
                 
-                # Create order item
-                item_total = quantity * product.price
-                total_amount += item_total
-                
-                order_item = OrderItem(
-                    order_id=order.id,
-                    product_id=product.id,
-                    quantity=quantity,
-                    price=product.price
-                )
-                db.session.add(order_item)
-                
-                # Update product stock
-                product.update_stock(quantity, 'sale')
+                # Add item to the list
+                items_data.append({
+                    'product_id': fresh_product.id,
+                    'quantity': quantity,
+                    'price': fresh_product.price,
+                    'name': fresh_product.name
+                })
             
-            # Update order total
-            order.total_amount = total_amount
+            # Fail if no valid items
+            if not items_data:
+                flash('No valid items selected for purchase.', 'error')
+                return redirect(url_for('in_store_sale'))
             
-            # Save changes
-            db.session.commit()
+            # Use the centralized function to create the order
+            order, error = create_order(customer_data, items_data, 'in-store')
+            
+            if error:
+                # If it's a detected duplicate, we can still proceed to the receipt
+                if "duplicate order" in error.lower() and order:
+                    flash('It appears this order was already processed!', 'info')
+                    return redirect(url_for('print_receipt', order_id=order.id))
+                else:
+                    flash(error, 'error')
+                    return redirect(url_for('in_store_sale'))
             
             # Redirect to receipt
             flash('Order created successfully!', 'success')
@@ -1334,24 +1582,41 @@ def in_store_sale():
 @login_required
 def pending_orders_api():
     try:
-        # Get online orders that are pending and haven't been processed
-        pending_orders = Order.query.filter_by(
-            order_type='online',
-            status='pending'
-        ).order_by(Order.order_date.desc()).limit(5).all()
+        # Use direct SQL instead of ORM to avoid column issues
+        conn = db.engine.raw_connection()
+        cursor = conn.cursor()
         
+        # Get online orders that are pending and haven't been processed
+        cursor.execute("""
+            SELECT id, customer_name, customer_phone, customer_email, customer_address, order_date, total_amount
+            FROM 'order'
+            WHERE order_type = 'online' AND status = 'pending'
+            ORDER BY order_date DESC
+            LIMIT 5
+        """)
+        
+        pending_orders = cursor.fetchall()
+        
+        # Format the orders data for the response
         orders_data = []
         for order in pending_orders:
+            # Get the order items count
+            cursor.execute("SELECT COUNT(*) FROM order_item WHERE order_id = ?", (order[0],))
+            items_count = cursor.fetchone()[0]
+            
+            # Format the order data
             orders_data.append({
-                'id': order.id,
-                'customer_name': order.customer_name or (order.customer.username if order.customer else 'Online Customer'),
-                'order_date': order.order_date.strftime('%Y-%m-%d %H:%M:%S'),
-                'total_amount': float(order.total_amount),
-                'items_count': len(order.items),
-                'customer_phone': order.customer_phone or '',
-                'customer_email': order.customer_email or '',
-                'customer_address': order.customer_address or ''
+                'id': order[0],
+                'customer_name': order[1] or 'Online Customer',
+                'order_date': order[5],
+                'total_amount': float(order[6]),
+                'items_count': items_count,
+                'customer_phone': order[2] or '',
+                'customer_email': order[3] or '',
+                'customer_address': order[4] or ''
             })
+        
+        conn.close()
         
         return jsonify({
             'count': len(pending_orders),
@@ -1400,23 +1665,25 @@ def sync_offline_order():
             return jsonify({'success': False, 'error': 'No data provided'}), 400
         
         # Extract order details
-        customer_name = data.get('customer_name', '')
-        customer_email = data.get('customer_email', '')
-        customer_phone = data.get('customer_phone', '')
-        customer_address = data.get('customer_address', '')
-        items = data.get('items', [])
+        customer_data = {
+            'customer_name': data.get('customer_name', ''),
+            'customer_email': data.get('customer_email', ''),
+            'customer_phone': data.get('customer_phone', ''),
+            'customer_address': data.get('customer_address', '')
+        }
+        
+        raw_items = data.get('items', [])
         offline_timestamp = data.get('offlineTimestamp')
         
         # Validate basic data
-        if not items or not isinstance(items, list):
+        if not raw_items or not isinstance(raw_items, list):
             return jsonify({'success': False, 'error': 'Invalid items data'}), 400
             
-        # Calculate total amount
-        total_amount = 0
-        order_items = []
+        # Prepare items data
+        items_data = []
         
         # Check stock and prepare items
-        for item in items:
+        for item in raw_items:
             product_id = item.get('product_id')
             quantity = item.get('quantity', 0)
             
@@ -1434,51 +1701,31 @@ def sync_offline_order():
                     'error': f'Not enough stock for {product.name}. Only {product.stock} available.'
                 }), 400
                 
-            item_total = quantity * product.price
-            total_amount += item_total
-            
-            order_items.append({
-                'product': product,
+            items_data.append({
+                'product_id': product_id,
                 'quantity': quantity,
-                'price': product.price
+                'price': product.price,
+                'name': product.name
             })
             
         # If no valid items, return error
-        if not order_items:
+        if not items_data:
             return jsonify({'success': False, 'error': 'No valid items in order'}), 400
             
-        # Create the order
-        order = Order(
-            total_amount=total_amount,
-            customer_id=current_user.id if current_user.is_authenticated else None,
-            order_date=datetime.fromisoformat(offline_timestamp) if offline_timestamp else datetime.utcnow(),
-            customer_name=customer_name,
-            customer_email=customer_email,
-            customer_phone=customer_phone,
-            customer_address=customer_address,
-            order_type='offline-sync',  # Special type for synced offline orders
-            status='completed',
-            created_by_id=current_user.id if current_user.is_authenticated else None
-        )
-        db.session.add(order)
-        db.session.commit()  # Commit to get order ID
+        # Create the order using the centralized function
+        order, error = create_order(customer_data, items_data, 'offline-sync')
         
-        # Create order items and update stock
-        for item in order_items:
-            # Create order item
-            order_item = OrderItem(
-                order_id=order.id,
-                product_id=item['product'].id,
-                quantity=item['quantity'],
-                price=item['price']
-            )
-            db.session.add(order_item)
-            
-            # Update product stock
-            item['product'].update_stock(item['quantity'], 'sale')
-            
-        # Commit all changes
-        db.session.commit()
+        if error:
+            # If it's a detected duplicate, we can still consider it a success
+            if "duplicate order" in error.lower() and order:
+                return jsonify({
+                    'success': True,
+                    'message': f'Order #{order.id} was already synced',
+                    'order_id': order.id,
+                    'duplicate': True
+                })
+            else:
+                return jsonify({'success': False, 'error': error}), 500
         
         return jsonify({
             'success': True,
@@ -1495,30 +1742,65 @@ def sync_offline_order():
 @login_required
 @staff_required
 def my_sales():
-    """Show sales made by the current staff member"""
+    """Display all sales created by the current staff member"""
     try:
-        # Get all orders created by this staff member
-        orders = Order.query.filter_by(created_by_id=current_user.id).order_by(Order.order_date.desc()).all()
+        # Get URL parameters
+        page = request.args.get('page', 1, type=int)
+        per_page = 10  # Number of orders per page
         
-        # Calculate some statistics
-        total_sales = sum(order.total_amount for order in orders)
-        today_sales = sum(order.total_amount for order in orders 
-                         if order.order_date.date() == datetime.now().date())
+        conn = db.engine.raw_connection()
+        cursor = conn.cursor()
         
-        # Get count of orders by type
-        in_store_count = Order.query.filter_by(created_by_id=current_user.id, order_type='in-store').count()
-        online_count = Order.query.filter_by(created_by_id=current_user.id, order_type='online').count()
+        # Count total orders for pagination
+        cursor.execute("""
+            SELECT COUNT(*)
+            FROM "order"
+            WHERE created_by_id = ?
+            ORDER BY order_date DESC
+        """, (current_user.id,))
         
-        return render_template('my_sales.html', 
+        total_orders = cursor.fetchone()[0]
+        
+        # Calculate offset
+        offset = (page - 1) * per_page
+        
+        # Get paginated orders
+        cursor.execute("""
+            SELECT id, customer_name, order_date, total_amount, status, viewed
+            FROM "order"
+            WHERE created_by_id = ?
+            ORDER BY order_date DESC
+            LIMIT ? OFFSET ?
+        """, (current_user.id, per_page, offset))
+        
+        order_data = cursor.fetchall()
+        
+        # Create a list of SimpleNamespace objects to mimic ORM
+        orders = []
+        for order_row in order_data:
+            order = SimpleNamespace(
+                id=order_row[0],
+                customer_name=order_row[1],
+                order_date=order_row[2],
+                total_amount=order_row[3],
+                status=order_row[4],
+                viewed=order_row[5]
+            )
+            orders.append(order)
+        
+        # Calculate total pages for pagination
+        total_pages = (total_orders + per_page - 1) // per_page
+        
+        conn.close()
+        
+        return render_template('staff/orders.html', 
                               orders=orders, 
-                              total_sales=total_sales,
-                              today_sales=today_sales,
-                              in_store_count=in_store_count,
-                              online_count=online_count)
+                              page=page, 
+                              total_pages=total_pages)
     except Exception as e:
-        logger.error(f'Error in my_sales route: {str(e)}')
-        flash('An error occurred while loading your sales data', 'error')
-        return redirect(url_for('index'))
+        flash('Error loading orders: ' + str(e), 'danger')
+        app.logger.error(f"Error in my_sales: {str(e)}")
+        return redirect(url_for('staff_dashboard'))
 
 # Method to identify if user agent is from a mobile or desktop device
 def is_mobile():
@@ -1985,6 +2267,1248 @@ def get_cart_count():
     except Exception as e:
         logger.error(f'Error getting cart count: {str(e)}')
         return jsonify({'success': False, 'error': str(e), 'count': 0})
+
+@app.route('/staff_dashboard')
+@login_required
+@staff_required
+def staff_dashboard():
+    try:
+        # Get recent orders (both online and in-store)
+        try:
+            recent_orders = Order.query.order_by(Order.order_date.desc()).limit(20).all()
+        except Exception as e:
+            app.logger.error(f"Error fetching recent orders: {str(e)}")
+            # Fallback to direct SQL
+            recent_orders = []
+            try:
+                result = db.session.execute(
+                    text("SELECT id, customer_name, total_amount, order_date, status FROM 'order' ORDER BY order_date DESC LIMIT 20")
+                )
+                for row in result:
+                    # Create a simplified order object with just the fields we need
+                    order = SimpleNamespace(
+                        id=row[0],
+                        customer_name=row[1],
+                        total_amount=row[2],
+                        order_date=row[3],
+                        status=row[4]
+                    )
+                    recent_orders.append(order)
+            except Exception as sql_e:
+                app.logger.error(f"Fallback SQL also failed: {str(sql_e)}")
+        
+        # Get pending orders that need to be processed
+        try:
+            pending_orders = Order.query.filter_by(status='pending').all()
+        except Exception as e:
+            app.logger.error(f"Error fetching pending orders: {str(e)}")
+            pending_orders = []
+            try:
+                result = db.session.execute(
+                    text("SELECT id, customer_name, total_amount, order_date FROM 'order' WHERE status = 'pending'")
+                )
+                for row in result:
+                    order = SimpleNamespace(
+                        id=row[0],
+                        customer_name=row[1],
+                        total_amount=row[2],
+                        order_date=row[3],
+                        status='pending'
+                    )
+                    pending_orders.append(order)
+            except Exception as sql_e:
+                app.logger.error(f"Fallback SQL also failed: {str(sql_e)}")
+        
+        # Count of orders by status
+        order_counts = {}
+        try:
+            order_counts = {
+                'pending': Order.query.filter_by(status='pending').count(),
+                'processing': Order.query.filter_by(status='processing').count(),
+                'completed': Order.query.filter_by(status='completed').count()
+            }
+        except Exception as e:
+            app.logger.error(f"Error fetching order counts: {str(e)}")
+            try:
+                # Fallback to direct SQL counts
+                pending = db.session.execute(text("SELECT COUNT(*) FROM 'order' WHERE status = 'pending'")).scalar() or 0
+                processing = db.session.execute(text("SELECT COUNT(*) FROM 'order' WHERE status = 'processing'")).scalar() or 0
+                completed = db.session.execute(text("SELECT COUNT(*) FROM 'order' WHERE status = 'completed'")).scalar() or 0
+                
+                order_counts = {
+                    'pending': pending,
+                    'processing': processing,
+                    'completed': completed
+                }
+            except Exception as sql_e:
+                app.logger.error(f"Fallback SQL counts also failed: {str(sql_e)}")
+                order_counts = {'pending': 0, 'processing': 0, 'completed': 0}
+        
+        return render_template('staff/dashboard.html', 
+                              recent_orders=recent_orders,
+                              pending_orders=pending_orders,
+                              order_counts=order_counts)
+    except Exception as e:
+        app.logger.error(f"Critical error in staff_dashboard: {str(e)}")
+        flash(f"Error loading dashboard: {str(e)}", "error")
+        return render_template('staff/dashboard.html', 
+                              recent_orders=[],
+                              pending_orders=[],
+                              order_counts={'pending': 0, 'processing': 0, 'completed': 0},
+                              error=str(e))
+
+# Add a staff-specific order management route
+@app.route('/staff/orders')
+@login_required
+@staff_required
+def staff_orders():
+    """Show all orders with filtering options for staff members"""
+    try:
+        # Get page number from request args, default to 1
+        page = request.args.get('page', 1, type=int)
+        per_page = 10
+        
+        # Use direct SQL for querying to avoid ORM column reference_number issues
+        conn = db.engine.raw_connection()
+        cursor = conn.cursor()
+        
+        # Base query - will add conditions based on filters
+        query_conditions = []
+        query_params = []
+        
+        # Filter by status
+        status = request.args.get('status')
+        if status and status != 'all':
+            query_conditions.append("status = ?")
+            query_params.append(status)
+        
+        # Filter by order type
+        order_type = request.args.get('type')
+        if order_type and order_type != 'all':
+            query_conditions.append("order_type = ?")
+            query_params.append(order_type)
+        
+        # Filter by date range
+        date_from = request.args.get('date_from')
+        if date_from:
+            try:
+                date_from_obj = datetime.strptime(date_from, '%Y-%m-%d')
+                query_conditions.append("order_date >= ?")
+                query_params.append(date_from_obj.isoformat())
+            except ValueError:
+                flash('Invalid date format for Date From', 'warning')
+        
+        date_to = request.args.get('date_to')
+        if date_to:
+            try:
+                date_to_obj = datetime.strptime(date_to, '%Y-%m-%d')
+                # Add a day to include the entire end date
+                date_to_obj = date_to_obj + timedelta(days=1)
+                query_conditions.append("order_date <= ?")
+                query_params.append(date_to_obj.isoformat())
+            except ValueError:
+                flash('Invalid date format for Date To', 'warning')
+        
+        # Construct WHERE clause if needed
+        where_clause = ""
+        if query_conditions:
+            where_clause = "WHERE " + " AND ".join(query_conditions)
+        
+        # Count total records for pagination
+        count_query = f"SELECT COUNT(*) FROM \"order\" {where_clause}"
+        cursor.execute(count_query, query_params)
+        total_count = cursor.fetchone()[0]
+        
+        # Calculate pagination values
+        total_pages = (total_count + per_page - 1) // per_page
+        offset = (page - 1) * per_page
+        
+        # Fetch paginated records
+        orders_query = f"""
+            SELECT id, customer_id, order_date, total_amount, status, 
+                   customer_name, customer_phone, customer_email, 
+                   order_type, created_by_id
+            FROM "order"
+            {where_clause}
+            ORDER BY order_date DESC
+            LIMIT ? OFFSET ?
+        """
+        cursor.execute(orders_query, query_params + [per_page, offset])
+        order_results = cursor.fetchall()
+        
+        # Create list of SimpleNamespace objects to mimic ORM objects
+        orders = []
+        for order_data in order_results:
+            # Get customer name for this order if it exists
+            customer_name = order_data[5]  # Default to customer_name from order
+            if order_data[1]:  # If customer_id exists
+                cursor.execute("SELECT username FROM user WHERE id = ?", (order_data[1],))
+                customer_result = cursor.fetchone()
+                if customer_result:
+                    customer_name = customer_result[0]
+            
+            # Create a SimpleNamespace to mimic Order object
+            order = SimpleNamespace(
+                id=order_data[0],
+                customer_id=order_data[1],
+                order_date=order_data[2],
+                total_amount=order_data[3],
+                status=order_data[4],
+                customer_name=customer_name or order_data[5],  # Use username or fallback to order's customer_name
+                customer_phone=order_data[6],
+                customer_email=order_data[7],
+                order_type=order_data[8],
+                created_by_id=order_data[9]
+            )
+            orders.append(order)
+        
+        # Create a pagination object that mimics Flask-SQLAlchemy's pagination
+        pagination = SimpleNamespace(
+            items=orders,
+            page=page,
+            per_page=per_page,
+            total=total_count,
+            pages=total_pages,
+            has_prev=(page > 1),
+            has_next=(page < total_pages),
+            prev_num=(page - 1 if page > 1 else None),
+            next_num=(page + 1 if page < total_pages else None),
+            iter_pages=lambda: range(1, total_pages + 1)
+        )
+        
+        conn.close()
+        
+        return render_template('staff/orders.html', 
+                            orders=orders,
+                            pagination=pagination)
+                            
+    except Exception as e:
+        app.logger.error(f"Error in staff_orders: {str(e)}")
+        flash(f'Error loading orders: {str(e)}', 'error')
+        return redirect(url_for('staff_dashboard'))
+
+# Add a route for staff to view a specific order and manage it
+@app.route('/staff/order/<int:order_id>')
+@login_required
+@staff_required
+def staff_order_detail(order_id):
+    try:
+        # Use direct SQL instead of ORM to avoid column issues
+        conn = db.engine.raw_connection()
+        cursor = conn.cursor()
+        
+        # Get the order details
+        cursor.execute("""
+            SELECT id, customer_id, order_date, total_amount, status, 
+                   customer_name, customer_phone, customer_email, customer_address,
+                   order_type, created_by_id, updated_at, completed_at, viewed, viewed_at,
+                   payment_method, payment_status, payment_id
+            FROM "order"
+            WHERE id = ?
+        """, (order_id,))
+        
+        order_data = cursor.fetchone()
+        
+        if not order_data:
+            flash('Order not found', 'error')
+            return redirect(url_for('staff_dashboard'))
+        
+        # Get staff name who created the order
+        staff_name = None
+        if order_data[10]:  # created_by_id
+            cursor.execute("SELECT username FROM user WHERE id = ?", (order_data[10],))
+            staff_result = cursor.fetchone()
+            if staff_result:
+                staff_name = staff_result[0]
+        
+        # Get order items
+        cursor.execute("""
+            SELECT oi.id, oi.product_id, oi.quantity, oi.price, p.name, p.category
+            FROM order_item oi
+            JOIN product p ON oi.product_id = p.id
+            WHERE oi.order_id = ?
+        """, (order_id,))
+        
+        order_items = cursor.fetchall()
+        
+        # Create a simple object to pass to the template that mimics the ORM object
+        order = SimpleNamespace(
+            id=order_data[0],
+            customer_id=order_data[1],
+            order_date=order_data[2],
+            total_amount=order_data[3],
+            status=order_data[4],
+            customer_name=order_data[5],
+            customer_phone=order_data[6],
+            customer_email=order_data[7],
+            customer_address=order_data[8],
+            order_type=order_data[9],
+            created_by_id=order_data[10],
+            created_by=SimpleNamespace(username=staff_name) if staff_name else None,
+            updated_at=order_data[11],
+            completed_at=order_data[12],
+            viewed=order_data[13],
+            viewed_at=order_data[14],
+            payment_method=order_data[15],
+            payment_status=order_data[16],
+            payment_id=order_data[17]
+        )
+        
+        # Create SimpleNamespace objects for order items and attach to order
+        items = []
+        for item_data in order_items:
+            item = SimpleNamespace(
+                id=item_data[0],
+                product_id=item_data[1],
+                quantity=item_data[2],
+                price=item_data[3],
+                product=SimpleNamespace(
+                    name=item_data[4],
+                    category=item_data[5]
+                )
+            )
+            items.append(item)
+        
+        # Add items as a property to the order
+        order.items = items
+        
+        conn.close()
+        
+        return render_template('staff/order_detail.html', order=order)
+    except Exception as e:
+        app.logger.error(f"Error in staff_order_detail: {str(e)}")
+        flash(f"Error viewing order: {str(e)}", "error")
+        return redirect(url_for('staff_dashboard'))
+
+@app.route('/kitchen/order/<int:order_id>')
+@login_required
+@staff_required
+def kitchen_order_detail(order_id):
+    try:
+        # Use direct SQL instead of ORM to avoid column issues
+        conn = db.engine.raw_connection()
+        cursor = conn.cursor()
+        
+        # Get the order details
+        cursor.execute("""
+            SELECT id, customer_id, order_date, total_amount, status, 
+                   customer_name, customer_phone, customer_email, customer_address,
+                   order_type, created_by_id, updated_at, completed_at, viewed, viewed_at
+            FROM "order"
+            WHERE id = ?
+        """, (order_id,))
+        
+        order_data = cursor.fetchone()
+        
+        if not order_data:
+            flash('Order not found', 'error')
+            return redirect(url_for('staff_dashboard'))
+            
+        # Mark order as viewed when kitchen staff opens it
+        if order_data[13] == 0 or not order_data[13]:  # viewed column index
+            try:
+                cursor.execute(
+                    'UPDATE "order" SET viewed = 1, viewed_at = ? WHERE id = ?', 
+                    (datetime.utcnow().isoformat(), order_id)
+                )
+                conn.commit()
+            except Exception as view_err:
+                logger.warning(f"Error marking order as viewed: {str(view_err)}")
+                # Continue even if marking as viewed fails
+        
+        # Get order items
+        cursor.execute("""
+            SELECT oi.id, oi.product_id, oi.quantity, oi.price, p.name, p.category
+            FROM order_item oi
+            JOIN product p ON oi.product_id = p.id
+            WHERE oi.order_id = ?
+        """, (order_id,))
+        
+        order_items = cursor.fetchall()
+        
+        # Create a simple object to pass to the template that mimics the ORM object
+        order = SimpleNamespace(
+            id=order_data[0],
+            customer_id=order_data[1],
+            order_date=order_data[2],
+            total_amount=order_data[3],
+            status=order_data[4],
+            customer_name=order_data[5],
+            customer_phone=order_data[6],
+            customer_email=order_data[7],
+            customer_address=order_data[8],
+            order_type=order_data[9],
+            created_by_id=order_data[10],
+            updated_at=order_data[11],
+            completed_at=order_data[12],
+            viewed=order_data[13],
+            viewed_at=order_data[14]
+        )
+        
+        # Create SimpleNamespace objects for order items and attach to order
+        items = []
+        for item_data in order_items:
+            item = SimpleNamespace(
+                id=item_data[0],
+                product_id=item_data[1],
+                quantity=item_data[2],
+                price=item_data[3],
+                product=SimpleNamespace(
+                    name=item_data[4],
+                    category=item_data[5]
+                )
+            )
+            items.append(item)
+        
+        # Add items as a property to the order
+        order.items = items
+        
+        conn.close()
+        
+        return render_template('kitchen/order_detail.html', order=order)
+    except Exception as e:
+        logger.error(f"Error in kitchen_order_detail: {str(e)}")
+        flash(f"Error viewing order: {str(e)}", "error")
+        return redirect(url_for('staff_dashboard'))
+
+@app.route('/staff/update_order_status/<int:order_id>', methods=['POST'])
+@login_required
+@staff_required
+def staff_update_order_status(order_id):
+    try:
+        # Get the new status from form
+        new_status = request.form.get('status')
+        notes = request.form.get('notes')
+        
+        if new_status not in ['pending', 'processing', 'completed', 'cancelled']:
+            flash('Invalid status.', 'error')
+            return redirect(url_for('staff_order_detail', order_id=order_id))
+        
+        conn = db.engine.raw_connection()
+        cursor = conn.cursor()
+        
+        # Get current order data to check if it exists
+        cursor.execute("SELECT status FROM \"order\" WHERE id = ?", (order_id,))
+        order_data = cursor.fetchone()
+        
+        if not order_data:
+            flash('Order not found', 'error')
+            conn.close()
+            return redirect(url_for('staff_dashboard'))
+        
+        # Set completed_at timestamp if status is being set to completed
+        current_time = datetime.utcnow().isoformat()
+        if new_status == 'completed':
+            cursor.execute(
+                'UPDATE "order" SET status = ?, updated_at = ?, completed_at = ? WHERE id = ?',
+                (new_status, current_time, current_time, order_id)
+            )
+        else:
+            cursor.execute(
+                'UPDATE "order" SET status = ?, updated_at = ? WHERE id = ?',
+                (new_status, current_time, order_id)
+            )
+        
+        # Save the status change
+        conn.commit()
+        conn.close()
+        
+        flash(f'Order status updated to {new_status}', 'success')
+        
+        # Redirect based on the source
+        redirect_url = request.form.get('redirect_url', 'staff_order_detail')
+        if redirect_url == 'kitchen_orders':
+            return redirect(url_for('kitchen_orders'))
+        else:
+            return redirect(url_for('staff_order_detail', order_id=order_id))
+            
+    except Exception as e:
+        app.logger.error(f"Error updating order status: {str(e)}")
+        flash(f"Error updating order status: {str(e)}", "error")
+        return redirect(url_for('staff_order_detail', order_id=order_id))
+
+# Temporary route to update database schema
+@app.route('/update_db')
+def update_db():
+    try:
+        # Connect to the database
+        conn = sqlite3.connect('instance/pos.db')
+        cursor = conn.cursor()
+        
+        # Check if we need to recreate the ORM models in the database
+        needs_rebuild = False
+        
+        # Check if columns already exist
+        cursor.execute("PRAGMA table_info('order')")
+        columns = cursor.fetchall()
+        column_names = [column[1] for column in columns]
+        
+        # Add reference_number column if it doesn't exist
+        if 'reference_number' not in column_names:
+            app.logger.info("Adding reference_number column to order table")
+            needs_rebuild = True
+            
+            # First try regular ALTER TABLE approach
+            try:
+                # SQLite doesn't support adding a UNIQUE column in ALTER TABLE
+                # Add a regular column
+                cursor.execute('ALTER TABLE "order" ADD COLUMN reference_number VARCHAR(50)')
+                
+                # Generate reference numbers for existing orders
+                cursor.execute('SELECT id, order_date FROM "order"')
+                orders = cursor.fetchall()
+                for order_id, order_date in orders:
+                    try:
+                        # Convert order_date string to datetime if needed
+                        if isinstance(order_date, str):
+                            order_date = datetime.fromisoformat(order_date)
+                        elif order_date is None:
+                            order_date = datetime.utcnow()
+                        
+                        # Generate reference number
+                        ref_number = f"ORD-{order_id}-{order_date.strftime('%Y%m%d')}"
+                        # Update the order
+                        cursor.execute('UPDATE "order" SET reference_number = ? WHERE id = ?', 
+                                      (ref_number, order_id))
+                    except Exception as ref_err:
+                        print(f"Error updating reference for order {order_id}: {str(ref_err)}")
+                
+                # Create a unique index instead of a UNIQUE constraint
+                try:
+                    cursor.execute('CREATE UNIQUE INDEX IF NOT EXISTS idx_order_reference_number ON "order" (reference_number)')
+                except Exception as index_err:
+                    print(f"Error creating unique index: {str(index_err)}")
+            except Exception as e:
+                app.logger.error(f"Error adding reference_number column: {str(e)}")
+                needs_rebuild = True  # If ALTER TABLE fails, we'll need to rebuild
+        
+        # Handle other columns
+        if 'updated_at' not in column_names:
+            cursor.execute('ALTER TABLE "order" ADD COLUMN updated_at TIMESTAMP')
+            
+        if 'completed_at' not in column_names:
+            cursor.execute('ALTER TABLE "order" ADD COLUMN completed_at TIMESTAMP')
+        
+        if 'viewed' not in column_names:
+            cursor.execute('ALTER TABLE "order" ADD COLUMN viewed BOOLEAN DEFAULT 0')
+            
+        if 'viewed_at' not in column_names:
+            cursor.execute('ALTER TABLE "order" ADD COLUMN viewed_at TIMESTAMP')
+        
+        # Commit changes
+        conn.commit()
+        conn.close()
+        
+        # If any columns are missing, rebuild the SQLAlchemy models
+        if needs_rebuild:
+            try:
+                # Force SQLAlchemy to rebuild its metadata
+                db.reflect()
+                db.session.commit()
+                
+                # Refresh the app
+                app.logger.info("Reloading models in SQLAlchemy")
+            except Exception as rebuild_err:
+                app.logger.error(f"Error rebuilding SQLAlchemy models: {str(rebuild_err)}")
+        
+        return 'Database schema updated successfully. <a href="/staff/orders">Go to Staff Orders</a>'
+    except Exception as e:
+        app.logger.error(f"Error updating database: {str(e)}")
+        return f'Error updating database: {str(e)}'
+
+@app.route('/api/check_new_orders', methods=['GET'])
+@staff_required
+def check_new_orders():
+    try:
+        # Use direct SQL query instead of ORM to avoid column issues
+        conn = db.engine.raw_connection()
+        cursor = conn.cursor()
+        
+        # Count unviewed orders
+        cursor.execute("SELECT COUNT(*) FROM 'order' WHERE viewed = 0")
+        new_orders = cursor.fetchone()[0]
+        
+        # If there are new orders, get the most recent one's details for the notification
+        if new_orders > 0:
+            cursor.execute("""
+                SELECT id, customer_name, total_amount, order_date 
+                FROM 'order' 
+                WHERE viewed = 0 
+                ORDER BY order_date DESC 
+                LIMIT 1
+            """)
+            
+            newest_order = cursor.fetchone()
+            if newest_order:
+                return jsonify({
+                    'new_orders': new_orders,
+                    'new_order': True,
+                    'order_id': newest_order[0],
+                    'customer_name': newest_order[1] if newest_order[1] else 'Customer',
+                    'total_amount': f"{newest_order[2]:.2f}",
+                    'currency': 'UGX',
+                    'order_date': newest_order[3]
+                })
+        
+        conn.close()
+        return jsonify({'new_orders': new_orders, 'new_order': False})
+    except Exception as e:
+        # Log the error and return a safe response
+        app.logger.error(f"Error checking new orders: {str(e)}")
+        return jsonify({'new_orders': 0, 'new_order': False, 'error': str(e)})
+
+@app.route('/api/mark_order_viewed/<int:order_id>', methods=['POST'])
+@login_required
+def mark_order_viewed(order_id):
+    try:
+        # Only staff or admin can mark orders as viewed
+        if not (current_user.is_staff or current_user.is_admin):
+            return jsonify({"success": False, "error": "Unauthorized"}), 403
+        
+        # Use direct SQL to avoid ORM issues
+        conn = db.engine.raw_connection()
+        cursor = conn.cursor()
+        
+        # Check if viewed column exists
+        cursor.execute("PRAGMA table_info('order')")
+        columns = [col[1] for col in cursor.fetchall()]
+        
+        if 'viewed' in columns and 'viewed_at' in columns:
+            # Update with direct SQL
+            timestamp = datetime.utcnow().isoformat()
+            cursor.execute(
+                'UPDATE "order" SET viewed = 1, viewed_at = ? WHERE id = ?', 
+                (timestamp, order_id)
+            )
+            conn.commit()
+            conn.close()
+            return jsonify({"success": True})
+        else:
+            # If columns don't exist, just return success anyway to stop the alarm
+            conn.close()
+            return jsonify({"success": True, "note": "Columns don't exist but acknowledged"})
+            
+    except Exception as e:
+        logger.error(f'Error marking order as viewed: {str(e)}')
+        return jsonify({"success": False, "error": str(e)}), 500
+
+def sync_cart(cart_id):
+    """Helper function to synchronize cart data and ensure consistency"""
+    try:
+        cart = Cart.query.get(cart_id)
+        if not cart:
+            return False
+            
+        # Remove invalid items
+        invalid_items = []
+        for item in cart.items:
+            if not item.product or item.product.stock <= 0 or item.quantity <= 0:
+                invalid_items.append(item)
+                
+        if invalid_items:
+            for item in invalid_items:
+                db.session.delete(item)
+            db.session.commit()
+            
+        return True
+    except Exception as e:
+        logger.error(f"Error syncing cart {cart_id}: {str(e)}")
+        return False
+
+@app.route('/sync_cart', methods=['POST'])
+def sync_cart_endpoint():
+    """API endpoint to synchronize cart data"""
+    try:
+        # Get cart ID
+        if current_user.is_authenticated:
+            cart = Cart.query.filter_by(user_id=current_user.id, status='active').first()
+        else:
+            cart_id = session.get('cart_id')
+            if not cart_id:
+                return jsonify({"success": True, "cart_count": 0, "cart_total": 0})
+            cart = Cart.query.get(cart_id)
+            
+        if not cart:
+            return jsonify({"success": True, "cart_count": 0, "cart_total": 0})
+            
+        # Sync the cart
+        sync_cart(cart.id)
+        
+        # Recalculate totals
+        cart_items = CartItem.query.filter_by(cart_id=cart.id).all()
+        cart_count = sum(item.quantity for item in cart_items)
+        cart_total = sum(item.quantity * item.product.price for item in cart_items)
+        
+        return jsonify({
+            "success": True,
+            "cart_count": cart_count,
+            "cart_total": cart_total
+        })
+    except Exception as e:
+        logger.error(f"Error in sync_cart endpoint: {str(e)}")
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.context_processor
+def inject_now():
+    """Add the now function to the template context to get current datetime"""
+    return {'now': datetime.now}
+
+@app.route('/staff/order_detail/<int:order_id>')
+@login_required
+@staff_required
+def my_sales_order_detail(order_id):
+    """Show detailed information for a specific order"""
+    try:
+        # Use direct SQL instead of ORM to avoid column issues
+        conn = db.engine.raw_connection()
+        cursor = conn.cursor()
+        
+        # Get the order details
+        cursor.execute("""
+            SELECT id, customer_id, order_date, total_amount, status, 
+                   customer_name, customer_phone, customer_email, customer_address,
+                   order_type, created_by_id, updated_at, completed_at, viewed, viewed_at
+            FROM "order"
+            WHERE id = ?
+        """, (order_id,))
+        
+        order_data = cursor.fetchone()
+        
+        if not order_data:
+            flash('Order not found', 'error')
+            return redirect(url_for('my_sales'))
+            
+        # Check if this order belongs to the current staff member
+        if order_data[10] != current_user.id:  # created_by_id index
+            flash('You do not have permission to view this order.', 'danger')
+            return redirect(url_for('my_sales'))
+        
+        # Mark order as viewed when opened
+        if order_data[13] == 0 or not order_data[13]:  # viewed column index
+            try:
+                cursor.execute(
+                    'UPDATE "order" SET viewed = 1, viewed_at = ? WHERE id = ?', 
+                    (datetime.utcnow().isoformat(), order_id)
+                )
+                conn.commit()
+                app.logger.info(f"Order #{order_id} marked as viewed from my_sales")
+            except Exception as e:
+                app.logger.error(f"Error marking order as viewed: {str(e)}")
+                # Continue even if marking fails
+        
+        # Get order items
+        cursor.execute("""
+            SELECT oi.id, oi.product_id, oi.quantity, oi.price, p.name
+            FROM order_item oi
+            JOIN product p ON oi.product_id = p.id
+            WHERE oi.order_id = ?
+        """, (order_id,))
+        
+        order_items = cursor.fetchall()
+        
+        # Create a simple object to pass to the template that mimics the ORM object
+        order = SimpleNamespace(
+            id=order_data[0],
+            customer_id=order_data[1],
+            order_date=order_data[2],
+            total_amount=order_data[3],
+            status=order_data[4],
+            customer_name=order_data[5],
+            customer_phone=order_data[6],
+            customer_email=order_data[7],
+            customer_address=order_data[8],
+            order_type=order_data[9],
+            created_by_id=order_data[10],
+            updated_at=order_data[11],
+            completed_at=order_data[12],
+            viewed=order_data[13],
+            viewed_at=order_data[14]
+        )
+        
+        # Create SimpleNamespace objects for order items
+        items = []
+        for item_data in order_items:
+            item = SimpleNamespace(
+                id=item_data[0],
+                product_id=item_data[1],
+                quantity=item_data[2],
+                price=item_data[3],
+                subtotal=item_data[2] * item_data[3],
+                product=SimpleNamespace(
+                    name=item_data[4]
+                )
+            )
+            items.append(item)
+        
+        conn.close()
+        
+        # Pass tax rate for calculations
+        tax_rate = 0.18  # 18% VAT
+        
+        return render_template('staff/order_detail.html', 
+                              order=order,
+                              items=items,
+                              tax_rate=tax_rate)
+    except Exception as e:
+        flash('Error loading order details: ' + str(e), 'danger')
+        app.logger.error(f"Error in my_sales_order_detail: {str(e)}")
+        return redirect(url_for('my_sales'))
+
+# Add this function before any of the order creation routes
+def create_order(order_data, items_data, order_type='online'):
+    """
+    Centralized function to create orders with consistent properties
+    
+    Parameters:
+    - order_data: dict with customer info (name, email, phone, address)
+    - items_data: list of dicts with product_id, quantity, price
+    - order_type: string ('online', 'in-store', 'offline-sync')
+    
+    Returns:
+    - order: Order object that was created
+    - error: Error message if any, None otherwise
+    """
+    try:
+        # Check for recent duplicate orders with the same items and customer - using direct SQL
+        # to avoid issues with missing columns during schema updates
+        recent_order_time = datetime.utcnow() - timedelta(minutes=5)
+        
+        # Build query parameters
+        query_params = {'order_date': recent_order_time.isoformat()}
+        
+        sql_conditions = ["order_date > :order_date"]
+        
+        if current_user.is_authenticated:
+            sql_conditions.append("created_by_id = :created_by_id")
+            query_params['created_by_id'] = current_user.id
+        
+        if order_data.get('customer_name'):
+            sql_conditions.append("customer_name = :customer_name")
+            query_params['customer_name'] = order_data.get('customer_name')
+        
+        if order_data.get('customer_phone'):
+            sql_conditions.append("customer_phone = :customer_phone")
+            query_params['customer_phone'] = order_data.get('customer_phone')
+        
+        # Construct the SQL query
+        sql_query = f"SELECT id FROM \"order\" WHERE {' AND '.join(sql_conditions)}"
+        
+        try:
+            # Execute the direct SQL query
+            potential_duplicate_ids = db.session.execute(text(sql_query), query_params).scalars().all()
+            
+            # If potential duplicates, check order items
+            for order_id in potential_duplicate_ids:
+                # Get the order items using direct SQL
+                order_items = db.session.execute(
+                    text("SELECT product_id, quantity FROM order_item WHERE order_id = :order_id"),
+                    {"order_id": order_id}
+                ).fetchall()
+                
+                if len(order_items) == len(items_data):
+                    # Get the product IDs and quantities for this order
+                    order_items_dict = {item[0]: item[1] for item in order_items}
+                    new_items_dict = {i.get('product_id'): i.get('quantity') for i in items_data}
+                    
+                    # If product IDs and quantities match, consider it a duplicate
+                    if order_items_dict == new_items_dict:
+                        # Get the full order to return
+                        pot_order = Order.query.get(order_id)
+                        if pot_order:
+                            logger.warning(f"Prevented duplicate order creation: {order_id}")
+                            return pot_order, "This appears to be a duplicate order"
+        
+        except Exception as query_err:
+            # If there's an error with the SQL, log but continue - it's better to risk a duplicate
+            # than to prevent order creation
+            logger.error(f"Error checking for duplicates: {str(query_err)}")
+        
+        # Calculate total amount
+        total_amount = sum(item.get('quantity', 0) * item.get('price', 0) for item in items_data)
+        
+        # Set appropriate status based on order type
+        if order_type == 'in-store':
+            status = 'completed'
+            viewed = True
+            viewed_at = datetime.utcnow()
+        else:
+            status = 'pending'
+            viewed = False
+            viewed_at = None
+        
+        # Use direct SQL for order creation to bypass ORM
+        conn = db.engine.raw_connection()
+        cursor = conn.cursor()
+        
+        # Check if the reference_number column exists in the order table
+        cursor.execute("PRAGMA table_info('order')")
+        columns = [col[1] for col in cursor.fetchall()]
+        has_reference_column = 'reference_number' in columns
+        
+        # Insert the order with or without reference_number based on schema
+        if has_reference_column:
+            cursor.execute("""
+                INSERT INTO "order" (
+                    customer_id, order_date, total_amount, status, customer_name, 
+                    customer_phone, customer_email, customer_address, order_type, created_by_id,
+                    viewed, viewed_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                current_user.id if current_user.is_authenticated else None,
+                datetime.utcnow().isoformat(),
+                total_amount,
+                status,
+                order_data.get('customer_name', ''),
+                order_data.get('customer_phone', ''),
+                order_data.get('customer_email', ''),
+                order_data.get('customer_address', ''),
+                order_type,
+                current_user.id if current_user.is_authenticated else None,
+                1 if viewed else 0,
+                viewed_at.isoformat() if viewed_at else None
+            ))
+        else:
+            # Insert without reference_number
+            cursor.execute("""
+                INSERT INTO "order" (
+                    customer_id, order_date, total_amount, status, customer_name, 
+                    customer_phone, customer_email, customer_address, order_type, created_by_id,
+                    viewed, viewed_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                current_user.id if current_user.is_authenticated else None,
+                datetime.utcnow().isoformat(),
+                total_amount,
+                status,
+                order_data.get('customer_name', ''),
+                order_data.get('customer_phone', ''),
+                order_data.get('customer_email', ''),
+                order_data.get('customer_address', ''),
+                order_type,
+                current_user.id if current_user.is_authenticated else None,
+                1 if viewed else 0,
+                viewed_at.isoformat() if viewed_at else None
+            ))
+        
+        # Get the last inserted row id
+        order_id = cursor.lastrowid
+        
+        # If reference column exists, update it with the order ID
+        if has_reference_column:
+            ref_number = f"ORD-{order_id}-{datetime.utcnow().strftime('%Y%m%d')}"
+            cursor.execute(
+                'UPDATE "order" SET reference_number = ? WHERE id = ?',
+                (ref_number, order_id)
+            )
+        
+        # Now add the order items
+        for item_data in items_data:
+            product_id = item_data.get('product_id')
+            quantity = item_data.get('quantity', 0)
+            price = item_data.get('price', 0)
+            
+            if not product_id or quantity <= 0:
+                continue
+                
+            # Create the order item
+            cursor.execute(
+                "INSERT INTO order_item (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)",
+                (order_id, product_id, quantity, price)
+            )
+            
+            # Update stock if needed
+            try:
+                # Get current stock
+                cursor.execute("SELECT stock FROM product WHERE id = ?", (product_id,))
+                current_stock = cursor.fetchone()[0]
+                
+                # Update stock
+                new_stock = current_stock - quantity
+                cursor.execute("UPDATE product SET stock = ? WHERE id = ?", (new_stock, product_id))
+                
+                # Record movement
+                cursor.execute(
+                    "INSERT INTO stock_movement (product_id, quantity, movement_type, remaining_stock) VALUES (?, ?, ?, ?)",
+                    (product_id, quantity, 'sale', new_stock)
+                )
+            except Exception as stock_err:
+                logger.error(f"Error updating stock: {str(stock_err)}")
+        
+        # Commit all changes
+        conn.commit()
+        conn.close()
+        
+        # Retrieve the newly created order 
+        order = Order.query.get(order_id)
+        return order, None
+        
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Error in create_order: {str(e)}")
+        return None, str(e)
+
+@app.route('/kitchen')
+@login_required
+@staff_required
+def kitchen_orders():
+    try:
+        # Get filter parameters from request
+        status_filter = request.args.get('status', 'processing')
+        
+        conn = db.engine.raw_connection()
+        cursor = conn.cursor()
+        
+        # Get orders with the specified status
+        cursor.execute("""
+            SELECT id, customer_name, order_date, total_amount, status, 
+                   customer_phone, order_type, viewed
+            FROM "order"
+            WHERE status = ?
+            ORDER BY order_date DESC
+        """, (status_filter,))
+        
+        order_data = cursor.fetchall()
+        
+        # Create a list of SimpleNamespace objects to mimic ORM
+        orders = []
+        for order_row in order_data:
+            order = SimpleNamespace(
+                id=order_row[0],
+                customer_name=order_row[1],
+                order_date=order_row[2],
+                total_amount=order_row[3],
+                status=order_row[4],
+                customer_phone=order_row[5],
+                order_type=order_row[6],
+                viewed=order_row[7]
+            )
+            orders.append(order)
+        
+        conn.close()
+        
+        return render_template('kitchen/orders.html', 
+                              orders=orders, 
+                              current_status=status_filter)
+    except Exception as e:
+        logger.error(f"Error in kitchen_orders: {str(e)}")
+        flash(f"Error loading orders: {str(e)}", "error")
+        return redirect(url_for('staff_dashboard'))
+
+@app.route('/orders/<int:order_id>')
+@login_required
+def customer_order_detail(order_id):
+    try:
+        # Use direct SQL instead of ORM to avoid column issues
+        conn = db.engine.raw_connection()
+        cursor = conn.cursor()
+        
+        # Get the order details, ensuring it belongs to the current user
+        cursor.execute("""
+            SELECT id, customer_id, order_date, total_amount, status, 
+                  customer_name, customer_phone, customer_email, customer_address,
+                  order_type, created_by_id, updated_at, completed_at,
+                  payment_method, payment_status, payment_id
+            FROM "order"
+            WHERE id = ? AND customer_id = ?
+        """, (order_id, current_user.id))
+        
+        order_data = cursor.fetchone()
+        
+        if not order_data:
+            flash('Order not found or you do not have permission to view it', 'error')
+            return redirect(url_for('customer_orders'))
+        
+        # Get order items
+        cursor.execute("""
+            SELECT oi.id, oi.product_id, oi.quantity, oi.price, p.name, p.category
+            FROM order_item oi
+            JOIN product p ON oi.product_id = p.id
+            WHERE oi.order_id = ?
+        """, (order_id,))
+        
+        order_items = cursor.fetchall()
+        
+        # Create a simple object to pass to the template that mimics the ORM object
+        order = SimpleNamespace(
+            id=order_data[0],
+            customer_id=order_data[1],
+            order_date=order_data[2],
+            total_amount=order_data[3],
+            status=order_data[4],
+            customer_name=order_data[5],
+            customer_phone=order_data[6],
+            customer_email=order_data[7],
+            customer_address=order_data[8],
+            order_type=order_data[9],
+            created_by_id=order_data[10],
+            updated_at=order_data[11],
+            completed_at=order_data[12],
+            payment_method=order_data[13],
+            payment_status=order_data[14],
+            payment_id=order_data[15]
+        )
+        
+        # Create SimpleNamespace objects for order items and attach to order
+        items = []
+        for item_data in order_items:
+            item = SimpleNamespace(
+                id=item_data[0],
+                product_id=item_data[1],
+                quantity=item_data[2],
+                price=item_data[3],
+                product=SimpleNamespace(
+                    name=item_data[4],
+                    category=item_data[5]
+                )
+            )
+            items.append(item)
+        
+        # Add items as a property to the order
+        order.items = items
+        
+        conn.close()
+        
+        return render_template('customer/order_detail.html', order=order)
+    except Exception as e:
+        app.logger.error(f"Error in customer_order_detail: {str(e)}")
+        flash(f"Error viewing order: {str(e)}", "error")
+        return redirect(url_for('customer_orders'))
+
+@app.route('/orders')
+@login_required
+def customer_orders():
+    try:
+        # Get URL parameters
+        page = request.args.get('page', 1, type=int)
+        per_page = 10  # Number of orders per page
+        
+        conn = db.engine.raw_connection()
+        cursor = conn.cursor()
+        
+        # Count total orders for pagination
+        cursor.execute("""
+            SELECT COUNT(*)
+            FROM "order"
+            WHERE customer_id = ?
+            ORDER BY order_date DESC
+        """, (current_user.id,))
+        
+        total_orders = cursor.fetchone()[0]
+        
+        # Calculate offset
+        offset = (page - 1) * per_page
+        
+        # Get paginated orders
+        cursor.execute("""
+            SELECT id, customer_name, order_date, total_amount, status,
+                   order_type, payment_status
+            FROM "order"
+            WHERE customer_id = ?
+            ORDER BY order_date DESC
+            LIMIT ? OFFSET ?
+        """, (current_user.id, per_page, offset))
+        
+        order_data = cursor.fetchall()
+        
+        # Create a list of SimpleNamespace objects to mimic ORM
+        orders = []
+        for order_row in order_data:
+            order = SimpleNamespace(
+                id=order_row[0],
+                customer_name=order_row[1],
+                order_date=order_row[2],
+                total_amount=order_row[3],
+                status=order_row[4],
+                order_type=order_row[5],
+                payment_status=order_row[6]
+            )
+            orders.append(order)
+        
+        # Calculate total pages for pagination
+        total_pages = (total_orders + per_page - 1) // per_page
+        
+        conn.close()
+        
+        return render_template('customer/orders.html', 
+                              orders=orders, 
+                              page=page, 
+                              total_pages=total_pages)
+    except Exception as e:
+        flash('Error loading orders: ' + str(e), 'danger')
+        app.logger.error(f"Error in customer_orders: {str(e)}")
+        return redirect(url_for('customer_dashboard'))
+
+@app.route('/staff/all-orders')
+@login_required
+@staff_required
+def staff_orders():
+    """Display all orders for authorized staff members"""
+    try:
+        # Check if staff is authorized to view all orders
+        if not (current_user.role == 'admin' or current_user.role == 'manager'):
+            flash('You are not authorized to view all orders.', 'danger')
+            return redirect(url_for('staff_dashboard'))
+        
+        # Get URL parameters
+        page = request.args.get('page', 1, type=int)
+        per_page = 10  # Number of orders per page
+        
+        conn = db.engine.raw_connection()
+        cursor = conn.cursor()
+        
+        # Count total orders for pagination
+        cursor.execute("""
+            SELECT COUNT(*)
+            FROM "order"
+            ORDER BY order_date DESC
+        """)
+        
+        total_orders = cursor.fetchone()[0]
+        
+        # Calculate offset
+        offset = (page - 1) * per_page
+        
+        # Get paginated orders
+        cursor.execute("""
+            SELECT o.id, o.customer_name, o.order_date, o.total_amount, o.status, o.viewed,
+                   u.username as staff_name
+            FROM "order" o
+            LEFT JOIN user u ON o.created_by_id = u.id
+            ORDER BY o.order_date DESC
+            LIMIT ? OFFSET ?
+        """, (per_page, offset))
+        
+        order_data = cursor.fetchall()
+        
+        # Create a list of SimpleNamespace objects to mimic ORM
+        orders = []
+        for order_row in order_data:
+            order = SimpleNamespace(
+                id=order_row[0],
+                customer_name=order_row[1],
+                order_date=order_row[2],
+                total_amount=order_row[3],
+                status=order_row[4],
+                viewed=order_row[5],
+                created_by=SimpleNamespace(
+                    username=order_row[6]
+                ) if order_row[6] else None
+            )
+            orders.append(order)
+        
+        # Calculate total pages for pagination
+        total_pages = (total_orders + per_page - 1) // per_page
+        
+        conn.close()
+        
+        return render_template('staff/all_orders.html', 
+                              orders=orders, 
+                              page=page, 
+                              total_pages=total_pages)
+    except Exception as e:
+        flash('Error loading orders: ' + str(e), 'danger')
+        app.logger.error(f"Error in staff_orders: {str(e)}")
+        return redirect(url_for('staff_dashboard'))
 
 if __name__ == '__main__':
     # Initialize database and create all tables
