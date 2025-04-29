@@ -1,4 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
+import os
 
 block_cipher = None
 
@@ -12,6 +13,8 @@ a = Analysis(
         ('instance', 'instance'),
         ('migrations', 'migrations'),
         ('.env', '.'),
+        ('check_and_init_db.py', '.'),
+        ('dist/POS System/Install.bat', '.'),
     ],
     hiddenimports=[
         'flask',
@@ -22,6 +25,8 @@ a = Analysis(
         'datetime',
         'flask_migrate',
         'dotenv',
+        'check_and_init_db',
+        'logging',
     ],
     hookspath=[],
     hooksconfig={},
@@ -45,12 +50,13 @@ exe = EXE(
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
-    console=False,
+    console=True,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon='static/images/favicon.ico' if os.path.exists('static/images/favicon.ico') else None,
 )
 
 coll = COLLECT(
