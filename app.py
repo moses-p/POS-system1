@@ -1,3 +1,6866 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import os
 import uuid
 import json
@@ -27,6 +6890,9 @@ from PIL import Image, ImageOps
 import qrcode
 from io import BytesIO
 from flask_cors import CORS
+from sqlalchemy.exc import SQLAlchemyError
+from sql_operations import direct_create_order, direct_get_order, direct_cart_operations, direct_get_products, direct_create_user, direct_get_user, direct_create_product
+from create_order_direct import direct_create_order
 
 # Generate a version ID for this app instance - changes on server restart
 APP_VERSION = str(uuid.uuid4())[:8]
@@ -72,25 +6938,41 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SESSION_TYPE'] = 'filesystem'  # Store sessions in files
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=5)  # Session expiration time
 
-# Ensure all database operations are committed
-@app.teardown_appcontext
-def shutdown_session(exception=None):
-    db.session.commit()
-    db.session.remove()
+# Ensure static files are found correctly
+app.static_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
+app.static_url_path = '/static'
+
+# Enable CORS for all routes
+CORS(app)
 
 # Enable debug mode
 app.debug = True
 
 # Custom render_template that adds version parameter
 def versioned_render_template(*args, **kwargs):
-    # Add version to all templates for cache busting
-    if 'version' not in kwargs:
+    """Add version to all templates for cache busting"""
+    try:
+        # Ensure we have a valid template and then add version
         kwargs['version'] = APP_VERSION
-    
-    # Use stable timestamp instead of generating a new one each time
-    kwargs['timestamp'] = APP_TIMESTAMP
-    
-    return render_template(*args, **kwargs)
+        kwargs['timestamp'] = APP_TIMESTAMP
+        
+        # Add common template variables
+        kwargs.setdefault('is_mobile', is_mobile() if 'is_mobile' in globals() else False)
+        
+        # Ensure the first argument is a valid template
+        if not args or not isinstance(args[0], str):
+            logger.error(f"Invalid template name: {args}")
+            return render_template('error.html', error="Template rendering error"), 500
+            
+        return render_template(*args, **kwargs)
+    except Exception as e:
+        logger.error(f"Template rendering error: {str(e)}")
+        # Fallback to basic rendering of error template
+        try:
+            return render_template('error.html', error=str(e)), 500
+        except:
+            # Ultimate fallback - plain text response
+            return f"Error: {str(e)}", 500
 
 # Add error handlers
 @app.errorhandler(500)
@@ -99,30 +6981,80 @@ def internal_error(error):
     db.session.rollback()
     return versioned_render_template('error.html', error=error), 500
 
+@app.errorhandler(403)
+def forbidden_error(error):
+    logger.error(f"403 error: {error}")
+    try:
+        return versioned_render_template('error.html', error=error), 403
+    except Exception as e:
+        logger.error(f"Error rendering 403 template: {e}")
+        # Fallback to static error page
+        return send_file('templates/error_fallback.html'), 403
+
 @app.errorhandler(404)
 def not_found_error(error):
-    return versioned_render_template('error.html', error=error), 404
+    """Custom handler for 404 errors to prevent them from turning into 403 errors"""
+    logger.warning(f"404 error: {error} - Path: {request.path}")
+    
+    # For API requests return JSON
+    if request.path.startswith('/api/'):
+        return jsonify({"error": "Resource not found", "path": request.path}), 404
+        
+    # For static files, serve a default version if possible
+    if request.path.startswith('/static/'):
+        file_type = request.path.split('.')[-1] if '.' in request.path else ''
+        if file_type == 'js':
+            return "console.log('File not found');", 200, {'Content-Type': 'application/javascript'}
+        elif file_type == 'css':
+            return "/* File not found */", 200, {'Content-Type': 'text/css'}
+        elif file_type in ['png', 'jpg', 'jpeg', 'gif']:
+            # Could serve a default image here if needed
+            pass
+    
+    try:
+        return versioned_render_template('error.html', error=error), 404
+    except Exception as e:
+        logger.error(f"Error rendering 404 template: {e}")
+        # Fallback to static error page
+        return send_file('templates/error_fallback.html'), 404
 
 @app.errorhandler(Exception)
 def handle_exception(e):
     logger.error(f'Unhandled Exception: {str(e)}')
-    return versioned_render_template('error.html', error=str(e)), 500
+    try:
+        return versioned_render_template('error.html', error=str(e)), 500
+    except Exception as err:
+        logger.error(f"Error rendering exception template: {err}")
+        # Fallback to static error page
+        return send_file('templates/error_fallback.html'), 500
 
 # Add security headers and disable caching
 @app.after_request
 def add_headers(response):
+    """Add security and cache control headers to responses"""
+    # Security headers
     response.headers['X-Content-Type-Options'] = 'nosniff'
     response.headers['X-Frame-Options'] = 'SAMEORIGIN'
     response.headers['X-XSS-Protection'] = '1; mode=block'
     
-    # Disable caching to prevent state reverting issues
-    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
-    response.headers['Pragma'] = 'no-cache'
-    response.headers['Expires'] = '0'
+    # Set Cache-Control header for static assets
+    if '/static/' in request.path:
+        # Cache static files for longer with a version parameter for cache busting
+        max_age = 60 * 60 * 24 * 30  # 30 days
+        response.headers['Cache-Control'] = f'public, max-age={max_age}'
+    else:
+        # For dynamic routes, avoid caching sensitive content
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '-1'
     
-    # Add ETag based on stable version only (not changing timestamp)
-    if 'text/html' in response.content_type:
-        response.headers['ETag'] = f'"{APP_VERSION}"'
+    # Add CORS headers
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+    
+    # Add Content-Security-Policy to prevent mixed content issues
+    response.headers['Content-Security-Policy'] = "default-src 'self' http: https: data: blob: 'unsafe-inline' 'unsafe-eval'"
     
     return response
 
@@ -274,6 +7206,18 @@ class CartItem(db.Model):
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+@app.route('/debug')
+def debug_route():
+    """Debug route to test basic access"""
+    return jsonify({
+        'status': 'success',
+        'message': 'Debug route accessible',
+        'authenticated': current_user.is_authenticated if hasattr(current_user, 'is_authenticated') else False,
+        'route': request.path,
+        'method': request.method,
+        'timestamp': datetime.utcnow().isoformat()
+    })
 
 @app.route('/')
 def index():
@@ -872,7 +7816,13 @@ def checkout():
                     # Mark cart as completed
                     cart.status = 'completed'
                     db.session.commit()
-                    return redirect(url_for('print_receipt', order_id=order.id))
+                    # Use get_order_by_id for more resilient order retrieval
+                    order = get_order_by_id(order.id)
+                    if order:
+                        return redirect(url_for('print_receipt', order_id=order.id))
+                    else:
+                        flash('Order was created but could not be retrieved. Please check orders list.', 'warning')
+                        return redirect(url_for('index'))
                 else:
                     # For other errors, show error and return to cart
                     flash(error, 'error')
@@ -885,9 +7835,13 @@ def checkout():
             # Store the order ID in session to prevent duplicates
             session['last_order_id'] = order.id
             
-            flash('Order placed successfully!', 'success')
+            # Retrieve order using resilient method to avoid reference_number issues
+            order = get_order_by_id(order.id)
+            if not order:
+                flash('Order was created but could not be retrieved. Please check your orders.', 'warning')
+                return redirect(url_for('index'))
             
-            # Redirect to receipt page
+            # Redirect to receipt
             return redirect(url_for('print_receipt', order_id=order.id))
             
         except Exception as e:
@@ -902,19 +7856,57 @@ def checkout():
 
 @app.route('/receipt/<int:order_id>')
 def print_receipt(order_id):
-    order = Order.query.get_or_404(order_id)
-    # Add tax rate for receipt calculations
-    tax_rate = 0.18  # 18% VAT
-    # Pass current_user to template even for anonymous users
-    return render_template('receipt.html', order=order, tax_rate=tax_rate, current_user=current_user)
+    try:
+        # Use our resilient get_order_by_id function
+        order = get_order_by_id(order_id)
+        if not order:
+            flash('Order not found', 'error')
+            return redirect(url_for('index'))
+            
+        # Add tax rate for receipt calculations
+        tax_rate = 0.18  # 18% VAT
+        # Pass current_user to template even for anonymous users
+        return render_template('receipt.html', order=order, tax_rate=tax_rate, current_user=current_user)
+    except Exception as e:
+        logger.error(f"Error loading receipt for order {order_id}: {str(e)}")
+        flash(f"Error loading receipt: {str(e)}", 'error')
+        return redirect(url_for('index'))
+    except Exception as e:
+        logger.error(f"Error loading receipt for order {order_id}: {str(e)}")
+        flash(f"Error loading receipt: {str(e)}", 'error')
+        return redirect(url_for('index'))
+    except Exception as e:
+        logger.error(f"Error loading receipt for order {order_id}: {str(e)}")
+        flash(f"Error loading receipt: {str(e)}", 'error')
+        return redirect(url_for('index'))
 
 @app.route('/order/<int:order_id>')
 @login_required
 def order_confirmation(order_id):
-    order = Order.query.get_or_404(order_id)
-    if order.customer_id != current_user.id and not current_user.is_admin:
-        abort(403)
-    return render_template('order_confirmation.html', order=order)
+    try:
+        # Use our resilient get_order_by_id function
+        order = get_order_by_id(order_id)
+        if not order:
+            flash('Order not found', 'error')
+            return redirect(url_for('index'))
+            
+        # Check permission if it's a regular Order object
+        if hasattr(order, 'customer_id') and order.customer_id != current_user.id and not current_user.is_admin:
+            abort(403)
+            
+        return render_template('order_confirmation.html', order=order)
+    except Exception as e:
+        logger.error(f"Error loading order confirmation for order {order_id}: {str(e)}")
+        flash(f"Error loading order details: {str(e)}", 'error')
+        return redirect(url_for('index'))
+    except Exception as e:
+        logger.error(f"Error loading order confirmation for order {order_id}: {str(e)}")
+        flash(f"Error loading order details: {str(e)}", 'error')
+        return redirect(url_for('index'))
+    except Exception as e:
+        logger.error(f"Error loading order confirmation for order {order_id}: {str(e)}")
+        flash(f"Error loading order details: {str(e)}", 'error')
+        return redirect(url_for('index'))
 
 @app.route('/restock/<int:product_id>', methods=['GET', 'POST'])
 @login_required
@@ -1648,7 +8640,45 @@ def mark_order_processed(order_id):
 
 @app.route('/service-worker.js')
 def service_worker():
-    return send_from_directory('static', 'service-worker.js')
+    """
+    Serve the service worker script without requiring authentication
+    This must be accessible to allow offline functionality
+    """
+    logger.info("Service worker requested")
+    
+    # Default service worker if file not found
+    default_worker = """
+    // Default service worker
+    self.addEventListener('fetch', function(event) {
+      event.respondWith(
+        fetch(event.request).catch(function() {
+          return caches.match(event.request);
+        })
+      );
+    });
+    """
+    
+    try:
+        worker_path = os.path.join(app.static_folder, 'service-worker.js')
+        
+        # Check if file exists
+        if os.path.exists(worker_path) and os.path.isfile(worker_path):
+            with open(worker_path, 'r') as file:
+                content = file.read()
+        else:
+            logger.warning("service-worker.js not found, using default")
+            content = default_worker
+        
+        response = make_response(content)
+        response.headers['Content-Type'] = 'application/javascript'
+        response.headers['Cache-Control'] = 'no-cache'
+        return response
+    except Exception as e:
+        logger.error(f"Error serving service-worker.js: {e}")
+        response = make_response(default_worker)
+        response.headers['Content-Type'] = 'application/javascript'
+        response.headers['Cache-Control'] = 'no-cache'
+        return response
 
 @app.route('/offline.html')
 def offline():
@@ -2286,11 +9316,20 @@ def staff_dashboard():
                 )
                 for row in result:
                     # Create a simplified order object with just the fields we need
+                    # Convert string date to datetime if needed
+                    order_date = row[3]
+                    if isinstance(order_date, str):
+                        try:
+                            order_date = datetime.fromisoformat(order_date.replace('Z', '+00:00'))
+                        except (ValueError, AttributeError):
+                            # If conversion fails, use current time as fallback
+                            order_date = datetime.utcnow()
+                            
                     order = SimpleNamespace(
                         id=row[0],
                         customer_name=row[1],
                         total_amount=row[2],
-                        order_date=row[3],
+                        order_date=order_date,
                         status=row[4]
                     )
                     recent_orders.append(order)
@@ -2308,11 +9347,20 @@ def staff_dashboard():
                     text("SELECT id, customer_name, total_amount, order_date FROM 'order' WHERE status = 'pending'")
                 )
                 for row in result:
+                    # Convert string date to datetime if needed
+                    order_date = row[3]
+                    if isinstance(order_date, str):
+                        try:
+                            order_date = datetime.fromisoformat(order_date.replace('Z', '+00:00'))
+                        except (ValueError, AttributeError):
+                            # If conversion fails, use current time as fallback
+                            order_date = datetime.utcnow()
+                            
                     order = SimpleNamespace(
                         id=row[0],
                         customer_name=row[1],
                         total_amount=row[2],
-                        order_date=row[3],
+                        order_date=order_date,
                         status='pending'
                     )
                     pending_orders.append(order)
@@ -2357,137 +9405,141 @@ def staff_dashboard():
                               order_counts={'pending': 0, 'processing': 0, 'completed': 0},
                               error=str(e))
 
-# Add a staff-specific order management route
-@app.route('/staff/orders')
+@app.route('/staff/all-orders')
 @login_required
 @staff_required
-def staff_orders():
-    """Show all orders with filtering options for staff members"""
+def all_staff_orders():
     try:
-        # Get page number from request args, default to 1
+        # Get filter parameters
         page = request.args.get('page', 1, type=int)
-        per_page = 10
+        per_page = 10  # Number of orders per page
         
-        # Use direct SQL for querying to avoid ORM column reference_number issues
+        # Get filter parameters
+        status = request.args.get('status', '')
+        order_type = request.args.get('order_type', '')
+        start_date = request.args.get('start_date', '')
+        end_date = request.args.get('end_date', '')
+        
         conn = db.engine.raw_connection()
         cursor = conn.cursor()
         
-        # Base query - will add conditions based on filters
-        query_conditions = []
-        query_params = []
+        # Build WHERE clause for filters
+        where_clauses = []
+        params = []
         
-        # Filter by status
-        status = request.args.get('status')
-        if status and status != 'all':
-            query_conditions.append("status = ?")
-            query_params.append(status)
+        if status:
+            where_clauses.append("status = ?")
+            params.append(status)
         
-        # Filter by order type
-        order_type = request.args.get('type')
-        if order_type and order_type != 'all':
-            query_conditions.append("order_type = ?")
-            query_params.append(order_type)
+        if order_type:
+            where_clauses.append("order_type = ?")
+            params.append(order_type)
         
-        # Filter by date range
-        date_from = request.args.get('date_from')
-        if date_from:
+        if start_date:
             try:
-                date_from_obj = datetime.strptime(date_from, '%Y-%m-%d')
-                query_conditions.append("order_date >= ?")
-                query_params.append(date_from_obj.isoformat())
+                # Parse the date string into a datetime object
+                start_date_obj = datetime.strptime(start_date, '%Y-%m-%d')
+                where_clauses.append("date(order_date) >= date(?)")
+                params.append(start_date_obj.strftime('%Y-%m-%d'))
             except ValueError:
-                flash('Invalid date format for Date From', 'warning')
+                flash('Invalid start date format. Please use YYYY-MM-DD.', 'warning')
         
-        date_to = request.args.get('date_to')
-        if date_to:
+        if end_date:
             try:
-                date_to_obj = datetime.strptime(date_to, '%Y-%m-%d')
-                # Add a day to include the entire end date
-                date_to_obj = date_to_obj + timedelta(days=1)
-                query_conditions.append("order_date <= ?")
-                query_params.append(date_to_obj.isoformat())
+                # Parse the date string into a datetime object
+                end_date_obj = datetime.strptime(end_date, '%Y-%m-%d')
+                where_clauses.append("date(order_date) <= date(?)")
+                params.append(end_date_obj.strftime('%Y-%m-%d'))
             except ValueError:
-                flash('Invalid date format for Date To', 'warning')
+                flash('Invalid end date format. Please use YYYY-MM-DD.', 'warning')
         
-        # Construct WHERE clause if needed
-        where_clause = ""
-        if query_conditions:
-            where_clause = "WHERE " + " AND ".join(query_conditions)
+        # Construct the WHERE clause
+        where_sql = " WHERE " + " AND ".join(where_clauses) if where_clauses else ""
         
-        # Count total records for pagination
-        count_query = f"SELECT COUNT(*) FROM \"order\" {where_clause}"
-        cursor.execute(count_query, query_params)
-        total_count = cursor.fetchone()[0]
+        # Count total orders for pagination
+        count_query = f"""
+            SELECT COUNT(*)
+            FROM "order"
+            {where_sql}
+        """
         
-        # Calculate pagination values
-        total_pages = (total_count + per_page - 1) // per_page
+        cursor.execute(count_query, params)
+        total_orders = cursor.fetchone()[0]
+        
+        # Calculate offset
         offset = (page - 1) * per_page
         
-        # Fetch paginated records
+        # Get paginated orders
         orders_query = f"""
-            SELECT id, customer_id, order_date, total_amount, status, 
-                   customer_name, customer_phone, customer_email, 
-                   order_type, created_by_id
+            SELECT id, customer_name, order_date, total_amount, status,
+                   order_type, viewed, created_by_id
             FROM "order"
-            {where_clause}
+            {where_sql}
             ORDER BY order_date DESC
             LIMIT ? OFFSET ?
         """
-        cursor.execute(orders_query, query_params + [per_page, offset])
-        order_results = cursor.fetchall()
         
-        # Create list of SimpleNamespace objects to mimic ORM objects
+        # Add pagination parameters to the end of params list
+        query_params = params + [per_page, offset]
+        cursor.execute(orders_query, query_params)
+        
+        order_data = cursor.fetchall()
+        
+        # Get staff names for created_by_id
+        staff_dict = {}
+        staff_ids = [row[7] for row in order_data if row[7] is not None]
+        if staff_ids:
+            placeholders = ','.join(['?'] * len(staff_ids))
+            cursor.execute(f"SELECT id, username FROM user WHERE id IN ({placeholders})", staff_ids)
+            for staff_id, username in cursor.fetchall():
+                staff_dict[staff_id] = username
+        
+        # Create a list of SimpleNamespace objects to mimic ORM
         orders = []
-        for order_data in order_results:
-            # Get customer name for this order if it exists
-            customer_name = order_data[5]  # Default to customer_name from order
-            if order_data[1]:  # If customer_id exists
-                cursor.execute("SELECT username FROM user WHERE id = ?", (order_data[1],))
-                customer_result = cursor.fetchone()
-                if customer_result:
-                    customer_name = customer_result[0]
+        for order_row in order_data:
+            # Convert string date to datetime if needed
+            order_date = order_row[2]
+            if isinstance(order_date, str):
+                try:
+                    order_date = datetime.fromisoformat(order_date.replace('Z', '+00:00'))
+                except (ValueError, AttributeError):
+                    # If conversion fails, use current time as fallback
+                    order_date = datetime.utcnow()
             
-            # Create a SimpleNamespace to mimic Order object
+            # Get staff name
+            created_by_id = order_row[7]
+            created_by = staff_dict.get(created_by_id, 'System') if created_by_id else 'System'
+            
             order = SimpleNamespace(
-                id=order_data[0],
-                customer_id=order_data[1],
-                order_date=order_data[2],
-                total_amount=order_data[3],
-                status=order_data[4],
-                customer_name=customer_name or order_data[5],  # Use username or fallback to order's customer_name
-                customer_phone=order_data[6],
-                customer_email=order_data[7],
-                order_type=order_data[8],
-                created_by_id=order_data[9]
+                id=order_row[0],
+                customer_name=order_row[1],
+                order_date=order_date,
+                total_amount=order_row[3],
+                status=order_row[4],
+                order_type=order_row[5],
+                viewed=order_row[6],
+                created_by=created_by
             )
             orders.append(order)
         
-        # Create a pagination object that mimics Flask-SQLAlchemy's pagination
-        pagination = SimpleNamespace(
-            items=orders,
-            page=page,
-            per_page=per_page,
-            total=total_count,
-            pages=total_pages,
-            has_prev=(page > 1),
-            has_next=(page < total_pages),
-            prev_num=(page - 1 if page > 1 else None),
-            next_num=(page + 1 if page < total_pages else None),
-            iter_pages=lambda: range(1, total_pages + 1)
-        )
+        # Calculate total pages for pagination
+        total_pages = (total_orders + per_page - 1) // per_page
         
         conn.close()
         
-        return render_template('staff/orders.html', 
-                            orders=orders,
-                            pagination=pagination)
-                            
+        return render_template('staff/all_orders.html', 
+                             orders=orders, 
+                             page=page, 
+                             total_pages=total_pages,
+                             status=status,
+                             order_type=order_type,
+                             start_date=start_date,
+                             end_date=end_date)
     except Exception as e:
-        app.logger.error(f"Error in staff_orders: {str(e)}")
-        flash(f'Error loading orders: {str(e)}', 'error')
+        flash('Error loading orders: ' + str(e), 'danger')
+        app.logger.error(f"Error in all_staff_orders: {str(e)}")
         return redirect(url_for('staff_dashboard'))
 
-# Add a route for staff to view a specific order and manage it
 @app.route('/staff/order/<int:order_id>')
 @login_required
 @staff_required
@@ -2497,16 +9549,32 @@ def staff_order_detail(order_id):
         conn = db.engine.raw_connection()
         cursor = conn.cursor()
         
-        # Get the order details
-        cursor.execute("""
-            SELECT id, customer_id, order_date, total_amount, status, 
-                   customer_name, customer_phone, customer_email, customer_address,
-                   order_type, created_by_id, updated_at, completed_at, viewed, viewed_at,
-                   payment_method, payment_status, payment_id
-            FROM "order"
-            WHERE id = ?
-        """, (order_id,))
+        # Check if payment_method and payment_status columns exist
+        cursor.execute("PRAGMA table_info('order')")
+        columns = [col[1] for col in cursor.fetchall()]
+        has_payment_columns = 'payment_method' in columns and 'payment_status' in columns
+        has_payment_id = 'payment_id' in columns
         
+        # Get the order details
+        if has_payment_columns and has_payment_id:
+            query = """
+                SELECT id, customer_id, order_date, total_amount, status, 
+                       customer_name, customer_phone, customer_email, customer_address,
+                       order_type, created_by_id, updated_at, completed_at, viewed, viewed_at,
+                       payment_method, payment_status, payment_id
+                FROM "order"
+                WHERE id = ?
+            """
+        else:
+            query = """
+                SELECT id, customer_id, order_date, total_amount, status, 
+                       customer_name, customer_phone, customer_email, customer_address,
+                       order_type, created_by_id, updated_at, completed_at, viewed, viewed_at
+                FROM "order"
+                WHERE id = ?
+            """
+        
+        cursor.execute(query, (order_id,))
         order_data = cursor.fetchone()
         
         if not order_data:
@@ -2523,7 +9591,7 @@ def staff_order_detail(order_id):
         
         # Get order items
         cursor.execute("""
-            SELECT oi.id, oi.product_id, oi.quantity, oi.price, p.name, p.category
+            SELECT oi.id, oi.product_id, oi.quantity, oi.price, p.name as product_name, p.category
             FROM order_item oi
             JOIN product p ON oi.product_id = p.id
             WHERE oi.order_id = ?
@@ -2532,27 +9600,37 @@ def staff_order_detail(order_id):
         order_items = cursor.fetchall()
         
         # Create a simple object to pass to the template that mimics the ORM object
-        order = SimpleNamespace(
-            id=order_data[0],
-            customer_id=order_data[1],
-            order_date=order_data[2],
-            total_amount=order_data[3],
-            status=order_data[4],
-            customer_name=order_data[5],
-            customer_phone=order_data[6],
-            customer_email=order_data[7],
-            customer_address=order_data[8],
-            order_type=order_data[9],
-            created_by_id=order_data[10],
-            created_by=SimpleNamespace(username=staff_name) if staff_name else None,
-            updated_at=order_data[11],
-            completed_at=order_data[12],
-            viewed=order_data[13],
-            viewed_at=order_data[14],
-            payment_method=order_data[15],
-            payment_status=order_data[16],
-            payment_id=order_data[17]
-        )
+        order_dict = {
+            'id': order_data[0],
+            'customer_id': order_data[1],
+            'order_date': order_data[2],
+            'total_amount': order_data[3],
+            'status': order_data[4],
+            'customer_name': order_data[5],
+            'customer_phone': order_data[6],
+            'customer_email': order_data[7],
+            'customer_address': order_data[8],
+            'order_type': order_data[9],
+            'created_by_id': order_data[10],
+            'created_by': SimpleNamespace(username=staff_name) if staff_name else None,
+            'updated_at': order_data[11],
+            'completed_at': order_data[12],
+            'viewed': order_data[13],
+            'viewed_at': order_data[14],
+        }
+        
+        # Add payment fields if they exist
+        if has_payment_columns and has_payment_id and len(order_data) >= 18:
+            order_dict['payment_method'] = order_data[15]
+            order_dict['payment_status'] = order_data[16]
+            order_dict['payment_id'] = order_data[17]
+        else:
+            # Provide default values
+            order_dict['payment_method'] = 'Cash'
+            order_dict['payment_status'] = 'paid' if order_data[4] == 'completed' else 'pending'
+            order_dict['payment_id'] = None
+        
+        order = SimpleNamespace(**order_dict)
         
         # Create SimpleNamespace objects for order items and attach to order
         items = []
@@ -2562,6 +9640,7 @@ def staff_order_detail(order_id):
                 product_id=item_data[1],
                 quantity=item_data[2],
                 price=item_data[3],
+                subtotal=item_data[2] * item_data[3],
                 product=SimpleNamespace(
                     name=item_data[4],
                     category=item_data[5]
@@ -2574,252 +9653,170 @@ def staff_order_detail(order_id):
         
         conn.close()
         
-        return render_template('staff/order_detail.html', order=order)
+        # Pass tax rate for calculations
+        tax_rate = 0.18  # 18% VAT
+        
+        return render_template('staff/order_detail.html', order=order, tax_rate=tax_rate)
     except Exception as e:
         app.logger.error(f"Error in staff_order_detail: {str(e)}")
         flash(f"Error viewing order: {str(e)}", "error")
         return redirect(url_for('staff_dashboard'))
 
-@app.route('/kitchen/order/<int:order_id>')
-@login_required
-@staff_required
-def kitchen_order_detail(order_id):
+def create_order(customer_data, items_data, order_type):
+    """
+    Centralized function to create orders from different contexts, with fallback to direct SQL
+    """
     try:
-        # Use direct SQL instead of ORM to avoid column issues
-        conn = db.engine.raw_connection()
-        cursor = conn.cursor()
-        
-        # Get the order details
-        cursor.execute("""
-            SELECT id, customer_id, order_date, total_amount, status, 
-                   customer_name, customer_phone, customer_email, customer_address,
-                   order_type, created_by_id, updated_at, completed_at, viewed, viewed_at
-            FROM "order"
-            WHERE id = ?
-        """, (order_id,))
-        
-        order_data = cursor.fetchone()
-        
-        if not order_data:
-            flash('Order not found', 'error')
-            return redirect(url_for('staff_dashboard'))
+        # First try using SQLAlchemy
+        try:
+            # Create a new order
+            order = Order(
+                customer_name=customer_data.get('customer_name', ''),
+                customer_phone=customer_data.get('customer_phone', ''),
+                customer_email=customer_data.get('customer_email', ''),
+                customer_address=customer_data.get('customer_address', ''),
+                total_amount=sum(item['price'] * item['quantity'] for item in items_data),
+                order_type=order_type,
+                customer_id=customer_data.get('customer_id'),
+                created_by_id=customer_data.get('created_by_id')
+            )
             
-        # Mark order as viewed when kitchen staff opens it
-        if order_data[13] == 0 or not order_data[13]:  # viewed column index
-            try:
-                cursor.execute(
-                    'UPDATE "order" SET viewed = 1, viewed_at = ? WHERE id = ?', 
-                    (datetime.utcnow().isoformat(), order_id)
+            # Add the order to the database
+            db.session.add(order)
+            db.session.flush()  # Get the order ID
+            
+            # Add order items
+            for item_data in items_data:
+                order_item = OrderItem(
+                    order_id=order.id,
+                    product_id=item_data['product_id'],
+                    quantity=item_data['quantity'],
+                    price=item_data['price']
                 )
-                conn.commit()
-            except Exception as view_err:
-                logger.warning(f"Error marking order as viewed: {str(view_err)}")
-                # Continue even if marking as viewed fails
-        
-        # Get order items
-        cursor.execute("""
-            SELECT oi.id, oi.product_id, oi.quantity, oi.price, p.name, p.category
-            FROM order_item oi
-            JOIN product p ON oi.product_id = p.id
-            WHERE oi.order_id = ?
-        """, (order_id,))
-        
-        order_items = cursor.fetchall()
-        
-        # Create a simple object to pass to the template that mimics the ORM object
-        order = SimpleNamespace(
-            id=order_data[0],
-            customer_id=order_data[1],
-            order_date=order_data[2],
-            total_amount=order_data[3],
-            status=order_data[4],
-            customer_name=order_data[5],
-            customer_phone=order_data[6],
-            customer_email=order_data[7],
-            customer_address=order_data[8],
-            order_type=order_data[9],
-            created_by_id=order_data[10],
-            updated_at=order_data[11],
-            completed_at=order_data[12],
-            viewed=order_data[13],
-            viewed_at=order_data[14]
-        )
-        
-        # Create SimpleNamespace objects for order items and attach to order
-        items = []
-        for item_data in order_items:
-            item = SimpleNamespace(
-                id=item_data[0],
-                product_id=item_data[1],
-                quantity=item_data[2],
-                price=item_data[3],
-                product=SimpleNamespace(
-                    name=item_data[4],
-                    category=item_data[5]
-                )
-            )
-            items.append(item)
-        
-        # Add items as a property to the order
-        order.items = items
-        
-        conn.close()
-        
-        return render_template('kitchen/order_detail.html', order=order)
-    except Exception as e:
-        logger.error(f"Error in kitchen_order_detail: {str(e)}")
-        flash(f"Error viewing order: {str(e)}", "error")
-        return redirect(url_for('staff_dashboard'))
-
-@app.route('/staff/update_order_status/<int:order_id>', methods=['POST'])
-@login_required
-@staff_required
-def staff_update_order_status(order_id):
-    try:
-        # Get the new status from form
-        new_status = request.form.get('status')
-        notes = request.form.get('notes')
-        
-        if new_status not in ['pending', 'processing', 'completed', 'cancelled']:
-            flash('Invalid status.', 'error')
-            return redirect(url_for('staff_order_detail', order_id=order_id))
-        
-        conn = db.engine.raw_connection()
-        cursor = conn.cursor()
-        
-        # Get current order data to check if it exists
-        cursor.execute("SELECT status FROM \"order\" WHERE id = ?", (order_id,))
-        order_data = cursor.fetchone()
-        
-        if not order_data:
-            flash('Order not found', 'error')
-            conn.close()
-            return redirect(url_for('staff_dashboard'))
-        
-        # Set completed_at timestamp if status is being set to completed
-        current_time = datetime.utcnow().isoformat()
-        if new_status == 'completed':
-            cursor.execute(
-                'UPDATE "order" SET status = ?, updated_at = ?, completed_at = ? WHERE id = ?',
-                (new_status, current_time, current_time, order_id)
-            )
-        else:
-            cursor.execute(
-                'UPDATE "order" SET status = ?, updated_at = ? WHERE id = ?',
-                (new_status, current_time, order_id)
-            )
-        
-        # Save the status change
-        conn.commit()
-        conn.close()
-        
-        flash(f'Order status updated to {new_status}', 'success')
-        
-        # Redirect based on the source
-        redirect_url = request.form.get('redirect_url', 'staff_order_detail')
-        if redirect_url == 'kitchen_orders':
-            return redirect(url_for('kitchen_orders'))
-        else:
-            return redirect(url_for('staff_order_detail', order_id=order_id))
+                db.session.add(order_item)
+                
+                # Update product stock
+                product = Product.query.get(item_data['product_id'])
+                if product:
+                    product.update_stock(item_data['quantity'], 'sale')
             
-    except Exception as e:
-        app.logger.error(f"Error updating order status: {str(e)}")
-        flash(f"Error updating order status: {str(e)}", "error")
-        return redirect(url_for('staff_order_detail', order_id=order_id))
-
-# Temporary route to update database schema
-@app.route('/update_db')
-def update_db():
-    try:
-        # Connect to the database
-        conn = sqlite3.connect('instance/pos.db')
-        cursor = conn.cursor()
-        
-        # Check if we need to recreate the ORM models in the database
-        needs_rebuild = False
-        
-        # Check if columns already exist
-        cursor.execute("PRAGMA table_info('order')")
-        columns = cursor.fetchall()
-        column_names = [column[1] for column in columns]
-        
-        # Add reference_number column if it doesn't exist
-        if 'reference_number' not in column_names:
-            app.logger.info("Adding reference_number column to order table")
-            needs_rebuild = True
+            # Generate reference number
+            now = datetime.utcnow()
+            order.reference_number = f"ORD-{now.strftime('%Y%m%d')}-{order.id}"
             
-            # First try regular ALTER TABLE approach
+            # Commit the transaction
+            db.session.commit()
+            
+            # Return the created order
+            return order, None
+            
+        except SQLAlchemyError as e:
+            # If we get a SQLAlchemy error, try the direct SQL approach
+            logger.warning(f"SQLAlchemy error when creating order, falling back to direct SQL: {str(e)}")
+            db.session.rollback()
+            
+            # Fall back to direct SQL approach
+            order_id, reference = direct_create_order(customer_data, items_data, order_type)
+            
+            if order_id:
+                # Get the order using our resilient function
+                order = get_order_by_id(order_id)
+                if order:
+                    return order, None
+                else:
+                    # If we can't get the order, return a generic success message
+                    logger.warning(f"Created order {order_id} with direct SQL but can't access it")
+                    return None, f"Order created with ID {order_id}, but couldn't be retrieved"
+            else:
+                return None, reference  # reference contains the error message
+    
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Error creating order: {str(e)}")
+        return None, f"Error creating order: {str(e)}"
+
+
+
+# Ensure all database operations are committed
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    db.session.commit()
+    db.session.remove()
+
+@app.route('/js/<path:filename>')
+def serve_js(filename):
+    """Directly serve JavaScript files to avoid permission issues"""
+    logger.info(f"JS file requested: {filename}")
+    return send_from_directory(os.path.join(app.static_folder, 'js'), filename)
+
+@app.route('/css/<path:filename>')
+def serve_css(filename):
+    """Directly serve CSS files to avoid permission issues"""
+    logger.info(f"CSS file requested: {filename}")
+    return send_from_directory(os.path.join(app.static_folder, 'css'), filename)
+
+@app.route('/images/<path:filename>')
+def serve_images(filename):
+    """Directly serve image files to avoid permission issues"""
+    logger.info(f"Image file requested: {filename}")
+    return send_from_directory(os.path.join(app.static_folder, 'images'), filename)
+
+@app.route('/manifest.json')
+def manifest():
+    """Serve the manifest.json file for PWA functionality"""
+    logger.info("Manifest.json requested")
+    return send_from_directory(app.static_folder, 'manifest.json')
+
+@app.route('/troubleshoot')
+def troubleshoot():
+    """Endpoint for troubleshooting - returns system diagnostics"""
+    diagnostics = {
+        'timestamp': datetime.utcnow().isoformat(),
+        'app_version': APP_VERSION,
+        'static_folder': app.static_folder,
+        'static_url_path': app.static_url_path,
+        'static_folder_exists': os.path.exists(app.static_folder),
+        'static_folder_contents': os.listdir(app.static_folder) if os.path.exists(app.static_folder) else [],
+        'service_worker_path': os.path.join(app.static_folder, 'service-worker.js'),
+        'service_worker_exists': os.path.exists(os.path.join(app.static_folder, 'service-worker.js')),
+        'current_path': request.path,
+        'headers': dict(request.headers),
+        'authenticated': current_user.is_authenticated if hasattr(current_user, 'is_authenticated') else False,
+        'user_agent': request.user_agent.string if request.user_agent else None,
+        'request_method': request.method,
+    }
+    
+    return jsonify(diagnostics)
+
+@app.route('/<path:path>')
+def catch_all(path):
+    """Catch-all route for any unhandled URLs"""
+    logger.warning(f"Unhandled path requested: {path}")
+    
+    # Try to determine if this is a static file request
+    if '.' in path:
+        extension = path.split('.')[-1].lower()
+        # If it seems to be a static file, try to serve it from static folder
+        if extension in ['js', 'css', 'png', 'jpg', 'jpeg', 'gif', 'ico', 'svg', 'woff', 'woff2', 'ttf', 'eot']:
             try:
-                # SQLite doesn't support adding a UNIQUE column in ALTER TABLE
-                # Add a regular column
-                cursor.execute('ALTER TABLE "order" ADD COLUMN reference_number VARCHAR(50)')
-                
-                # Generate reference numbers for existing orders
-                cursor.execute('SELECT id, order_date FROM "order"')
-                orders = cursor.fetchall()
-                for order_id, order_date in orders:
-                    try:
-                        # Convert order_date string to datetime if needed
-                        if isinstance(order_date, str):
-                            order_date = datetime.fromisoformat(order_date)
-                        elif order_date is None:
-                            order_date = datetime.utcnow()
-                        
-                        # Generate reference number
-                        ref_number = f"ORD-{order_id}-{order_date.strftime('%Y%m%d')}"
-                        # Update the order
-                        cursor.execute('UPDATE "order" SET reference_number = ? WHERE id = ?', 
-                                      (ref_number, order_id))
-                    except Exception as ref_err:
-                        print(f"Error updating reference for order {order_id}: {str(ref_err)}")
-                
-                # Create a unique index instead of a UNIQUE constraint
-                try:
-                    cursor.execute('CREATE UNIQUE INDEX IF NOT EXISTS idx_order_reference_number ON "order" (reference_number)')
-                except Exception as index_err:
-                    print(f"Error creating unique index: {str(index_err)}")
+                # Check if file exists in static folder
+                filepath = os.path.join(app.static_folder, path)
+                if os.path.exists(filepath) and os.path.isfile(filepath):
+                    return send_from_directory(app.static_folder, path)
             except Exception as e:
-                app.logger.error(f"Error adding reference_number column: {str(e)}")
-                needs_rebuild = True  # If ALTER TABLE fails, we'll need to rebuild
-        
-        # Handle other columns
-        if 'updated_at' not in column_names:
-            cursor.execute('ALTER TABLE "order" ADD COLUMN updated_at TIMESTAMP')
-            
-        if 'completed_at' not in column_names:
-            cursor.execute('ALTER TABLE "order" ADD COLUMN completed_at TIMESTAMP')
-        
-        if 'viewed' not in column_names:
-            cursor.execute('ALTER TABLE "order" ADD COLUMN viewed BOOLEAN DEFAULT 0')
-            
-        if 'viewed_at' not in column_names:
-            cursor.execute('ALTER TABLE "order" ADD COLUMN viewed_at TIMESTAMP')
-        
-        # Commit changes
-        conn.commit()
-        conn.close()
-        
-        # If any columns are missing, rebuild the SQLAlchemy models
-        if needs_rebuild:
-            try:
-                # Force SQLAlchemy to rebuild its metadata
-                db.reflect()
-                db.session.commit()
+                logger.error(f"Error serving static file {path}: {e}")
                 
-                # Refresh the app
-                app.logger.info("Reloading models in SQLAlchemy")
-            except Exception as rebuild_err:
-                app.logger.error(f"Error rebuilding SQLAlchemy models: {str(rebuild_err)}")
-        
-        return 'Database schema updated successfully. <a href="/staff/orders">Go to Staff Orders</a>'
-    except Exception as e:
-        app.logger.error(f"Error updating database: {str(e)}")
-        return f'Error updating database: {str(e)}'
+    # If we reach here, it's not a valid route
+    return redirect(url_for('index'))
 
 @app.route('/api/check_new_orders', methods=['GET'])
-@staff_required
 def check_new_orders():
     try:
+        # Check if user is staff (authenticated and has staff role)
+        if not current_user.is_authenticated or not (current_user.is_staff or current_user.is_admin):
+            # Return empty result for non-staff users instead of error
+            return jsonify({'new_orders': 0, 'new_order': False, 'authenticated': False})
+        
         # Use direct SQL query instead of ORM to avoid column issues
         conn = db.engine.raw_connection()
         cursor = conn.cursor()
@@ -2847,652 +9844,117 @@ def check_new_orders():
                     'customer_name': newest_order[1] if newest_order[1] else 'Customer',
                     'total_amount': f"{newest_order[2]:.2f}",
                     'currency': 'UGX',
-                    'order_date': newest_order[3]
+                    'order_date': newest_order[3],
+                    'authenticated': True
                 })
         
         conn.close()
-        return jsonify({'new_orders': new_orders, 'new_order': False})
+        return jsonify({'new_orders': new_orders, 'new_order': False, 'authenticated': True})
     except Exception as e:
         # Log the error and return a safe response
         app.logger.error(f"Error checking new orders: {str(e)}")
-        return jsonify({'new_orders': 0, 'new_order': False, 'error': str(e)})
+        return jsonify({'new_orders': 0, 'new_order': False, 'error': str(e), 'authenticated': False})
 
-@app.route('/api/mark_order_viewed/<int:order_id>', methods=['POST'])
-@login_required
-def mark_order_viewed(order_id):
-    try:
-        # Only staff or admin can mark orders as viewed
-        if not (current_user.is_staff or current_user.is_admin):
-            return jsonify({"success": False, "error": "Unauthorized"}), 403
-        
-        # Use direct SQL to avoid ORM issues
-        conn = db.engine.raw_connection()
-        cursor = conn.cursor()
-        
-        # Check if viewed column exists
-        cursor.execute("PRAGMA table_info('order')")
-        columns = [col[1] for col in cursor.fetchall()]
-        
-        if 'viewed' in columns and 'viewed_at' in columns:
-            # Update with direct SQL
-            timestamp = datetime.utcnow().isoformat()
-            cursor.execute(
-                'UPDATE "order" SET viewed = 1, viewed_at = ? WHERE id = ?', 
-                (timestamp, order_id)
-            )
-            conn.commit()
-            conn.close()
-            return jsonify({"success": True})
-        else:
-            # If columns don't exist, just return success anyway to stop the alarm
-            conn.close()
-            return jsonify({"success": True, "note": "Columns don't exist but acknowledged"})
-            
-    except Exception as e:
-        logger.error(f'Error marking order as viewed: {str(e)}')
-        return jsonify({"success": False, "error": str(e)}), 500
-
-def sync_cart(cart_id):
-    """Helper function to synchronize cart data and ensure consistency"""
-    try:
-        cart = Cart.query.get(cart_id)
-        if not cart:
-            return False
-            
-        # Remove invalid items
-        invalid_items = []
-        for item in cart.items:
-            if not item.product or item.product.stock <= 0 or item.quantity <= 0:
-                invalid_items.append(item)
-                
-        if invalid_items:
-            for item in invalid_items:
-                db.session.delete(item)
-            db.session.commit()
-            
-        return True
-    except Exception as e:
-        logger.error(f"Error syncing cart {cart_id}: {str(e)}")
-        return False
-
-@app.route('/sync_cart', methods=['POST'])
-def sync_cart_endpoint():
-    """API endpoint to synchronize cart data"""
-    try:
-        # Get cart ID
-        if current_user.is_authenticated:
-            cart = Cart.query.filter_by(user_id=current_user.id, status='active').first()
-        else:
-            cart_id = session.get('cart_id')
-            if not cart_id:
-                return jsonify({"success": True, "cart_count": 0, "cart_total": 0})
-            cart = Cart.query.get(cart_id)
-            
-        if not cart:
-            return jsonify({"success": True, "cart_count": 0, "cart_total": 0})
-            
-        # Sync the cart
-        sync_cart(cart.id)
-        
-        # Recalculate totals
-        cart_items = CartItem.query.filter_by(cart_id=cart.id).all()
-        cart_count = sum(item.quantity for item in cart_items)
-        cart_total = sum(item.quantity * item.product.price for item in cart_items)
-        
-        return jsonify({
-            "success": True,
-            "cart_count": cart_count,
-            "cart_total": cart_total
-        })
-    except Exception as e:
-        logger.error(f"Error in sync_cart endpoint: {str(e)}")
-        return jsonify({"success": False, "error": str(e)}), 500
-
-@app.context_processor
-def inject_now():
-    """Add the now function to the template context to get current datetime"""
-    return {'now': datetime.now}
-
-@app.route('/staff/order_detail/<int:order_id>')
-@login_required
-@staff_required
-def my_sales_order_detail(order_id):
-    """Show detailed information for a specific order"""
-    try:
-        # Use direct SQL instead of ORM to avoid column issues
-        conn = db.engine.raw_connection()
-        cursor = conn.cursor()
-        
-        # Get the order details
-        cursor.execute("""
-            SELECT id, customer_id, order_date, total_amount, status, 
-                   customer_name, customer_phone, customer_email, customer_address,
-                   order_type, created_by_id, updated_at, completed_at, viewed, viewed_at
-            FROM "order"
-            WHERE id = ?
-        """, (order_id,))
-        
-        order_data = cursor.fetchone()
-        
-        if not order_data:
-            flash('Order not found', 'error')
-            return redirect(url_for('my_sales'))
-            
-        # Check if this order belongs to the current staff member
-        if order_data[10] != current_user.id:  # created_by_id index
-            flash('You do not have permission to view this order.', 'danger')
-            return redirect(url_for('my_sales'))
-        
-        # Mark order as viewed when opened
-        if order_data[13] == 0 or not order_data[13]:  # viewed column index
-            try:
-                cursor.execute(
-                    'UPDATE "order" SET viewed = 1, viewed_at = ? WHERE id = ?', 
-                    (datetime.utcnow().isoformat(), order_id)
-                )
-                conn.commit()
-                app.logger.info(f"Order #{order_id} marked as viewed from my_sales")
-            except Exception as e:
-                app.logger.error(f"Error marking order as viewed: {str(e)}")
-                # Continue even if marking fails
-        
-        # Get order items
-        cursor.execute("""
-            SELECT oi.id, oi.product_id, oi.quantity, oi.price, p.name
-            FROM order_item oi
-            JOIN product p ON oi.product_id = p.id
-            WHERE oi.order_id = ?
-        """, (order_id,))
-        
-        order_items = cursor.fetchall()
-        
-        # Create a simple object to pass to the template that mimics the ORM object
-        order = SimpleNamespace(
-            id=order_data[0],
-            customer_id=order_data[1],
-            order_date=order_data[2],
-            total_amount=order_data[3],
-            status=order_data[4],
-            customer_name=order_data[5],
-            customer_phone=order_data[6],
-            customer_email=order_data[7],
-            customer_address=order_data[8],
-            order_type=order_data[9],
-            created_by_id=order_data[10],
-            updated_at=order_data[11],
-            completed_at=order_data[12],
-            viewed=order_data[13],
-            viewed_at=order_data[14]
-        )
-        
-        # Create SimpleNamespace objects for order items
-        items = []
-        for item_data in order_items:
-            item = SimpleNamespace(
-                id=item_data[0],
-                product_id=item_data[1],
-                quantity=item_data[2],
-                price=item_data[3],
-                subtotal=item_data[2] * item_data[3],
-                product=SimpleNamespace(
-                    name=item_data[4]
-                )
-            )
-            items.append(item)
-        
-        conn.close()
-        
-        # Pass tax rate for calculations
-        tax_rate = 0.18  # 18% VAT
-        
-        return render_template('staff/order_detail.html', 
-                              order=order,
-                              items=items,
-                              tax_rate=tax_rate)
-    except Exception as e:
-        flash('Error loading order details: ' + str(e), 'danger')
-        app.logger.error(f"Error in my_sales_order_detail: {str(e)}")
-        return redirect(url_for('my_sales'))
-
-# Add this function before any of the order creation routes
-def create_order(order_data, items_data, order_type='online'):
-    """
-    Centralized function to create orders with consistent properties
-    
-    Parameters:
-    - order_data: dict with customer info (name, email, phone, address)
-    - items_data: list of dicts with product_id, quantity, price
-    - order_type: string ('online', 'in-store', 'offline-sync')
-    
-    Returns:
-    - order: Order object that was created
-    - error: Error message if any, None otherwise
-    """
-    try:
-        # Check for recent duplicate orders with the same items and customer - using direct SQL
-        # to avoid issues with missing columns during schema updates
-        recent_order_time = datetime.utcnow() - timedelta(minutes=5)
-        
-        # Build query parameters
-        query_params = {'order_date': recent_order_time.isoformat()}
-        
-        sql_conditions = ["order_date > :order_date"]
-        
-        if current_user.is_authenticated:
-            sql_conditions.append("created_by_id = :created_by_id")
-            query_params['created_by_id'] = current_user.id
-        
-        if order_data.get('customer_name'):
-            sql_conditions.append("customer_name = :customer_name")
-            query_params['customer_name'] = order_data.get('customer_name')
-        
-        if order_data.get('customer_phone'):
-            sql_conditions.append("customer_phone = :customer_phone")
-            query_params['customer_phone'] = order_data.get('customer_phone')
-        
-        # Construct the SQL query
-        sql_query = f"SELECT id FROM \"order\" WHERE {' AND '.join(sql_conditions)}"
-        
-        try:
-            # Execute the direct SQL query
-            potential_duplicate_ids = db.session.execute(text(sql_query), query_params).scalars().all()
-            
-            # If potential duplicates, check order items
-            for order_id in potential_duplicate_ids:
-                # Get the order items using direct SQL
-                order_items = db.session.execute(
-                    text("SELECT product_id, quantity FROM order_item WHERE order_id = :order_id"),
-                    {"order_id": order_id}
-                ).fetchall()
-                
-                if len(order_items) == len(items_data):
-                    # Get the product IDs and quantities for this order
-                    order_items_dict = {item[0]: item[1] for item in order_items}
-                    new_items_dict = {i.get('product_id'): i.get('quantity') for i in items_data}
-                    
-                    # If product IDs and quantities match, consider it a duplicate
-                    if order_items_dict == new_items_dict:
-                        # Get the full order to return
-                        pot_order = Order.query.get(order_id)
-                        if pot_order:
-                            logger.warning(f"Prevented duplicate order creation: {order_id}")
-                            return pot_order, "This appears to be a duplicate order"
-        
-        except Exception as query_err:
-            # If there's an error with the SQL, log but continue - it's better to risk a duplicate
-            # than to prevent order creation
-            logger.error(f"Error checking for duplicates: {str(query_err)}")
-        
-        # Calculate total amount
-        total_amount = sum(item.get('quantity', 0) * item.get('price', 0) for item in items_data)
-        
-        # Set appropriate status based on order type
-        if order_type == 'in-store':
-            status = 'completed'
-            viewed = True
-            viewed_at = datetime.utcnow()
-        else:
-            status = 'pending'
-            viewed = False
-            viewed_at = None
-        
-        # Use direct SQL for order creation to bypass ORM
-        conn = db.engine.raw_connection()
-        cursor = conn.cursor()
-        
-        # Check if the reference_number column exists in the order table
-        cursor.execute("PRAGMA table_info('order')")
-        columns = [col[1] for col in cursor.fetchall()]
-        has_reference_column = 'reference_number' in columns
-        
-        # Insert the order with or without reference_number based on schema
-        if has_reference_column:
-            cursor.execute("""
-                INSERT INTO "order" (
-                    customer_id, order_date, total_amount, status, customer_name, 
-                    customer_phone, customer_email, customer_address, order_type, created_by_id,
-                    viewed, viewed_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (
-                current_user.id if current_user.is_authenticated else None,
-                datetime.utcnow().isoformat(),
-                total_amount,
-                status,
-                order_data.get('customer_name', ''),
-                order_data.get('customer_phone', ''),
-                order_data.get('customer_email', ''),
-                order_data.get('customer_address', ''),
-                order_type,
-                current_user.id if current_user.is_authenticated else None,
-                1 if viewed else 0,
-                viewed_at.isoformat() if viewed_at else None
-            ))
-        else:
-            # Insert without reference_number
-            cursor.execute("""
-                INSERT INTO "order" (
-                    customer_id, order_date, total_amount, status, customer_name, 
-                    customer_phone, customer_email, customer_address, order_type, created_by_id,
-                    viewed, viewed_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (
-                current_user.id if current_user.is_authenticated else None,
-                datetime.utcnow().isoformat(),
-                total_amount,
-                status,
-                order_data.get('customer_name', ''),
-                order_data.get('customer_phone', ''),
-                order_data.get('customer_email', ''),
-                order_data.get('customer_address', ''),
-                order_type,
-                current_user.id if current_user.is_authenticated else None,
-                1 if viewed else 0,
-                viewed_at.isoformat() if viewed_at else None
-            ))
-        
-        # Get the last inserted row id
-        order_id = cursor.lastrowid
-        
-        # If reference column exists, update it with the order ID
-        if has_reference_column:
-            ref_number = f"ORD-{order_id}-{datetime.utcnow().strftime('%Y%m%d')}"
-            cursor.execute(
-                'UPDATE "order" SET reference_number = ? WHERE id = ?',
-                (ref_number, order_id)
-            )
-        
-        # Now add the order items
-        for item_data in items_data:
-            product_id = item_data.get('product_id')
-            quantity = item_data.get('quantity', 0)
-            price = item_data.get('price', 0)
-            
-            if not product_id or quantity <= 0:
-                continue
-                
-            # Create the order item
-            cursor.execute(
-                "INSERT INTO order_item (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)",
-                (order_id, product_id, quantity, price)
-            )
-            
-            # Update stock if needed
-            try:
-                # Get current stock
-                cursor.execute("SELECT stock FROM product WHERE id = ?", (product_id,))
-                current_stock = cursor.fetchone()[0]
-                
-                # Update stock
-                new_stock = current_stock - quantity
-                cursor.execute("UPDATE product SET stock = ? WHERE id = ?", (new_stock, product_id))
-                
-                # Record movement
-                cursor.execute(
-                    "INSERT INTO stock_movement (product_id, quantity, movement_type, remaining_stock) VALUES (?, ?, ?, ?)",
-                    (product_id, quantity, 'sale', new_stock)
-                )
-            except Exception as stock_err:
-                logger.error(f"Error updating stock: {str(stock_err)}")
-        
-        # Commit all changes
-        conn.commit()
-        conn.close()
-        
-        # Retrieve the newly created order 
-        order = Order.query.get(order_id)
-        return order, None
-        
-    except Exception as e:
-        db.session.rollback()
-        logger.error(f"Error in create_order: {str(e)}")
-        return None, str(e)
-
-@app.route('/kitchen')
-@login_required
-@staff_required
-def kitchen_orders():
-    try:
-        # Get filter parameters from request
-        status_filter = request.args.get('status', 'processing')
-        
-        conn = db.engine.raw_connection()
-        cursor = conn.cursor()
-        
-        # Get orders with the specified status
-        cursor.execute("""
-            SELECT id, customer_name, order_date, total_amount, status, 
-                   customer_phone, order_type, viewed
-            FROM "order"
-            WHERE status = ?
-            ORDER BY order_date DESC
-        """, (status_filter,))
-        
-        order_data = cursor.fetchall()
-        
-        # Create a list of SimpleNamespace objects to mimic ORM
-        orders = []
-        for order_row in order_data:
-            order = SimpleNamespace(
-                id=order_row[0],
-                customer_name=order_row[1],
-                order_date=order_row[2],
-                total_amount=order_row[3],
-                status=order_row[4],
-                customer_phone=order_row[5],
-                order_type=order_row[6],
-                viewed=order_row[7]
-            )
-            orders.append(order)
-        
-        conn.close()
-        
-        return render_template('kitchen/orders.html', 
-                              orders=orders, 
-                              current_status=status_filter)
-    except Exception as e:
-        logger.error(f"Error in kitchen_orders: {str(e)}")
-        flash(f"Error loading orders: {str(e)}", "error")
-        return redirect(url_for('staff_dashboard'))
-
-@app.route('/orders/<int:order_id>')
-@login_required
-def customer_order_detail(order_id):
-    try:
-        # Use direct SQL instead of ORM to avoid column issues
-        conn = db.engine.raw_connection()
-        cursor = conn.cursor()
-        
-        # Get the order details, ensuring it belongs to the current user
-        cursor.execute("""
-            SELECT id, customer_id, order_date, total_amount, status, 
-                  customer_name, customer_phone, customer_email, customer_address,
-                  order_type, created_by_id, updated_at, completed_at,
-                  payment_method, payment_status, payment_id
-            FROM "order"
-            WHERE id = ? AND customer_id = ?
-        """, (order_id, current_user.id))
-        
-        order_data = cursor.fetchone()
-        
-        if not order_data:
-            flash('Order not found or you do not have permission to view it', 'error')
-            return redirect(url_for('customer_orders'))
-        
-        # Get order items
-        cursor.execute("""
-            SELECT oi.id, oi.product_id, oi.quantity, oi.price, p.name, p.category
-            FROM order_item oi
-            JOIN product p ON oi.product_id = p.id
-            WHERE oi.order_id = ?
-        """, (order_id,))
-        
-        order_items = cursor.fetchall()
-        
-        # Create a simple object to pass to the template that mimics the ORM object
-        order = SimpleNamespace(
-            id=order_data[0],
-            customer_id=order_data[1],
-            order_date=order_data[2],
-            total_amount=order_data[3],
-            status=order_data[4],
-            customer_name=order_data[5],
-            customer_phone=order_data[6],
-            customer_email=order_data[7],
-            customer_address=order_data[8],
-            order_type=order_data[9],
-            created_by_id=order_data[10],
-            updated_at=order_data[11],
-            completed_at=order_data[12],
-            payment_method=order_data[13],
-            payment_status=order_data[14],
-            payment_id=order_data[15]
-        )
-        
-        # Create SimpleNamespace objects for order items and attach to order
-        items = []
-        for item_data in order_items:
-            item = SimpleNamespace(
-                id=item_data[0],
-                product_id=item_data[1],
-                quantity=item_data[2],
-                price=item_data[3],
-                product=SimpleNamespace(
-                    name=item_data[4],
-                    category=item_data[5]
-                )
-            )
-            items.append(item)
-        
-        # Add items as a property to the order
-        order.items = items
-        
-        conn.close()
-        
-        return render_template('customer/order_detail.html', order=order)
-    except Exception as e:
-        app.logger.error(f"Error in customer_order_detail: {str(e)}")
-        flash(f"Error viewing order: {str(e)}", "error")
-        return redirect(url_for('customer_orders'))
-
-@app.route('/orders')
-@login_required
-def customer_orders():
-    try:
-        # Get URL parameters
-        page = request.args.get('page', 1, type=int)
-        per_page = 10  # Number of orders per page
-        
-        conn = db.engine.raw_connection()
-        cursor = conn.cursor()
-        
-        # Count total orders for pagination
-        cursor.execute("""
-            SELECT COUNT(*)
-            FROM "order"
-            WHERE customer_id = ?
-            ORDER BY order_date DESC
-        """, (current_user.id,))
-        
-        total_orders = cursor.fetchone()[0]
-        
-        # Calculate offset
-        offset = (page - 1) * per_page
-        
-        # Get paginated orders
-        cursor.execute("""
-            SELECT id, customer_name, order_date, total_amount, status,
-                   order_type, payment_status
-            FROM "order"
-            WHERE customer_id = ?
-            ORDER BY order_date DESC
-            LIMIT ? OFFSET ?
-        """, (current_user.id, per_page, offset))
-        
-        order_data = cursor.fetchall()
-        
-        # Create a list of SimpleNamespace objects to mimic ORM
-        orders = []
-        for order_row in order_data:
-            order = SimpleNamespace(
-                id=order_row[0],
-                customer_name=order_row[1],
-                order_date=order_row[2],
-                total_amount=order_row[3],
-                status=order_row[4],
-                order_type=order_row[5],
-                payment_status=order_row[6]
-            )
-            orders.append(order)
-        
-        # Calculate total pages for pagination
-        total_pages = (total_orders + per_page - 1) // per_page
-        
-        conn.close()
-        
-        return render_template('customer/orders.html', 
-                              orders=orders, 
-                              page=page, 
-                              total_pages=total_pages)
-    except Exception as e:
-        flash('Error loading orders: ' + str(e), 'danger')
-        app.logger.error(f"Error in customer_orders: {str(e)}")
-        return redirect(url_for('customer_dashboard'))
-
-@app.route('/staff/all-orders')
+@app.route('/staff/orders')
 @login_required
 @staff_required
 def staff_orders():
-    """Display all orders for authorized staff members"""
     try:
-        # Check if staff is authorized to view all orders
-        if not (current_user.role == 'admin' or current_user.role == 'manager'):
-            flash('You are not authorized to view all orders.', 'danger')
-            return redirect(url_for('staff_dashboard'))
-        
         # Get URL parameters
         page = request.args.get('page', 1, type=int)
         per_page = 10  # Number of orders per page
         
+        # Get filter parameters
+        status = request.args.get('status', '')
+        order_type = request.args.get('order_type', '')
+        
         conn = db.engine.raw_connection()
         cursor = conn.cursor()
         
+        # Build WHERE clause for filters
+        where_clauses = []
+        params = []
+        
+        if status:
+            where_clauses.append("status = ?")
+            params.append(status)
+        
+        if order_type:
+            where_clauses.append("order_type = ?")
+            params.append(order_type)
+        
+        # Construct the WHERE clause
+        where_sql = " WHERE " + " AND ".join(where_clauses) if where_clauses else ""
+        
+        # Limit to recent orders (last 30 days)
+        if where_clauses:
+            where_sql += " AND date(order_date) >= date('now', '-30 day')"
+        else:
+            where_sql = " WHERE date(order_date) >= date('now', '-30 day')"
+        
         # Count total orders for pagination
-        cursor.execute("""
+        count_query = f"""
             SELECT COUNT(*)
             FROM "order"
-            ORDER BY order_date DESC
-        """)
+            {where_sql}
+        """
         
+        cursor.execute(count_query, params)
         total_orders = cursor.fetchone()[0]
         
         # Calculate offset
         offset = (page - 1) * per_page
         
         # Get paginated orders
-        cursor.execute("""
-            SELECT o.id, o.customer_name, o.order_date, o.total_amount, o.status, o.viewed,
-                   u.username as staff_name
-            FROM "order" o
-            LEFT JOIN user u ON o.created_by_id = u.id
-            ORDER BY o.order_date DESC
+        orders_query = f"""
+            SELECT id, customer_name, order_date, total_amount, status,
+                   order_type, viewed, created_by_id
+            FROM "order"
+            {where_sql}
+            ORDER BY order_date DESC
             LIMIT ? OFFSET ?
-        """, (per_page, offset))
+        """
+        
+        # Add pagination parameters to the end of params list
+        query_params = params + [per_page, offset]
+        cursor.execute(orders_query, query_params)
         
         order_data = cursor.fetchall()
+        
+        # Get staff names for created_by_id
+        staff_dict = {}
+        staff_ids = [row[7] for row in order_data if row[7] is not None]
+        if staff_ids:
+            placeholders = ','.join(['?'] * len(staff_ids))
+            cursor.execute(f"SELECT id, username FROM user WHERE id IN ({placeholders})", staff_ids)
+            for staff_id, username in cursor.fetchall():
+                staff_dict[staff_id] = username
         
         # Create a list of SimpleNamespace objects to mimic ORM
         orders = []
         for order_row in order_data:
+            # Convert string date to datetime if needed
+            order_date = order_row[2]
+            if isinstance(order_date, str):
+                try:
+                    order_date = datetime.fromisoformat(order_date.replace('Z', '+00:00'))
+                except (ValueError, AttributeError):
+                    # If conversion fails, use current time as fallback
+                    order_date = datetime.utcnow()
+            
+            # Get staff name
+            created_by_id = order_row[7]
+            created_by = staff_dict.get(created_by_id, 'System') if created_by_id else 'System'
+            
             order = SimpleNamespace(
                 id=order_row[0],
                 customer_name=order_row[1],
-                order_date=order_row[2],
+                order_date=order_date,
                 total_amount=order_row[3],
                 status=order_row[4],
-                viewed=order_row[5],
-                created_by=SimpleNamespace(
-                    username=order_row[6]
-                ) if order_row[6] else None
+                order_type=order_row[5],
+                viewed=order_row[6],
+                created_by=created_by
             )
             orders.append(order)
         
@@ -3501,16 +9963,123 @@ def staff_orders():
         
         conn.close()
         
-        return render_template('staff/all_orders.html', 
+        return render_template('staff/orders.html', 
                               orders=orders, 
                               page=page, 
-                              total_pages=total_pages)
+                              total_pages=total_pages,
+                              status=status,
+                              order_type=order_type)
     except Exception as e:
-        flash('Error loading orders: ' + str(e), 'danger')
+        flash('Error loading recent orders: ' + str(e), 'danger')
         app.logger.error(f"Error in staff_orders: {str(e)}")
         return redirect(url_for('staff_dashboard'))
+
+def get_order_by_id(order_id):
+    """
+    Get an order by ID with fallback to direct SQL if SQLAlchemy fails
+    """
+    try:
+        # First try with SQLAlchemy
+        order = Order.query.get(order_id)
+        if order:
+            return order
+            
+        # If not found with SQLAlchemy, try direct SQL
+        logger.warning(f"Order {order_id} not found with SQLAlchemy, trying direct SQL")
+        
+        try:
+            # Direct database query with LEFT JOIN to handle missing products
+            conn = sqlite3.connect('instance/pos.db')
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            
+            # Get the order
+            cursor.execute("""
+            SELECT * FROM "order" WHERE id = ?
+            """, (order_id,))
+            
+            order_row = cursor.fetchone()
+            if not order_row:
+                conn.close()
+                logger.error(f"Order {order_id} not found in direct SQL")
+                return None
+                
+            order_dict = dict(order_row)
+            
+            # Get the order items with LEFT JOIN to products
+            cursor.execute("""
+            SELECT oi.*, p.name as product_name, p.price as product_price 
+            FROM order_item oi
+            LEFT JOIN product p ON oi.product_id = p.id
+            WHERE oi.order_id = ?
+            """, (order_id,))
+            
+            items = [dict(row) for row in cursor.fetchall()]
+            conn.close()
+            
+            # Create a SimpleOrder object to mimic the SQLAlchemy Order
+            class SimpleOrder:
+                def __init__(self, order_data, item_data):
+                    # Basic order properties
+                    self.id = order_data.get('id')
+                    self.reference_number = order_data.get('reference_number', '')
+                    self.customer_name = order_data.get('customer_name', '')
+                    self.customer_phone = order_data.get('customer_phone', '')
+                    self.customer_email = order_data.get('customer_email', '')
+                    self.customer_address = order_data.get('customer_address', '')
+                    self.order_date = order_data.get('order_date', '')
+                    self.total_amount = order_data.get('total_amount', 0)
+                    self.status = order_data.get('status', 'pending')
+                    self.order_type = order_data.get('order_type', 'online')
+                    self.viewed = order_data.get('viewed', 0)
+                    self.viewed_at = order_data.get('viewed_at')
+                    self.completed_at = order_data.get('completed_at')
+                    self.updated_at = order_data.get('updated_at')
+                    self.created_by_id = order_data.get('created_by_id')
+                    self.customer_id = order_data.get('customer_id')
+                    
+                    # Store item data for items property
+                    self._items = item_data
+                
+                @property
+                def items(self):
+                    class SimpleOrderItem:
+                        def __init__(self, item_data):
+                            self.id = item_data.get('id', 0)
+                            self.order_id = item_data.get('order_id', 0)
+                            self.product_id = item_data.get('product_id', 0)
+                            self.quantity = item_data.get('quantity', 0)
+                            self.price = item_data.get('price', 0)
+                            self._product_name = item_data.get('product_name', 'Product')
+                            self._product_price = item_data.get('product_price', self.price)
+                            
+                        @property
+                        def subtotal(self):
+                            return self.price * self.quantity
+                            
+                        @property
+                        def product(self):
+                            class SimpleProduct:
+                                def __init__(self, name, price):
+                                    self.name = name
+                                    self.price = price
+                            return SimpleProduct(self._product_name, self._product_price)
+                    
+                    return [SimpleOrderItem(item) for item in self._items]
+            
+            return SimpleOrder(order_dict, items)
+            
+        except Exception as inner_e:
+            logger.error(f"Error in direct SQL retrieval: {str(inner_e)}")
+            return None
+    
+    except Exception as e:
+        logger.error(f"Error in get_order_by_id: {str(e)}")
+        return None
 
 if __name__ == '__main__':
     # Initialize database and create all tables
     init_db()
-    app.run(debug=True) 
+    # Run app with permissive host to allow access from all IPs in local network
+    # This can help with network-related 403 errors
+    app.run(debug=True, host='0.0.0.0', port=5000, threaded=True) 
