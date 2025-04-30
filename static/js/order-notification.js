@@ -31,6 +31,9 @@ function detectUserRole() {
         isStaff = true;
         console.log('Staff dashboard link found, user is staff');
     }
+    
+    // Always report role for debugging
+    console.log('User roles:', { isAdmin, isStaff });
 }
 
 // Create audio element with fallback beep sound
@@ -63,9 +66,21 @@ function checkForNewOrders() {
     
     console.log('Checking for new orders...');
     fetch('/api/check_new_orders')
-        .then(response => response.json())
+        .then(response => {
+            // Check if the response is JSON
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                // Not JSON, likely an HTML error page
+                throw new Error('Response is not JSON');
+            }
+            return response.json();
+        })
         .then(data => {
             console.log('Order check response:', data);
+            
+            // Both admin and staff should receive notifications
+            // Remove the authentication check as we want to allow
+            // admin to receive notifications too
             
             // If we have new orders
             if (data.new_order && data.order_id) {
@@ -84,7 +99,18 @@ function checkForNewOrders() {
                 stopAlarm();
             }
         })
-        .catch(error => console.error('Error checking for new orders:', error));
+        .catch(error => {
+            console.error('Error checking for new orders:', error);
+            // Don't keep retrying if there's an auth issue
+            if (error.message === 'Response is not JSON') {
+                console.log('Pausing order checks due to authentication issue');
+                // Pause checks for 30 seconds
+                setTimeout(() => {
+                    console.log('Resuming order checks after auth error pause');
+                    lastCheckTime = 0;  // Reset to allow immediate check
+                }, 30000);
+            }
+        });
 }
 
 // Function to start the alarm
@@ -144,12 +170,8 @@ function showOrderNotification(orderData) {
     notification.className = 'order-notification alert alert-warning alert-dismissible fade show';
     notification.setAttribute('data-order-id', orderData.order_id);
     
-    // Determine the correct URL based on user role
+    // Determine the correct URL based on user role - both admin and staff can see orders
     let orderViewUrl = '/staff/order/' + orderData.order_id;
-    if (isAdmin) {
-        // Admin can also use the staff URL
-        orderViewUrl = '/staff/order/' + orderData.order_id;
-    }
     
     notification.innerHTML = `
         <strong>New Order #${orderData.order_id}!</strong>
@@ -218,7 +240,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Detect user role first
     detectUserRole();
-    console.log('User roles detected:', { isAdmin, isStaff });
     
     // Create notification container if it doesn't exist
     if (!document.getElementById('orderNotificationContainer')) {

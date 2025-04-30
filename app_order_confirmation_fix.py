@@ -1,0 +1,19 @@
+@app.route('/order/<int:order_id>')
+@login_required
+def order_confirmation(order_id):
+    try:
+        # Use our resilient get_order_by_id function
+        order = get_order_by_id(order_id)
+        if not order:
+            flash('Order not found', 'error')
+            return redirect(url_for('index'))
+            
+        # Check permission if it's a regular Order object
+        if hasattr(order, 'customer_id') and order.customer_id != current_user.id and not current_user.is_admin:
+            abort(403)
+            
+        return render_template('order_confirmation.html', order=order)
+    except Exception as e:
+        logger.error(f"Error loading order confirmation for order {order_id}: {str(e)}")
+        flash(f"Error loading order details: {str(e)}", 'error')
+        return redirect(url_for('index')) 

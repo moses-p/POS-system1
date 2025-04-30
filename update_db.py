@@ -1,5 +1,9 @@
 import sqlite3
 from app import app, db, User
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def update_schema():
     print("Updating database schema...")
@@ -39,44 +43,52 @@ def update_schema():
             else:
                 print("is_staff column already exists")
             
+            # Check if reference_number column exists in order table
+            cursor.execute("PRAGMA table_info('order')")
+            columns = cursor.fetchall()
+            column_names = [column[1] for column in columns]
+            
+            if 'reference_number' not in column_names:
+                logger.info("Adding reference_number column to order table")
+                cursor.execute('''
+                    ALTER TABLE "order" 
+                    ADD COLUMN reference_number VARCHAR(50) UNIQUE NULL
+                ''')
+                
+                # Update existing orders with a reference number
+                cursor.execute("SELECT id FROM 'order'")
+                orders = cursor.fetchall()
+                for order in orders:
+                    order_id = order[0]
+                    ref_num = f"ORD-MIGRATED-{order_id}"
+                    cursor.execute(
+                        "UPDATE 'order' SET reference_number = ? WHERE id = ?", 
+                        (ref_num, order_id)
+                    )
+                
+                logger.info(f"Added reference_number to {len(orders)} existing orders")
+            else:
+                logger.info("reference_number column already exists")
+            
             # Close the connection
-            conn.close()
+            conn.commit()
+            logger.info("Database schema update completed successfully")
+            return True
         except Exception as e:
-            print(f"Error with direct SQLite update: {e}")
+            logger.error(f"Error updating database schema: {str(e)}")
+            return False
+    finally:
+        if 'conn' in locals():
+            conn.close()
     
     print("Database update complete.")
 
 def update_db():
-    try:
-        # Connect to the database
-        conn = sqlite3.connect('instance/pos.db')
-        cursor = conn.cursor()
-        
-        # Check if columns already exist
-        cursor.execute("PRAGMA table_info('order')")
-        columns = cursor.fetchall()
-        column_names = [column[1] for column in columns]
-        
-        print("Current columns:", column_names)
-        
-        # Add viewed column if it doesn't exist
-        if 'viewed' not in column_names:
-            print("Adding 'viewed' column...")
-            cursor.execute('ALTER TABLE "order" ADD COLUMN viewed BOOLEAN DEFAULT 0')
-            
-        # Add viewed_at column if it doesn't exist
-        if 'viewed_at' not in column_names:
-            print("Adding 'viewed_at' column...")
-            cursor.execute('ALTER TABLE "order" ADD COLUMN viewed_at TIMESTAMP')
-        
-        # Commit changes
-        conn.commit()
-        conn.close()
-        
-        print('Database schema updated successfully.')
-    except Exception as e:
-        print(f'Error updating database: {str(e)}')
+    result = update_schema()
+    if result:
+        print("Database updated successfully")
+    else:
+        print("Database update failed")
 
 if __name__ == '__main__':
-    update_schema()
     update_db() 

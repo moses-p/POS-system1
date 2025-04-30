@@ -1,0 +1,94 @@
+def create_order(customer_data, items_data, order_type):
+    """
+    Centralized function to create orders, using only direct SQL to avoid SQLAlchemy issues
+    """
+    try:
+        # Skip SQLAlchemy entirely and use direct SQL
+        try:
+            # Calculate total amount
+            total_amount = sum(item['price'] * item['quantity'] for item in items_data)
+            
+            # Generate a unique reference number
+            now = datetime.utcnow()
+            date_part = now.strftime('%Y%m%d')
+            random_part = str(uuid.uuid4())[:8]
+            reference_number = f"ORD-{date_part}-{random_part}"
+            
+            # Connect to database
+            conn = sqlite3.connect('instance/pos.db')
+            cursor = conn.cursor()
+            
+            # Insert the order
+            cursor.execute("""
+                INSERT INTO [order] (
+                    reference_number, 
+                    customer_name, 
+                    customer_phone, 
+                    customer_email, 
+                    customer_address, 
+                    order_date, 
+                    total_amount, 
+                    status, 
+                    order_type, 
+                    viewed,
+                    customer_id,
+                    created_by_id
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """, (
+                    reference_number,
+                    customer_data.get('customer_name', ''),
+                    customer_data.get('customer_phone', ''),
+                    customer_data.get('customer_email', ''),
+                    customer_data.get('customer_address', ''),
+                    now.strftime('%Y-%m-%d %H:%M:%S'),
+                    total_amount,
+                    'pending',
+                    order_type,
+                    0,
+                    customer_data.get('customer_id'),
+                    customer_data.get('created_by_id')
+                ))
+                
+            # Get the new order ID
+            order_id = cursor.lastrowid
+                
+            # Insert order items
+            for item_data in items_data:
+                cursor.execute("""
+                    INSERT INTO order_item (order_id, product_id, quantity, price)
+                    VALUES (?, ?, ?, ?)
+                    """, (
+                        order_id,
+                        item_data['product_id'],
+                        item_data['quantity'],
+                        item_data['price']
+                    ))
+                    
+                # Update product stock
+                cursor.execute("""
+                    UPDATE product SET stock = stock - ? WHERE id = ?
+                    """, (item_data['quantity'], item_data['product_id']))
+            
+            # Commit the transaction
+            conn.commit()
+            conn.close()
+            
+            # Return the created order
+            order = get_order_by_id(order_id)
+            if order:
+                logger.info(f"Successfully created order {order_id} with direct SQL")
+                return order, None
+            else:
+                logger.warning(f"Created order {order_id} with direct SQL but can't retrieve it")
+                return None, f"Order created with ID {order_id}, but couldn't be retrieved. Try refreshing."
+        
+        except Exception as e:
+            logger.error(f"Error creating order with direct SQL: {str(e)}")
+            if 'conn' in locals() and conn:
+                conn.rollback()
+                conn.close()
+            return None, f"Error creating order: {str(e)}"
+            
+    except Exception as e:
+        logger.error(f"Error in create_order: {str(e)}")
+        return None, f"Error creating order: {str(e)}" 

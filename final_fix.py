@@ -1,6 +1,8 @@
 import sqlite3
 import os
 import time
+import re
+import shutil
 
 print("===========================================")
 print("EMERGENCY DATABASE FIX - DIRECT SCHEMA EDIT")
@@ -13,7 +15,6 @@ print(f"Connecting to database at {db_path}...")
 # Backup the database first
 backup_path = f'instance/pos_backup_{int(time.time())}.db'
 try:
-    import shutil
     shutil.copy2(db_path, backup_path)
     print(f"Database backed up to {backup_path}")
 except Exception as e:
@@ -238,4 +239,106 @@ finally:
     print("\nDatabase connection closed.")
     
 print("\nIMPORTANT: Please restart the Flask server to use the updated schema.")
-print(f"If issues persist, restore from backup: {backup_path}") 
+print(f"If issues persist, restore from backup: {backup_path}")
+
+def fix_indentation(filename):
+    """Fix indentation issues in a Python file"""
+    with open(filename, 'r', encoding='utf-8') as file:
+        lines = file.readlines()
+    
+    fixed_lines = []
+    current_indent = 0
+    in_multiline_string = False
+    string_delimiter = None
+    
+    for line in lines:
+        stripped = line.strip()
+        
+        # Skip empty lines
+        if not stripped:
+            fixed_lines.append(line)
+            continue
+        
+        # Check for multiline strings
+        if not in_multiline_string:
+            if stripped.startswith('"""') or stripped.startswith("'''"):
+                in_multiline_string = True
+                string_delimiter = stripped[:3]
+                if stripped.endswith(string_delimiter) and len(stripped) > 3:
+                    in_multiline_string = False
+        else:
+            if stripped.endswith(string_delimiter):
+                in_multiline_string = False
+            fixed_lines.append(line)
+            continue
+        
+        # Skip comments
+        if stripped.startswith('#'):
+            fixed_lines.append(line)
+            continue
+        
+        # If inside a multiline string, don't modify
+        if in_multiline_string:
+            fixed_lines.append(line)
+            continue
+        
+        # Adjust indentation based on colons and brackets
+        if stripped.endswith(':'):
+            fixed_lines.append(line)
+            current_indent += 4
+        elif stripped == 'else:' or stripped.startswith('elif ') or stripped.startswith('except ') or stripped.startswith('finally:'):
+            # For else/elif/except/finally, keep same indent as previous block
+            fixed_lines.append(line)
+        else:
+            # Normal line, use current indentation
+            fixed_lines.append(' ' * current_indent + stripped + '\n')
+        
+        # Check for dedent indicators
+        if stripped.startswith('return ') or stripped.startswith('break') or stripped.startswith('continue'):
+            current_indent = max(0, current_indent - 4)
+    
+    with open(filename, 'w', encoding='utf-8') as file:
+        file.writelines(fixed_lines)
+
+
+def replace_functions():
+    """Replace problematic functions in app.py"""
+    # Create a backup
+    shutil.copy('app.py', 'app.py.final_backup')
+    
+    with open('app.py', 'r', encoding='utf-8') as file:
+        content = file.read()
+    
+    # Replace create_order function
+    create_order_pattern = r'def create_order\(customer_data, items_data, order_type\):.*?(?=@app\.route|\ndef )'
+    content = re.sub(create_order_pattern, CREATE_ORDER_FUNCTION, content, flags=re.DOTALL)
+    
+    # Replace catch_all function
+    catch_all_pattern = r'@app\.route\(\'/<path:path>\'\).*?def catch_all\(path\):.*?(?=@app\.route|\ndef )'
+    content = re.sub(catch_all_pattern, CATCH_ALL_FUNCTION, content, flags=re.DOTALL)
+    
+    # Replace get_order_by_id function
+    get_order_pattern = r'def get_order_by_id\(order_id\):.*?(?=@app\.route|\ndef |\nif __name__)'
+    content = re.sub(get_order_pattern, GET_ORDER_BY_ID_FUNCTION, content, flags=re.DOTALL)
+    
+    with open('app_fixed_final.py', 'w', encoding='utf-8') as file:
+        file.write(content)
+    
+    print("Replaced problematic functions in app_fixed_final.py")
+    return 'app_fixed_final.py'
+
+
+if __name__ == "__main__":
+    output_file = replace_functions()
+    print("Verifying syntax...")
+    
+    try:
+        import py_compile
+        py_compile.compile(output_file, doraise=True)
+        print("Syntax OK! Fixed app saved to app_fixed_final.py")
+        # Copy to app.py if syntax is correct
+        shutil.copy(output_file, 'app.py')
+        print("Copied fixed app to app.py")
+    except py_compile.PyCompileError as e:
+        print(f"Syntax errors still exist: {str(e)}")
+        print("The fixed version is available in app_fixed_final.py for manual inspection") 

@@ -1,0 +1,64 @@
+2025-04-30 00:27:22,238 INFO: Database backed up to instance/pos_backup_20250430_002722.db
+2025-04-30 00:27:22,239 INFO: No columns needed to be added to table 'user'
+2025-04-30 00:27:22,240 INFO: Adding column 'payment_method' to table 'order'
+2025-04-30 00:27:22,244 INFO: Adding column 'payment_status' to table 'order'
+2025-04-30 00:27:22,249 INFO: Adding column 'payment_id' to table 'order'
+2025-04-30 00:27:22,253 INFO: Adding column 'delivery_address' to table 'order'
+2025-04-30 00:27:22,257 INFO: Added 4 columns to table 'order'
+2025-04-30 00:27:22,258 INFO: No columns needed to be added to table 'product'
+2025-04-30 00:27:22,263 INFO: Created/verified index: user.username unique
+2025-04-30 00:27:22,268 INFO: Created/verified index: user.email unique
+2025-04-30 00:27:22,268 INFO: Created/verified index: order.reference_number unique
+2025-04-30 00:27:22,272 INFO: Created/verified index: order.customer_id
+2025-04-30 00:27:22,272 INFO: Created/verified index: order.order_date
+2025-04-30 00:27:22,274 INFO: Created/verified index: order.status
+2025-04-30 00:27:22,278 INFO: Created/verified index: product.name
+2025-04-30 00:27:22,283 INFO: Created/verified index: product.category
+2025-04-30 00:27:22,288 INFO: Created/verified index: product.barcode unique
+2025-04-30 00:27:22,289 INFO: Schema fix complete. Added 4 columns in total.
+2025-04-30 22:55:46,695 INFO: Starting database schema fix for reference_number column
+2025-04-30 22:55:46,697 ERROR: Error adding reference_number column: near "order": syntax error
+2025-04-30 22:55:46,697 ERROR: Failed to update database schema
+2025-04-30 22:59:32,836 INFO: Starting database schema fix for reference_number column
+2025-04-30 22:59:32,837 ERROR: Error adding reference_number column: near "order": syntax error
+2025-04-30 22:59:32,837 ERROR: Failed to update database schema
+2025-04-30 23:00:33,113 INFO: Starting database schema fix for reference_number column
+2025-04-30 23:00:33,114 ERROR: Error adding reference_number column: near "order": syntax error
+2025-04-30 23:00:33,115 ERROR: Failed to update database schema
+2025-04-30 23:02:09,861 INFO: Starting database schema fix for reference_number column
+2025-04-30 23:02:09,862 INFO: reference_number column already exists in the order table
+2025-04-30 23:02:09,863 INFO: Database schema updated successfully
+2025-04-30 23:45:22,678 INFO: Starting database schema fix for reference_number column
+2025-04-30 23:45:22,679 INFO: reference_number column already exists in the order table
+2025-04-30 23:45:22,679 INFO: Database schema updated successfully
+2025-05-01 00:02:53,591 INFO: Starting database schema fix for reference_number column
+2025-05-01 00:02:53,592 INFO: reference_number column already exists in the order table
+2025-05-01 00:02:53,592 INFO: Database schema updated successfully
+2025-05-01 00:06:16,892 INFO: Starting database schema fix for reference_number column
+2025-05-01 00:06:16,893 INFO: reference_number column already exists in the order table
+2025-05-01 00:06:16,893 INFO: Checking for orders without reference numbers
+2025-05-01 00:06:16,894 INFO: All orders have reference numbers
+2025-05-01 00:06:16,894 INFO: Actual columns in order table: ['id', 'reference_number', 'customer_id', 'order_date', 'total_amount', 'status', 'customer_name', 'customer_phone', 'customer_email', 'customer_address', 'order_type', 'created_by_id', 'updated_at', 'completed_at', 'viewed', 'viewed_at']
+2025-05-01 00:06:16,895 INFO: Order table schema matches expected columns
+2025-05-01 00:06:16,895 INFO: Database schema updated successfully
+2025-05-01 00:20:58,438 INFO: Starting database schema fix for reference_number column
+2025-05-01 00:20:58,439 INFO: reference_number column already exists in the order table
+2025-05-01 00:20:58,439 INFO: Checking for orders without reference numbers
+2025-05-01 00:20:58,440 INFO: All orders have reference numbers
+2025-05-01 00:20:58,440 INFO: Actual columns in order table: ['id', 'reference_number', 'customer_id', 'order_date', 'total_amount', 'status', 'customer_name', 'customer_phone', 'customer_email', 'customer_address', 'order_type', 'created_by_id', 'updated_at', 'completed_at', 'viewed', 'viewed_at']
+2025-05-01 00:20:58,441 INFO: Order table schema matches expected columns
+2025-05-01 00:20:58,441 INFO: Database schema updated successfully
+2025-05-01 00:59:33,878 INFO: Starting database schema fix for reference_number column
+2025-05-01 00:59:33,886 INFO: reference_number column already exists in the order table
+2025-05-01 00:59:33,886 INFO: Checking for orders without reference numbers
+2025-05-01 00:59:33,886 INFO: All orders have reference numbers
+2025-05-01 00:59:33,887 INFO: Actual columns in order table: ['id', 'reference_number', 'customer_id', 'order_date', 'total_amount', 'status', 'customer_name', 'customer_phone', 'customer_email', 'customer_address', 'order_type', 'created_by_id', 'updated_at', 'completed_at', 'viewed', 'viewed_at']
+2025-05-01 00:59:33,888 INFO: Order table schema matches expected columns
+2025-05-01 00:59:33,888 INFO: Database schema updated successfully
+2025-05-01 01:00:35,909 INFO: Starting database schema fix for reference_number column
+2025-05-01 01:00:35,910 INFO: reference_number column already exists in the order table
+2025-05-01 01:00:35,911 INFO: Checking for orders without reference numbers
+2025-05-01 01:00:35,911 INFO: All orders have reference numbers
+2025-05-01 01:00:35,912 INFO: Actual columns in order table: ['id', 'reference_number', 'customer_id', 'order_date', 'total_amount', 'status', 'customer_name', 'customer_phone', 'customer_email', 'customer_address', 'order_type', 'created_by_id', 'updated_at', 'completed_at', 'viewed', 'viewed_at']
+2025-05-01 01:00:35,913 INFO: Order table schema matches expected columns
+2025-05-01 01:00:35,913 INFO: Database schema updated successfully

@@ -40,7 +40,7 @@
                 </div>
                 <div class="col-12">
                     <button type="submit" class="btn btn-primary">Apply Filters</button>
-                    <a href="{{ url_for('staff_orders') }}" class="btn btn-outline-secondary">Clear Filters</a>
+                    <a href="{{ url_for('all_staff_orders') }}" class="btn btn-outline-secondary">Clear Filters</a>
                 </div>
             </form>
         </div>
@@ -75,7 +75,17 @@
                                     #{{ order.id }}
                                 </a>
                             </td>
-                            <td>{{ order.order_date.strftime('%Y-%m-%d %H:%M') if order.order_date else 'N/A' }}</td>
+                            <td>
+                                {% if order.order_date %}
+                                    {% if order.order_date is string %}
+                                        {{ order.order_date }}
+                                    {% else %}
+                                        {{ order.order_date.strftime('%Y-%m-%d %H:%M') }}
+                                    {% endif %}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </td>
                             <td>
                                 {% if order.customer_name %}
                                     {{ order.customer_name }}
@@ -116,7 +126,7 @@
                             <td colspan="7" class="text-center py-4">
                                 <p class="h5 text-muted mb-3">No orders found</p>
                                 {% if request.args %}
-                                <a href="{{ url_for('staff_orders') }}" class="btn btn-outline-primary">Clear filters</a>
+                                <a href="{{ url_for('all_staff_orders') }}" class="btn btn-outline-primary">Clear filters</a>
                                 {% endif %}
                             </td>
                         </tr>
@@ -131,7 +141,7 @@
                     <ul class="pagination">
                         {% if pagination.has_prev %}
                         <li class="page-item">
-                            <a class="page-link" href="{{ url_for('staff_orders', page=pagination.prev_num, **request.args) }}" aria-label="Previous">
+                            <a class="page-link" href="{{ url_for('all_staff_orders', page=pagination.prev_num, **request.args) }}" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
@@ -148,7 +158,7 @@
                                 {% if page_num == pagination.page %}
                                 <li class="page-item active"><a class="page-link" href="#">{{ page_num }}</a></li>
                                 {% else %}
-                                <li class="page-item"><a class="page-link" href="{{ url_for('staff_orders', page=page_num, **request.args) }}">{{ page_num }}</a></li>
+                                <li class="page-item"><a class="page-link" href="{{ url_for('all_staff_orders', page=page_num, **request.args) }}">{{ page_num }}</a></li>
                                 {% endif %}
                             {% else %}
                                 <li class="page-item disabled"><a class="page-link" href="#">…</a></li>
@@ -157,7 +167,7 @@
                         
                         {% if pagination.has_next %}
                         <li class="page-item">
-                            <a class="page-link" href="{{ url_for('staff_orders', page=pagination.next_num, **request.args) }}" aria-label="Next">
+                            <a class="page-link" href="{{ url_for('all_staff_orders', page=pagination.next_num, **request.args) }}" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>

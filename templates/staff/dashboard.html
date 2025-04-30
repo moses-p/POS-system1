@@ -12,7 +12,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Pending Orders</h5>
                     <p class="card-text display-4">{{ order_counts.pending }}</p>
-                    <a href="{{ url_for('staff_orders') }}?status=pending" class="btn btn-light">View Orders</a>
+                    <a href="{{ url_for('all_staff_orders') }}?status=pending" class="btn btn-light">View Orders</a>
                 </div>
             </div>
         </div>
@@ -21,7 +21,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Processing Orders</h5>
                     <p class="card-text display-4">{{ order_counts.processing }}</p>
-                    <a href="{{ url_for('staff_orders') }}?status=processing" class="btn btn-light">View Orders</a>
+                    <a href="{{ url_for('all_staff_orders') }}?status=processing" class="btn btn-light">View Orders</a>
                 </div>
             </div>
         </div>
@@ -30,7 +30,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Completed Orders</h5>
                     <p class="card-text display-4">{{ order_counts.completed }}</p>
-                    <a href="{{ url_for('staff_orders') }}?status=completed" class="btn btn-light">View Orders</a>
+                    <a href="{{ url_for('all_staff_orders') }}?status=completed" class="btn btn-light">View Orders</a>
                 </div>
             </div>
         </div>
@@ -41,7 +41,7 @@
             <div class="card mb-3">
                 <div class="card-header d-flex justify-content-between">
                     <h5>Pending Orders</h5>
-                    <a href="{{ url_for('staff_orders') }}?status=pending" class="btn btn-sm btn-primary">View All</a>
+                    <a href="{{ url_for('all_staff_orders') }}?status=pending" class="btn btn-sm btn-primary">View All</a>
                 </div>
                 <div class="card-body">
                     {% if pending_orders %}
@@ -71,7 +71,7 @@
                 <div class="card-body">
                     <div class="d-grid gap-2">
                         <a href="{{ url_for('in_store_sale') }}" class="btn btn-primary">Create New In-Store Sale</a>
-                        <a href="{{ url_for('staff_orders') }}" class="btn btn-secondary">View All Orders</a>
+                        <a href="{{ url_for('all_staff_orders') }}" class="btn btn-secondary">View All Orders</a>
                     </div>
                 </div>
             </div>
@@ -81,7 +81,7 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between">
             <h5>Recent Orders</h5>
-            <a href="{{ url_for('staff_orders') }}" class="btn btn-sm btn-primary">View All</a>
+            <a href="{{ url_for('all_staff_orders') }}" class="btn btn-sm btn-primary">View All</a>
         </div>
         <div class="card-body">
             {% if recent_orders %}
@@ -112,7 +112,7 @@
                 </div>
                 {% if recent_orders|length >= 5 %}
                 <div class="text-center mt-3">
-                    <a href="{{ url_for('staff_orders') }}" class="btn btn-outline-primary">View All Orders</a>
+                    <a href="{{ url_for('all_staff_orders') }}" class="btn btn-outline-primary">View All Orders</a>
                 </div>
                 {% endif %}
             {% else %}

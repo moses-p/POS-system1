@@ -7,7 +7,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h3">Order #{{ order.id }}</h1>
         <div class="d-flex">
-            <a href="{{ url_for('staff_orders') }}" class="btn btn-outline-secondary me-2">
+            <a href="{{ url_for('all_staff_orders') }}" class="btn btn-outline-secondary me-2">
                 <i class="bi bi-arrow-left"></i> Back to Orders
             </a>
             
@@ -82,7 +82,7 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex justify-content-between">
                             <span>Order Date:</span>
-                            <span class="text-muted">{{ order.order_date.strftime('%Y-%m-%d %H:%M') if order.order_date else 'N/A' }}</span>
+                            <span class="text-muted">{% if order.order_date is string %}{{ order.order_date }}{% else %}{{ order.order_date.strftime('%Y-%m-%d %H:%M') if order.order_date else 'N/A' }}{% endif %}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between">
                             <span>Order Type:</span>
@@ -104,7 +104,7 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between">
                             <span>Payment Method:</span>
-                            <span class="text-muted">{{ order.payment_method|capitalize }}</span>
+                            <span class="text-muted">{{ order.payment_method|default('Cash')|capitalize }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between">
                             <span>Payment Status:</span>
@@ -113,7 +113,7 @@
                             {% elif order.payment_status == 'pending' %}
                                 <span class="badge bg-warning">Pending</span>
                             {% else %}
-                                <span class="badge bg-secondary">{{ order.payment_status|capitalize }}</span>
+                                <span class="badge bg-secondary">{{ order.payment_status|default('Unknown')|capitalize }}</span>
                             {% endif %}
                         </li>
                     </ul>
@@ -137,7 +137,7 @@
                             <strong>Email:</strong> {{ order.customer_email }}
                         </li>
                         <li class="list-group-item">
-                            <strong>Address:</strong> {{ order.delivery_address }}
+                            <strong>Address:</strong> {{ order.customer_address|default('N/A') }}
                         </li>
                     </ul>
                 </div>
@@ -157,7 +157,7 @@
                             </div>
                             <div>
                                 <h6 class="mb-0">Order Placed</h6>
-                                <small class="text-muted">{{ order.order_date.strftime('%Y-%m-%d %H:%M') if order.order_date else 'N/A' }}</small>
+                                <small class="text-muted">{% if order.order_date is string %}{{ order.order_date }}{% else %}{{ order.order_date.strftime('%Y-%m-%d %H:%M') if order.order_date else 'N/A' }}{% endif %}</small>
                             </div>
                         </li>
                         
@@ -169,7 +169,7 @@
                             </div>
                             <div>
                                 <h6 class="mb-0">Processing Started</h6>
-                                <small class="text-muted">{{ order.updated_at.strftime('%Y-%m-%d %H:%M') if order.updated_at else 'N/A' }}</small>
+                                <small class="text-muted">{% if order.updated_at is string %}{{ order.updated_at }}{% else %}{{ order.updated_at.strftime('%Y-%m-%d %H:%M') if order.updated_at else 'N/A' }}{% endif %}</small>
                             </div>
                         </li>
                         {% endif %}
@@ -181,7 +181,7 @@
                             </div>
                             <div>
                                 <h6 class="mb-0">Order Completed</h6>
-                                <small class="text-muted">{{ order.completed_at.strftime('%Y-%m-%d %H:%M') if order.completed_at else 'N/A' }}</small>
+                                <small class="text-muted">{% if order.completed_at is string %}{{ order.completed_at }}{% else %}{{ order.completed_at.strftime('%Y-%m-%d %H:%M') if order.completed_at else 'N/A' }}{% endif %}</small>
                             </div>
                         </li>
                         {% endif %}
@@ -193,7 +193,7 @@
                             </div>
                             <div>
                                 <h6 class="mb-0">Order Cancelled</h6>
-                                <small class="text-muted">{{ order.updated_at.strftime('%Y-%m-%d %H:%M') if order.updated_at else 'N/A' }}</small>
+                                <small class="text-muted">{% if order.updated_at is string %}{{ order.updated_at }}{% else %}{{ order.updated_at.strftime('%Y-%m-%d %H:%M') if order.updated_at else 'N/A' }}{% endif %}</small>
                             </div>
                         </li>
                         {% endif %}
@@ -212,7 +212,7 @@
                 <h5 class="modal-title" id="updateStatusModalLabel">Update Order Status</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ url_for('staff_update_order_status', order_id=order.id) }}" method="POST">
+            <form action="{{ staff_update_order_status_url }}" method="POST">
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="status" class="form-label">New Status</label>

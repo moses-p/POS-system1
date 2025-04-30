@@ -3,6 +3,9 @@ import sqlite3
 import logging
 from app import app, db, User, init_db
 from validate_db import validate_database
+from fix_reference_number import add_reference_number_column
+from fix_schema_comprehensive import fix_all_tables
+from fix_cart_issue import fix_cart_issues
 
 # Configure logging
 logging.basicConfig(
@@ -117,6 +120,27 @@ def run_checks():
     # Fix order table
     if not fix_order_table():
         logger.error("Failed to fix order table")
+    
+    # Special fix for cart page issue
+    try:
+        logger.info("Applying cart page fixes")
+        fix_cart_issues()
+    except Exception as e:
+        logger.error(f"Error applying cart page fixes: {str(e)}")
+        
+        # Fallback to comprehensive schema fix
+        try:
+            logger.info("Falling back to comprehensive schema fix")
+            fix_all_tables()
+        except Exception as e:
+            logger.error(f"Error during comprehensive schema fix: {str(e)}")
+            
+            # Fallback to simple reference_number fix
+            try:
+                logger.info("Falling back to simple reference_number fix")
+                add_reference_number_column()
+            except Exception as e2:
+                logger.error(f"Error fixing reference_number column: {str(e2)}")
     
     # Run validation and fixing processes
     try:

@@ -1,0 +1,11 @@
+2025-04-30 19:11:29,187 INFO: Database backed up to instance/pos_backup_20250430_191129.db
+2025-04-30 19:11:29,189 INFO: Found 3 existing orders to migrate
+2025-04-30 19:11:29,190 INFO: Backed up 3 orders and 16 order items
+2025-04-30 19:11:29,190 INFO: Dropping order_item table
+2025-04-30 19:11:29,196 INFO: Dropping order table
+2025-04-30 19:11:29,201 INFO: Creating new order table with correct schema
+2025-04-30 19:11:29,206 INFO: Creating new order_item table
+2025-04-30 19:11:29,211 INFO: Creating indexes
+2025-04-30 19:11:29,220 INFO: Restoring order data
+2025-04-30 19:11:29,222 INFO: Restoring order item data
+2025-04-30 19:11:29,230 INFO: Order table rebuild complete

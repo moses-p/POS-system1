@@ -1,0 +1,7 @@
+                    # Use get_order_by_id for more resilient order retrieval
+                    order = get_order_by_id(order.id)
+                    if order:
+                        return redirect(url_for('print_receipt', order_id=order.id))
+                    else:
+                        flash('Order was created but could not be retrieved. Please check orders list.', 'warning')
+                        return redirect(url_for('index'))

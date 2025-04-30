@@ -1,0 +1,11 @@
+2025-04-30 19:22:45,894 INFO: Database backed up to instance/pos_backup_20250430_192245.db
+2025-04-30 19:22:45,895 INFO: Removed existing database at instance/pos.db
+2025-04-30 19:22:45,895 INFO: Creating user table
+2025-04-30 19:22:45,902 INFO: Creating product table
+2025-04-30 19:22:45,906 INFO: Creating order table
+2025-04-30 19:22:45,912 INFO: Creating order_item table
+2025-04-30 19:22:45,919 INFO: Creating stock_movement table
+2025-04-30 19:22:45,924 INFO: Creating price_change table
+2025-04-30 19:22:45,930 INFO: Creating cart and cart_item tables
+2025-04-30 19:22:45,938 INFO: Creating indexes
+2025-04-30 19:22:45,970 INFO: Database recreation completed successfully

@@ -1,0 +1,13 @@
+2025-04-30 19:11:53,277 INFO: Please run rebuild_order_table.py first to rebuild the order table
+2025-04-30 19:11:53,326 INFO: Tables in database: ['cart', 'cart_item', 'order', 'order_backup', 'order_item', 'order_old', 'price_change', 'product', 'sqlite_sequence', 'stock_movement', 'test_order', 'user']
+2025-04-30 19:11:53,328 INFO: Columns in order table: ['id', 'reference_number', 'customer_id', 'order_date', 'total_amount', 'status', 'customer_name', 'customer_phone', 'customer_email', 'customer_address', 'order_type', 'created_by_id', 'updated_at', 'completed_at', 'viewed', 'viewed_at']
+2025-04-30 19:11:53,329 INFO: SQLAlchemy metadata refreshed successfully
+2025-04-30 19:11:53,329 INFO: SQLAlchemy metadata refreshed successfully
+2025-04-30 19:11:53,330 INFO: Created Order model patch file: order_model_patch.py
+2025-04-30 19:11:53,330 INFO: 
+        Fix completed. Now do the following:
+        
+        1. Restart your Flask application to reload the SQLAlchemy models
+        2. If issues persist, review the Order model in app.py and ensure it matches 
+           the schema in the database
+        

@@ -217,6 +217,7 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="{{ url_for('static', filename='js/in_store_sale.js') }}"></script>
 <script>
     // Product search functionality
     document.getElementById('productSearch').addEventListener('keyup', function() {

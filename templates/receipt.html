@@ -157,7 +157,7 @@
             <div class="receipt-info">
                 <div><strong>RECEIPT</strong></div>
                 <div>Order #: {{ order.id }}</div>
-                <div>Date: {{ order.order_date.strftime('%Y-%m-%d %H:%M:%S') if order.order_date else 'N/A' }}</div>
+                <div>Date: {% if order.order_date is string %}{{ order.order_date }}{% else %}{{ order.order_date.strftime('%Y-%m-%d %H:%M:%S') if order.order_date else 'N/A' }}{% endif %}</div>
                 <div>Customer: {{ order.customer_name or 'Guest' }}</div>
                 <div>Type: {{ order.order_type|capitalize }}</div>
             </div>
