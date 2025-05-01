@@ -31,6 +31,9 @@ from sqlalchemy.exc import SQLAlchemyError
 from sql_operations import direct_create_order, direct_get_order, direct_cart_operations, direct_get_products, direct_create_user, direct_get_user, direct_create_product
 from create_order_direct import direct_create_order
 
+# Define what's available for import
+__all__ = ['app', 'init_db', 'db']
+
 # Generate a version ID for this app instance - changes on server restart
 APP_VERSION = str(uuid.uuid4())[:8]
 # Use a stable timestamp that only changes when the server restarts
