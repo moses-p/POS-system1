@@ -4,7 +4,13 @@ import webbrowser
 import threading
 import time
 import logging
-from app import app, init_db
+try:
+    # Try importing directly
+    from app import app, init_db
+except ImportError:
+    # If direct import fails, ensure current directory is in path
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from app import app, init_db
 from check_and_init_db import run_checks
 
 # Configure logging
