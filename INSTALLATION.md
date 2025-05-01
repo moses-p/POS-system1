@@ -29,6 +29,6 @@ If you encounter any issues:
 2. Ensure the "instance" folder is not deleted (it contains your database)
 3. If the application won't start, try running it as Administrator
 
-For additional support, contact: mosesharuna407@gmail.com
+For additional support, contact: arisegeniusug@gmail.com
 
 © 2025 arisegenius. All Rights Reserved. 

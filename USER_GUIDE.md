@@ -161,5 +161,5 @@ The system automatically switches to offline mode when internet connection is lo
 
 ### Getting Help
 - Contact system administrator
-- Email support: support@example.com
-- Phone: 1-800-POS-HELP 
+- Email support: arisegeniusug@gmail.com
+- Phone: +256743232445 

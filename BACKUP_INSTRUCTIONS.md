@@ -69,4 +69,6 @@ If backups are not working:
 3. Verify that the scheduled tasks are active in Windows Task Scheduler
 4. Review `backup_log.txt` for any error messages
 
-For persistent issues, please contact technical support. 
+For persistent issues, please contact technical support:
+- Email: arisegeniusug@gmail.com
+- Phone: +256743232445 
