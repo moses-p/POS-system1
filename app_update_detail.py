@@ -1,5 +1,5 @@
 from flask import render_template, url_for
-
+ 
 def staff_order_detail(order_id):
     order = get_order_by_id(order_id)
     tax_rate = calculate_tax_rate(order)
