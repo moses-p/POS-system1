@@ -14,7 +14,7 @@ a = Analysis(
         ('migrations', 'migrations'),
         ('.env', '.'),
         ('check_and_init_db.py', '.'),
-        ('dist/POS System/Install.bat', '.'),
+        ('Install.bat', '.'),
     ],
     hiddenimports=[
         'flask',
