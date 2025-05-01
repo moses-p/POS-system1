@@ -6,10 +6,11 @@
     <title>Receipt - Order #{{ order.id }}</title>
     <style>
         body {
-            font-family: 'Courier New', monospace;
+            font-family: 'Arial', sans-serif; /* Changed from Courier for better readability */
             margin: 0;
             padding: 0;
             background-color: #f9f9f9;
+            text-align: center; /* Center align the body content */
         }
         
         .receipt-container {
@@ -18,40 +19,80 @@
             background: white;
             padding: 15px;
             box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            display: inline-block; /* This helps with centering */
+            text-align: left; /* Reset text alignment for content */
         }
         
         @media print {
+            body {
+                font-family: 'Arial', sans-serif;
+                font-weight: bold; /* Make all text bold when printing */
+                text-align: center; /* Ensure centering when printing */
+            }
+            
             .receipt-container {
                 width: 80mm;
-                margin: 0;
-                padding: 0;
+                max-width: 80mm;
+                margin: 0 auto;
+                padding: 8px;
                 box-shadow: none;
+                display: inline-block;
+                text-align: left;
             }
             
             .no-print {
                 display: none;
+            }
+
+            /* Increase contrast for printing */
+            * {
+                color: black !important;
+                background: white !important;
+            }
+
+            /* Bold important information */
+            .receipt-totals strong, 
+            .receipt-header h1,
+            .receipt-info div:first-child {
+                font-weight: 900 !important; /* Extra bold */
+                font-size: 120% !important;
+            }
+            
+            /* Add space between lines for better readability */
+            .receipt-info div, 
+            .receipt-totals div, 
+            .receipt-footer p {
+                margin-bottom: 8px !important;
+                line-height: 1.4 !important;
+            }
+            
+            /* Ensure the page is centered */
+            @page {
+                margin: 0;
+                size: auto;
             }
         }
         
         .receipt-header {
             text-align: center;
             margin-bottom: 15px;
-            border-bottom: 1px dashed #ccc;
+            border-bottom: 2px dashed #000; /* Darker and thicker divider */
             padding-bottom: 10px;
         }
         
         .receipt-header h1 {
-            font-size: 18px;
+            font-size: 22px; /* Larger company name */
             margin: 0 0 5px 0;
+            font-weight: bold;
         }
         
         .receipt-header p {
-            font-size: 12px;
-            margin: 3px 0;
+            font-size: 14px; /* Larger header info */
+            margin: 5px 0;
         }
         
         .receipt-body {
-            font-size: 12px;
+            font-size: 14px; /* Larger receipt text */
         }
         
         .receipt-info {
@@ -59,7 +100,8 @@
         }
         
         .receipt-info div {
-            margin-bottom: 5px;
+            margin-bottom: 7px;
+            font-weight: 500; /* Semi-bold for info */
         }
         
         .items-table {
@@ -70,45 +112,57 @@
         
         .items-table th {
             text-align: left;
-            border-bottom: 1px solid #ddd;
-            padding: 5px 0;
+            border-bottom: 2px solid #000; /* Darker divider */
+            padding: 7px 0;
+            font-size: 15px; /* Larger headers */
         }
         
         .items-table td {
-            padding: 5px 0;
+            padding: 8px 0;
             vertical-align: top;
+            font-size: 14px; /* Larger cells */
         }
         
         .items-table .qty {
             width: 10%;
             text-align: center;
+            font-weight: bold;
         }
         
         .items-table .desc {
             width: 60%;
+            font-weight: bold;
         }
         
         .items-table .amount {
             width: 30%;
             text-align: right;
+            font-weight: bold;
         }
         
         .receipt-totals {
             text-align: right;
-            border-top: 1px dashed #ccc;
+            border-top: 2px dashed #000; /* Darker and thicker divider */
             padding-top: 10px;
+            font-size: 15px; /* Larger totals */
         }
         
         .receipt-totals div {
-            margin-bottom: 5px;
+            margin-bottom: 7px;
+        }
+        
+        .receipt-totals div:last-child {
+            font-size: 18px; /* Extra large final total */
+            font-weight: bold;
+            margin-top: 10px; /* Add space before total */
         }
         
         .receipt-footer {
             text-align: center;
             margin-top: 15px;
-            border-top: 1px dashed #ccc;
+            border-top: 2px dashed #000; /* Darker and thicker divider */
             padding-top: 10px;
-            font-size: 12px;
+            font-size: 14px; /* Larger footer */
         }
         
         .receipt-footer p {
@@ -147,10 +201,10 @@
 <body>
     <div class="receipt-container">
         <div class="receipt-header">
-            <h1>GreenGrocer</h1>
+            <h1>AG GENIUS UG LTD</h1>
             <p>Quality Fresh Produce</p>
             <p>Kampala, Uganda</p>
-            <p>Tel: +256 123 456 789</p>
+            <p>Tel: +256 743232445 / +256752215976</p>
         </div>
         
         <div class="receipt-body">
@@ -190,6 +244,7 @@
             <div class="receipt-footer">
                 <p>Thank you for shopping with us!</p>
                 <p>Please come again</p>
+                <p>Email: arisegeniusug@gmail.com</p>
                 <p>*** This is a computer generated receipt ***</p>
             </div>
         </div>

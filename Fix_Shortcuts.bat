@@ -1,6 +1,11 @@
 @echo off
-echo Installing POS System...
+echo Fixing POS System shortcuts...
 echo.
+
+REM Remove existing shortcuts
+echo Removing existing shortcuts...
+if exist "%USERPROFILE%\Desktop\POS System.lnk" del "%USERPROFILE%\Desktop\POS System.lnk"
+if exist "%APPDATA%\Microsoft\Windows\Start Menu\Programs\POS System\POS System.lnk" del "%APPDATA%\Microsoft\Windows\Start Menu\Programs\POS System\POS System.lnk"
 
 REM Create desktop shortcut
 echo Creating desktop shortcut...
@@ -31,12 +36,8 @@ echo oLink.Save >> %SCRIPT%
 cscript /nologo %SCRIPT%
 del %SCRIPT%
 
-REM Ensure database is initialized
-echo Initializing database...
-"%~dp0POS System.exe" --init-db
-
 echo.
-echo Installation completed!
-echo You can run the application from the desktop shortcut or Start Menu.
+echo Shortcuts have been fixed!
+echo You should now be able to launch the POS System from the desktop shortcut or Start Menu.
 echo.
 pause 

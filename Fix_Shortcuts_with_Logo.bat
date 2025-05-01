@@ -1,6 +1,14 @@
 @echo off
-echo Installing POS System...
+echo Fixing POS System shortcuts with AG logo...
 echo.
+
+REM Define custom AG logo path
+set ICON_PATH="%~dp0ag_logo.ico"
+
+REM Remove existing shortcuts
+echo Removing existing shortcuts...
+if exist "%USERPROFILE%\Desktop\POS System.lnk" del "%USERPROFILE%\Desktop\POS System.lnk"
+if exist "%APPDATA%\Microsoft\Windows\Start Menu\Programs\POS System\POS System.lnk" del "%APPDATA%\Microsoft\Windows\Start Menu\Programs\POS System\POS System.lnk"
 
 REM Create desktop shortcut
 echo Creating desktop shortcut...
@@ -10,8 +18,8 @@ echo sLinkFile = oWS.SpecialFolders("Desktop") ^& "\POS System.lnk" >> %SCRIPT%
 echo Set oLink = oWS.CreateShortcut(sLinkFile) >> %SCRIPT%
 echo oLink.TargetPath = "%~dp0POS System.exe" >> %SCRIPT%
 echo oLink.WorkingDirectory = "%~dp0" >> %SCRIPT%
-echo oLink.Description = "Point of Sale System" >> %SCRIPT%
-echo oLink.IconLocation = "%~dp0static\favicon.ico" >> %SCRIPT%
+echo oLink.Description = "AG POS System" >> %SCRIPT%
+echo oLink.IconLocation = %ICON_PATH% >> %SCRIPT%
 echo oLink.Save >> %SCRIPT%
 cscript /nologo %SCRIPT%
 del %SCRIPT%
@@ -25,18 +33,15 @@ echo sLinkFile = "%APPDATA%\Microsoft\Windows\Start Menu\Programs\POS System\POS
 echo Set oLink = oWS.CreateShortcut(sLinkFile) >> %SCRIPT%
 echo oLink.TargetPath = "%~dp0POS System.exe" >> %SCRIPT%
 echo oLink.WorkingDirectory = "%~dp0" >> %SCRIPT%
-echo oLink.Description = "Point of Sale System" >> %SCRIPT%
-echo oLink.IconLocation = "%~dp0static\favicon.ico" >> %SCRIPT%
+echo oLink.Description = "AG POS System" >> %SCRIPT%
+echo oLink.IconLocation = %ICON_PATH% >> %SCRIPT%
 echo oLink.Save >> %SCRIPT%
 cscript /nologo %SCRIPT%
 del %SCRIPT%
 
-REM Ensure database is initialized
-echo Initializing database...
-"%~dp0POS System.exe" --init-db
-
 echo.
-echo Installation completed!
-echo You can run the application from the desktop shortcut or Start Menu.
+echo Shortcuts have been created with AG logo!
+echo IMPORTANT: Make sure you have the ag_logo.ico file in the same folder as this script.
+echo You should now be able to launch the POS System from the desktop shortcut or Start Menu.
 echo.
 pause 
