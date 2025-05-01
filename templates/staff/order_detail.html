@@ -250,4 +250,29 @@
     margin-left: 6px;
 }
 </style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Call the markOrderViewed API when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get the order ID from the URL or from a data attribute
+        const orderId = {{ order.id }};
+        
+        // Call the API to mark the order as viewed
+        fetch(`/api/mark_order_viewed/${orderId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Order marked as viewed:', data);
+        })
+        .catch(error => {
+            console.error('Error marking order as viewed:', error);
+        });
+    });
+</script>
 {% endblock %} 
