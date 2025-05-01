@@ -3,7 +3,7 @@ import sqlite3
 import logging
 from app import app, db, User, init_db
 from validate_db import validate_database
-from fix_reference_number import add_reference_number_column
+from fix_reference_number import fix_reference_number_column
 from fix_schema_comprehensive import fix_all_tables
 from fix_cart_issue import fix_cart_issues
 
@@ -138,7 +138,7 @@ def run_checks():
             # Fallback to simple reference_number fix
             try:
                 logger.info("Falling back to simple reference_number fix")
-                add_reference_number_column()
+                fix_reference_number_column()
             except Exception as e2:
                 logger.error(f"Error fixing reference_number column: {str(e2)}")
     
