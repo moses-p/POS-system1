@@ -178,6 +178,12 @@ def fix_order_table_names():
             conn.close()
         return False
 
+# Add an alias function for backward compatibility
+def add_reference_number_column():
+    """Alias for fix_reference_number_column for backward compatibility"""
+    logger.info("Called add_reference_number_column alias function")
+    return fix_reference_number_column()
+
 if __name__ == "__main__":
     logger.info("Starting database schema fix for reference_number column")
     
