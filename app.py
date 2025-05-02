@@ -2989,6 +2989,30 @@ def check_new_orders():
         app.logger.error(f"Error checking new orders: {str(e)}")
         return jsonify({'new_orders': 0, 'new_order': False, 'error': str(e), 'authenticated': False})
 
+@app.route('/api/mark_order_viewed/<int:order_id>', methods=['POST'])
+def mark_order_viewed(order_id):
+    try:
+        # Allow both admin and staff to mark orders as viewed
+        if not current_user.is_authenticated:
+            return jsonify({'success': False, 'error': 'Authentication required'})
+        
+        conn = db.engine.raw_connection()
+        cursor = conn.cursor()
+        
+        # Mark the order as viewed
+        now = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+        cursor.execute("""
+            UPDATE 'order' SET viewed = 1, viewed_at = ? WHERE id = ?
+        """, (now, order_id))
+        
+        conn.commit()
+        conn.close()
+        
+        return jsonify({'success': True})
+    except Exception as e:
+        app.logger.error(f"Error marking order as viewed: {str(e)}")
+        return jsonify({'success': False, 'error': str(e)})
+
 @app.route('/staff/orders')
 @login_required
 @staff_required
