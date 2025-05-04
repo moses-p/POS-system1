@@ -9,3 +9,25 @@
 2025-04-30 19:22:45,930 INFO: Creating cart and cart_item tables
 2025-04-30 19:22:45,938 INFO: Creating indexes
 2025-04-30 19:22:45,970 INFO: Database recreation completed successfully
+2025-05-04 03:15:03,982 INFO: Database backed up to instance/pos_backup_20250504_031503.db
+2025-05-04 03:15:03,982 INFO: Removed existing database at instance/pos.db
+2025-05-04 03:15:03,983 INFO: Creating user table
+2025-05-04 03:15:03,989 INFO: Creating product table
+2025-05-04 03:15:03,995 INFO: Creating order table
+2025-05-04 03:15:04,003 INFO: Creating order_item table
+2025-05-04 03:15:04,007 INFO: Creating stock_movement table
+2025-05-04 03:15:04,012 INFO: Creating price_change table
+2025-05-04 03:15:04,017 INFO: Creating cart and cart_item tables
+2025-05-04 03:15:04,027 INFO: Creating indexes
+2025-05-04 03:15:04,060 INFO: Database recreation completed successfully
+2025-05-04 03:19:51,288 INFO: Database backed up to instance/pos_backup_20250504_031951.db
+2025-05-04 03:19:51,289 INFO: Removed existing database at instance/pos.db
+2025-05-04 03:19:51,290 INFO: Creating user table
+2025-05-04 03:19:51,298 INFO: Creating product table
+2025-05-04 03:19:51,302 INFO: Creating order table
+2025-05-04 03:19:51,306 INFO: Creating order_item table
+2025-05-04 03:19:51,315 INFO: Creating stock_movement table
+2025-05-04 03:19:51,319 INFO: Creating price_change table
+2025-05-04 03:19:51,323 INFO: Creating cart and cart_item tables
+2025-05-04 03:19:51,332 INFO: Creating indexes
+2025-05-04 03:19:51,368 INFO: Database recreation completed successfully

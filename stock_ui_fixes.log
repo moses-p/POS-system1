@@ -1,0 +1,24 @@
+2025-05-03 04:05:10,695 - INFO - Starting stock refresh functionality improvements...
+2025-05-03 04:05:10,697 - INFO - Created backup: static/js/app.js.backup_20250503_040510
+2025-05-03 04:05:10,697 - INFO - Found refreshStock function in app.js
+2025-05-03 04:05:10,698 - INFO - refreshStock function has error handling with retry mechanism
+2025-05-03 04:05:10,698 - INFO - refreshStock function has cache-busting headers
+2025-05-03 04:05:10,698 - INFO - Found updateProductStockUI function in app.js
+2025-05-03 04:05:10,698 - INFO - updateProductStockUI iterates through all stock elements
+2025-05-03 04:05:10,701 - INFO - Checking template: templates/index.html
+2025-05-03 04:05:10,702 - INFO - Created backup: templates/index.html.backup_20250503_040510
+2025-05-03 04:05:10,703 - INFO - Template templates/index.html calls refreshStock function
+2025-05-03 04:05:10,703 - INFO - Template templates/index.html has auto-refresh mechanism
+2025-05-03 04:05:10,703 - INFO - Checking template: templates/inventory_management.html
+2025-05-03 04:05:10,704 - INFO - Created backup: templates/inventory_management.html.backup_20250503_040510
+2025-05-03 04:05:10,704 - WARNING - Template templates/inventory_management.html does not call refreshStock function
+2025-05-03 04:05:10,705 - INFO - Checking template: templates/in_store_sale.html
+2025-05-03 04:05:10,706 - INFO - Created backup: templates/in_store_sale.html.backup_20250503_040510
+2025-05-03 04:05:10,706 - INFO - Template templates/in_store_sale.html calls refreshStock function
+2025-05-03 04:05:10,707 - INFO - Template templates/in_store_sale.html has auto-refresh mechanism
+2025-05-03 04:05:10,707 - WARNING - Template file not found: templates/product_detail.html
+2025-05-03 04:05:10,707 - INFO - Checking for refresh button in: templates/index.html
+2025-05-03 04:05:10,708 - INFO - Created backup: templates/index.html.backup_20250503_040510
+2025-05-03 04:05:10,709 - INFO - Adding refresh button to templates/index.html
+2025-05-03 04:05:10,709 - WARNING - Template file not found: templates/product_detail.html
+2025-05-03 04:05:10,709 - INFO - Stock refresh functionality improvements completed

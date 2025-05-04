@@ -384,6 +384,75 @@
             -ms-touch-action: manipulation;
             touch-action: manipulation;
         }
+
+        /* Ensure main content stretches to fill space for sticky footer */
+        main.flex-shrink-0.flex-grow-1 {
+            flex: 1 0 auto;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        /* Floating install button for PWA */
+        #floatingInstallBtn {
+            display: none;
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            z-index: 2000;
+            background: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+            padding: 14px 28px;
+            font-size: 1.15rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        #floatingInstallBtn:hover {
+            background: #217dbb;
+        }
+        @media (max-width: 767.98px) {
+            #floatingInstallBtn {
+                bottom: 70px;
+                right: 10px;
+                padding: 12px 18px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+    
+    <!-- Mobile-specific navbar and content improvements -->
+    <style>
+    @media (max-width: 767.98px) {
+        .navbar {
+            min-height: 64px !important;
+            height: auto !important;
+            font-size: 1.15rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18) !important;
+            background: var(--primary-color) !important;
+            z-index: 1050;
+        }
+        .navbar-toggler {
+            font-size: 2rem;
+            padding: 0.6rem 1.2rem;
+        }
+        .navbar-nav .nav-link {
+            font-size: 1.1rem;
+            padding: 1rem 1.2rem;
+        }
+        .navbar-collapse {
+            background: var(--primary-color);
+        }
+        main.flex-shrink-0.flex-grow-1 {
+            margin-top: 70px !important;
+        }
+        .content-wrapper, main {
+            padding-top: 0.5rem !important;
+        }
+    }
     </style>
     
     <!-- Platform-specific CSS adjustments -->
@@ -421,6 +490,21 @@
         
         // Run on page load
         document.addEventListener('DOMContentLoaded', handleAuthCache);
+    </script>
+
+    <!-- Register service worker for PWA support -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/static/service-worker.js').then(function(registration) {
+            // Registration successful
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+          }, function(err) {
+            // Registration failed
+            console.log('ServiceWorker registration failed: ', err);
+          });
+        });
+      }
     </script>
 </head>
 <body class="d-flex flex-column h-100">
@@ -472,6 +556,11 @@
                                     <i class="fas fa-users-cog me-1"></i>Manage Staff
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('in_store_sale') }}">
+                                    <i class="fas fa-cash-register me-1"></i>Sale
+                                </a>
+                            </li>
                         {% elif current_user.is_staff %}
                             <!-- Staff-only navigation -->
                             <li class="nav-item">
@@ -480,7 +569,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('my_sales') }}">
+                                <a class="nav-link" href="{{ url_for('staff_orders') }}">
                                     <i class="fas fa-receipt me-1"></i>My Sales
                                 </a>
                             </li>
@@ -530,6 +619,14 @@
                 <!-- Will be populated by JavaScript when offline transactions exist -->
             </div>
             
+            <!-- Notification area for pending online orders -->
+            <div id="onlineOrdersNotification" class="d-none alert alert-info alert-dismissible fade show">
+                <i class="fas fa-bell me-2"></i>
+                <span id="pendingOrdersCount">0</span> new online orders pending.
+                <a href="/in_store_sale" class="alert-link ms-2">Process now</a>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
@@ -547,12 +644,12 @@
 
     <footer class="footer mt-auto py-3 bg-dark">
         <div class="container text-center">
-            <div class="row">
-                <div class="col-md-4">
+            <div class="row footer-row gy-4">
+                <div class="col-12 col-md-4">
                     <h5>About Us</h5>
                     <p>Your trusted POS system for efficient business management.</p>
                 </div>
-                <div class="col-md-4">
+                <div class="col-12 col-md-4">
                     <h5>Quick Links</h5>
                     <ul class="list-unstyled">
                         <li><a href="{{ url_for('index') }}" class="text-white">Home</a></li>
@@ -561,9 +658,10 @@
                                 <li><a href="{{ url_for('admin') }}" class="text-white">Admin Panel</a></li>
                                 <li><a href="{{ url_for('reports') }}" class="text-white">Reports</a></li>
                                 <li><a href="{{ url_for('manage_staff') }}" class="text-white">Manage Staff</a></li>
+                                <li><a href="{{ url_for('in_store_sale') }}" class="text-white">Sale</a></li>
                             {% elif current_user.is_staff %}
                                 <li><a href="{{ url_for('in_store_sale') }}" class="text-white">Sale</a></li>
-                                <li><a href="{{ url_for('my_sales') }}" class="text-white">My Sales</a></li>
+                                <li><a href="{{ url_for('staff_orders') }}" class="text-white">My Sales</a></li>
                             {% endif %}
                             <li><a href="{{ url_for('profile') }}" class="text-white">My Profile</a></li>
                             <li><a href="{{ url_for('logout') }}" class="text-white">Logout</a></li>
@@ -573,11 +671,11 @@
                         {% endif %}
                     </ul>
                 </div>
-                <div class="col-md-4">
+                <div class="col-12 col-md-4 footer-contact">
                     <h5>Contact Us</h5>
-                    <p>
-                        <i class="fas fa-envelope me-2"></i>arisegeniusug@gmail.com<br>
-                        <i class="fas fa-phone me-2"></i>+256743232445
+                    <p class="footer-contact-info mb-1">
+                        <span class="d-inline-block mb-1"><i class="fas fa-envelope me-2"></i><span class="footer-contact-text">arisegeniusug@gmail.com</span></span><br>
+                        <span class="d-inline-block"><i class="fas fa-phone me-2"></i><span class="footer-contact-text">+256743232445</span></span>
                     </p>
                 </div>
             </div>
@@ -600,6 +698,9 @@
         </div>
     </div>
 
+    <!-- Floating Install App Button for PWA -->
+    <button id="floatingInstallBtn"><i class="fas fa-download me-2"></i>Install App</button>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     
@@ -608,7 +709,7 @@
     <script src="{{ url_for('static', filename='js/service-worker-update.js') }}"></script>
     
     <!-- Main application JavaScript -->
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script src="/static/js/app.js?v={{ timestamp }}"></script>
     
     <!-- Platform detection and optimization -->
     <script>
@@ -681,7 +782,7 @@
     <!-- PWA Installation Logic -->
     <script>
         // Initialize PWA install prompt
-        let deferredPrompt;
+        let deferredPrompt = null;
         const installPrompt = document.getElementById('installPrompt');
         const installButton = document.getElementById('installButton');
         const dismissButton = document.getElementById('dismissInstall');
@@ -733,10 +834,69 @@
     <!-- Custom JavaScript -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     {% block scripts %}{% endblock %}
+    <style>
+    @media (max-width: 767.98px) {
+        .footer-row {
+            flex-direction: column !important;
+        }
+        .footer-contact {
+            margin-bottom: 1.5rem;
+        }
+        .footer-contact-info {
+            font-size: 1.25rem;
+            line-height: 1.9;
+            font-weight: 600;
+            background: #222d36;
+            color: #fff !important;
+            padding: 1.1rem 0.7rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+            margin: 0 auto;
+            max-width: 95vw;
+        }
+        .footer-contact-text {
+            font-size: 1.18rem;
+            font-weight: 700;
+            color: #fff !important;
+        }
+        .footer h5 {
+            font-size: 1.3rem;
+            margin-bottom: 0.7rem;
+        }
+        .footer-contact-info i {
+            color: #4fc3f7 !important;
+            font-size: 1.3em;
+            margin-right: 0.5em;
+        }
+    }
+    </style>
+    <script>
+    // PWA Install Prompt Handler
+    let deferredPrompt = null;
+    const floatingInstallBtn = document.getElementById('floatingInstallBtn');
 
-    {% if current_user.is_authenticated and (current_user.is_staff or current_user.is_admin) %}
-        <!-- Order notification system for staff -->
-        <script src="{{ url_for('static', filename='js/order-notification.js') }}"></script>
-    {% endif %}
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        if (floatingInstallBtn) floatingInstallBtn.style.display = 'block';
+    });
+
+    if (floatingInstallBtn) {
+        floatingInstallBtn.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                floatingInstallBtn.style.display = 'none';
+            }
+            deferredPrompt = null;
+        });
+    }
+
+    window.addEventListener('appinstalled', () => {
+        if (floatingInstallBtn) floatingInstallBtn.style.display = 'none';
+        deferredPrompt = null;
+    });
+    </script>
 </body>
 </html> 

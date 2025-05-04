@@ -4,13 +4,16 @@
 
 {% block content %}
 <div class="container mt-4">
-    <div class="row mb-3">
+    <div class="row mb-4">
         <div class="col-md-8">
             <h2>Inventory Management</h2>
         </div>
         <div class="col-md-4 text-end">
-            <a href="{{ url_for('add_product') }}" class="btn btn-primary">
-                <i class="fas fa-plus me-2"></i>Add New Product
+            <button id="forceRefreshBtn" class="btn btn-outline-primary me-2">
+                <i class="fas fa-sync-alt me-1"></i> Force Refresh Stock
+            </button>
+            <a href="{{ url_for('add_product') }}" class="btn btn-success">
+                <i class="fas fa-plus me-1"></i> Add Product
             </a>
         </div>
     </div>
@@ -26,7 +29,7 @@
                         </div>
                         <div class="flex-grow-1 ms-3">
                             <h5 class="card-title">Total Products</h5>
-                            <h3 class="mb-0">{{ products|length }}</h3>
+                            <h3 class="mb-0" id="totalProductsCount">{{ products|length }}</h3>
                         </div>
                     </div>
                 </div>
@@ -42,7 +45,7 @@
                         </div>
                         <div class="flex-grow-1 ms-3">
                             <h5 class="card-title">Low Stock</h5>
-                            <h3 class="mb-0">{{ low_stock_products }}</h3>
+                            <h3 class="mb-0" id="lowStockCount">{{ low_stock_products }}</h3>
                         </div>
                     </div>
                 </div>
@@ -58,7 +61,7 @@
                         </div>
                         <div class="flex-grow-1 ms-3">
                             <h5 class="card-title">Out of Stock</h5>
-                            <h3 class="mb-0">{{ out_of_stock_products }}</h3>
+                            <h3 class="mb-0" id="outOfStockCount">{{ out_of_stock_products }}</h3>
                         </div>
                     </div>
                 </div>
@@ -100,7 +103,7 @@
                             <td>{{ product.name }}</td>
                             <td>{{ product.category or 'N/A' }}</td>
                             <td>{{ product.price }} {{ product.currency }}</td>
-                            <td>{{ product.stock }} {{ product.unit }}</td>
+                            <td><span class="product-stock" data-product-id="{{ product.id }}">{{ product.stock }} {{ product.unit }}</span></td>
                             <td>
                                 {% if product.stock <= product.reorder_point %}
                                     <span class="badge bg-warning">Low Stock</span>
@@ -140,7 +143,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-hover">
+                <table class="table table-hover" id="stockMovementsTable">
                     <thead>
                         <tr>
                             <th>Date</th>
@@ -220,4 +223,9 @@
         });
     });
 </script>
+
+<!-- Add custom JavaScript -->
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/inventory_management.js') }}?v={{ timestamp }}"></script>
+{% endblock %}
 {% endblock %} 

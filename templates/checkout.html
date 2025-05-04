@@ -6,7 +6,7 @@
 <div class="container mt-4">
     <h2>Checkout</h2>
     
-    <form method="POST" action="{{ url_for('checkout') }}">
+    <form method="POST" action="{{ url_for('checkout') }}" id="checkout-form">
         <div class="row">
             <div class="col-md-6">
                 <div class="card mb-4">
@@ -16,19 +16,19 @@
                     <div class="card-body">
                         <div class="mb-3">
                             <label for="customer_name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="customer_name" name="customer_name" value="{{ current_user.username if current_user.is_authenticated else '' }}" required>
+                            <input type="text" class="form-control" id="customer_name" name="customer_name" value="{{ customer_info.name or (current_user.username if current_user.is_authenticated else '') }}" required>
                         </div>
                         <div class="mb-3">
                             <label for="customer_email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="customer_email" name="customer_email" value="{{ current_user.email if current_user.is_authenticated else '' }}" required>
+                            <input type="email" class="form-control" id="customer_email" name="customer_email" value="{{ customer_info.email or (current_user.email if current_user.is_authenticated else '') }}" required>
                         </div>
                         <div class="mb-3">
                             <label for="customer_phone" class="form-label">Phone Number</label>
-                            <input type="tel" class="form-control" id="customer_phone" name="customer_phone" required>
+                            <input type="tel" class="form-control" id="customer_phone" name="customer_phone" value="{{ customer_info.phone }}" required>
                         </div>
                         <div class="mb-3">
                             <label for="customer_address" class="form-label">Address (Optional)</label>
-                            <textarea class="form-control" id="customer_address" name="customer_address" rows="3"></textarea>
+                            <textarea class="form-control" id="customer_address" name="customer_address" rows="3">{{ customer_info.address }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -68,8 +68,14 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">Complete Order</button>
+                        <button type="submit" class="btn btn-primary" id="complete-order-btn">Complete Order</button>
                         <a href="{{ url_for('view_cart') }}" class="btn btn-secondary">Back to Cart</a>
+                        <div id="order-processing" style="display: none;" class="mt-2">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Processing...</span>
+                            </div>
+                            <span class="ms-2">Processing your order, please wait...</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -79,5 +85,27 @@
 {% endblock %}
 
 {% block scripts %}
+<script>
+// Prevent double-submission of the checkout form
+document.getElementById('checkout-form').addEventListener('submit', function(e) {
+    // Get the button and processing indicator
+    var submitBtn = document.getElementById('complete-order-btn');
+    var processingIndicator = document.getElementById('order-processing');
+    
+    // If the button is already disabled, prevent the form submission
+    if (submitBtn.disabled) {
+        e.preventDefault();
+        return false;
+    }
+    
+    // Disable the button and show the processing indicator
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = 'Processing...';
+    processingIndicator.style.display = 'block';
+    
+    // Allow the form to submit
+    return true;
+});
+</script>
 <script src="{{ url_for('static', filename='js/checkout.js') }}"></script>
 {% endblock %} 

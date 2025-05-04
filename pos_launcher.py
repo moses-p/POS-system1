@@ -1,3 +1,5 @@
+# This is the recommended entry point for desktop packaging (Windows/Mac/Linux) using PyInstaller.
+# It ensures the database is initialized and opens the app in the default browser.
 import os
 import sys
 import webbrowser

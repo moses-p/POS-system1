@@ -25,6 +25,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize cart functionality
     initCartFunctionality();
     
+    // Refresh stock levels on page load
+    if (document.querySelector('.product-stock')) {
+        refreshStock();
+    }
+    
     // Add timestamp to prevent browser caching
     const addTimestampToLinks = () => {
         document.querySelectorAll('a').forEach(link => {
@@ -149,32 +154,8 @@ function initAuthStateHandler() {
 
 // Initialize cart functionality
 function initCartFunctionality() {
-    // Add to cart buttons on product pages
-    const addToCartButtons = document.querySelectorAll('.add-to-cart');
-    if (addToCartButtons.length > 0) {
-        addToCartButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
-                // Prevent default action to ensure our handler runs
-                e.preventDefault();
-                e.stopPropagation();
-                
-                const productId = this.dataset.productId;
-                if (!productId) {
-                    console.error('Product ID not found on button');
-                    return;
-                }
-                
-                // Check if we're in the context of the index page with customer info
-                if (window.addProductToCart) {
-                    // Use the page's implementation
-                    window.addProductToCart(productId);
-                } else {
-                    // Generic implementation
-                    addToCart(productId, this);
-                }
-            });
-        });
-    }
+    // Do not add event handlers here - they're already defined in index.html
+    // Just define the global addToCart function for use elsewhere
     
     // Generic add to cart function
     window.addToCart = function(productId, buttonElement) {
@@ -232,6 +213,9 @@ function initCartFunctionality() {
                 // Update cart counter if available
                 updateCartCounter();
                 
+                // Add refreshStock call to update UI
+                refreshStock(productId);
+                
                 // Update button
                 if (buttonElement) {
                     buttonElement.innerHTML = '<i class="fas fa-check me-2"></i>Added to Cart';
@@ -253,7 +237,7 @@ function initCartFunctionality() {
             }
         })
         .catch(error => {
-            console.error('Add to cart error:', error);
+            console.error('Error adding to cart:', error);
             if (buttonElement) {
                 buttonElement.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Error';
                 setTimeout(() => {
@@ -689,6 +673,72 @@ function initCartSync() {
     
     // Setup periodic sync every 30 seconds
     setInterval(syncCart, 30000);
+    
+    // Check for pending online orders (for staff and admin)
+    checkPendingOnlineOrders();
+    setInterval(checkPendingOnlineOrders, 60000); // Check every minute
+}
+
+// Check for pending online orders
+function checkPendingOnlineOrders() {
+    // Only run if user might be staff or admin
+    if (!document.querySelector('a[href="/admin"]') && 
+        !document.querySelector('a[href="/in_store_sale"]')) {
+        return;
+    }
+    
+    fetch('/api/pending_orders', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        credentials: 'same-origin'
+    })
+    .then(response => response.json())
+    .then(data => {
+        const pendingCount = data.pending_orders ? data.pending_orders.length : 0;
+        
+        // Update UI with pending orders count
+        updatePendingOrdersNotification(pendingCount);
+    })
+    .catch(error => {
+        console.error('Error checking pending orders:', error);
+    });
+}
+
+// Update pending online orders notification
+function updatePendingOrdersNotification(count) {
+    const notificationElement = document.getElementById('onlineOrdersNotification');
+    const countElement = document.getElementById('pendingOrdersCount');
+    
+    if (!notificationElement || !countElement) return;
+    
+    if (count > 0) {
+        countElement.textContent = count;
+        notificationElement.classList.remove('d-none');
+        
+        // Add click handler to open modal if clicked (and user is on in-store sale page)
+        notificationElement.addEventListener('click', function(event) {
+            // Only handle if they click alert but not the close button
+            if (event.target.classList.contains('btn-close')) return;
+            
+            // Navigate to in-store sale page if not already there
+            if (!window.location.pathname.includes('/in_store_sale')) {
+                window.location.href = '/in_store_sale?openOrdersModal=true';
+            } else {
+                // Try to open the online orders modal if we're already on the page
+                try {
+                    const orderModal = new bootstrap.Modal(document.getElementById('onlineOrdersModal'));
+                    orderModal.show();
+                } catch (e) {
+                    console.error("Error opening orders modal:", e);
+                }
+            }
+        });
+    } else {
+        notificationElement.classList.add('d-none');
+    }
 }
 
 // Sync cart data with the server
@@ -725,51 +775,75 @@ function syncCart() {
 
 // Setup "Add to Cart" buttons
 function setupAddToCartButtons() {
+    // Keep track of button processing state to prevent double submission
+    window.cartButtonsProcessing = window.cartButtonsProcessing || {};
+    
     document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-        button.addEventListener('click', function(event) {
-            event.preventDefault();
-            const productId = this.getAttribute('data-product-id');
-            
-            // Show loading state
-            this.disabled = true;
-            this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding...';
-            
-            fetch(`/add_to_cart/${productId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                body: JSON.stringify({})
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Reset button
-                this.disabled = false;
-                this.innerHTML = 'Add to Cart';
-                
-                if (data.success) {
-                    // Update cart count badge
-                    const cartCountBadge = document.getElementById('cart-count');
-                    if (cartCountBadge) {
-                        cartCountBadge.textContent = data.cart_count;
-                    }
-                    
-                    // Show success toast
-                    showToast(`Added ${data.product_name} to cart!`, 'success');
-                } else {
-                    // Show error toast
-                    showToast(data.error || 'Error adding to cart', 'danger');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                this.disabled = false;
-                this.innerHTML = 'Add to Cart';
-                showToast('Error adding to cart', 'danger');
-            });
-        });
+        // Remove any existing listeners first
+        button.removeEventListener('click', addToCartHandler);
+        // Add the event listener
+        button.addEventListener('click', addToCartHandler);
     });
+    
+    function addToCartHandler(event) {
+        event.preventDefault();
+        const productId = this.getAttribute('data-product-id');
+        
+        // Check if this button is already processing a request
+        if (window.cartButtonsProcessing[productId]) {
+            console.log('Preventing duplicate add to cart request for product ID:', productId);
+            return;
+        }
+        
+        // Mark this button as processing
+        window.cartButtonsProcessing[productId] = true;
+        
+        // Show loading state
+        this.disabled = true;
+        this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding...';
+        
+        fetch(`/add_to_cart/${productId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Reset button
+            this.disabled = false;
+            this.innerHTML = 'Add to Cart';
+            
+            if (data.success) {
+                // Update cart count badge
+                const cartCountBadge = document.getElementById('cart-count');
+                if (cartCountBadge) {
+                    cartCountBadge.textContent = data.cart_count;
+                }
+                
+                // Show success toast
+                showToast(`Added ${data.product_name} to cart!`, 'success');
+            } else {
+                // Show error toast
+                showToast(data.error || 'Error adding to cart', 'danger');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            this.disabled = false;
+            this.innerHTML = 'Add to Cart';
+            showToast('Error adding to cart', 'danger');
+        })
+        .finally(() => {
+            // Reset processing state after a delay to prevent accidental double-clicks
+            setTimeout(() => {
+                window.cartButtonsProcessing[productId] = false;
+            }, 1000);
+            this.disabled = false;
+        });
+    }
 }
 
 // Setup quantity update buttons on cart page
@@ -884,6 +958,19 @@ function setupFormValidation() {
             form.classList.add('was-validated');
         }, false);
     });
+
+    // Listen for checkout form completion
+    const checkoutForm = document.getElementById('checkoutForm');
+    if (checkoutForm) {
+        checkoutForm.addEventListener('submit', function(e) {
+            // After form submission is processed successfully
+            // This will happen after redirect, using the DOMContentLoaded event
+            if (document.referrer.includes('/checkout')) {
+                // Refresh all product stock levels after checkout
+                setTimeout(() => refreshStock(), 1000);
+            }
+        });
+    }
 }
 
 // Helper function to format currency
@@ -943,5 +1030,146 @@ function showToast(message, type = 'info') {
     // Remove toast after it's hidden
     toast.addEventListener('hidden.bs.toast', function() {
         this.remove();
+    });
+}
+
+// Function to refresh stock information for a product
+function refreshStock(productId = null) {
+    // Build URL depending on whether we have a specific product ID
+    const timestamp = Date.now();
+    const url = productId ? 
+        `/api/stock_status?product_id=${productId}&_t=${timestamp}` : 
+        `/api/stock_status?_t=${timestamp}`;
+    
+    // Check if we're on the inventory management page
+    const isInventoryPage = window.location.pathname.includes('/inventory_management');
+    const isAdminPage = window.location.pathname === '/admin';
+    
+    // For inventory page, we handle refreshes differently (via inventory_management.js)
+    // to avoid conflicts between multiple refresh mechanisms
+    if (isInventoryPage && !productId) {
+        console.log('Skipping refreshStock on inventory page - handled by inventory_management.js');
+        return Promise.resolve({success: true, message: 'Handled by inventory_management.js'});
+    }
+    
+    return new Promise((resolve, reject) => {
+        let retryCount = 0;
+        const maxRetries = 2;
+        
+        function fetchWithRetry() {
+            console.log(`Fetching stock data from ${url}`);
+            fetch(url, {
+                method: 'GET',
+                cache: 'no-store',
+                headers: {
+                    'Cache-Control': 'no-cache, no-store, must-revalidate',
+                    'Pragma': 'no-cache',
+                    'Expires': '0',
+                    'X-Requested-With': 'fetch',
+                    'X-Timestamp': timestamp.toString()
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Network response error: ${response.status} ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Stock data received:', data);
+                    if (data.success) {
+                        if (productId && data.product_id == productId) {
+                            // Single product update
+                            updateProductStockUI(data.product_id, data.stock);
+                        } else if (data.products) {
+                            // Multiple products update
+                            Object.keys(data.products).forEach(id => {
+                                const stockInfo = data.products[id];
+                                updateProductStockUI(id, stockInfo.stock);
+                            });
+                        }
+                        
+                        // For admin page with stock movements, do a hard reload to see updated movements
+                        if (isAdminPage && !productId) {
+                            // Only reload if there's a stock movements table
+                            const movementsTable = document.querySelector('#stock-movements-table');
+                            if (movementsTable) {
+                                // Special admin reload handling
+                                window.location.reload();
+                                return;
+                            }
+                        }
+                        
+                        resolve(data);
+                    } else {
+                        console.error('API returned error:', data);
+                        reject(new Error(data.error || 'Unknown API error'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching stock data:', error);
+                    if (retryCount < maxRetries) {
+                        retryCount++;
+                        console.log(`Retrying (${retryCount}/${maxRetries})...`);
+                        setTimeout(fetchWithRetry, 1000);
+                    } else {
+                        reject(error);
+                    }
+                });
+        }
+        
+        fetchWithRetry();
+    });
+}
+
+// Function to update product stock UI elements
+function updateProductStockUI(productId, stockLevel) {
+    // First find all elements that display stock for this product
+    const stockElements = document.querySelectorAll(`.product-stock[data-product-id="${productId}"]`);
+    
+    if (stockElements.length === 0) {
+        console.log(`No product-stock elements found for product ID ${productId}`);
+        return;
+    }
+    
+    console.log(`Updating UI for product ID ${productId} with stock level ${stockLevel}`);
+    
+    stockElements.forEach(element => {
+        // Get the original content to preserve format
+        const originalContent = element.textContent.trim();
+        
+        // Check which format is being used
+        if (originalContent.toLowerCase().includes('stock:')) {
+            // Format: "Stock: X"
+            element.textContent = `Stock: ${stockLevel}`;
+        } else if (originalContent.toLowerCase().includes('in stock:')) {
+            // Format: "In Stock: X {unit}"
+            const parts = originalContent.split(' ');
+            const unitIndex = parts.findIndex(p => p.trim().length > 0 && !p.includes(':') && isNaN(parseFloat(p)));
+            const unit = unitIndex >= 0 ? parts[unitIndex].trim() : '';
+            element.textContent = `In Stock: ${stockLevel} ${unit}`;
+        } else {
+            // Just update the number directly
+            element.textContent = stockLevel.toString();
+        }
+        
+        // Update color based on stock level
+        const product = element.closest('.product-card') || element.closest('.product-item');
+        if (product) {
+            const addToCartBtn = product.querySelector('.add-to-cart');
+            if (addToCartBtn) {
+                if (stockLevel <= 0) {
+                    addToCartBtn.classList.add('btn-secondary');
+                    addToCartBtn.classList.remove('btn-primary');
+                    addToCartBtn.disabled = true;
+                    addToCartBtn.textContent = 'Out of Stock';
+                } else {
+                    addToCartBtn.classList.add('btn-primary');
+                    addToCartBtn.classList.remove('btn-secondary');
+                    addToCartBtn.disabled = false;
+                    addToCartBtn.innerHTML = '<i class="fas fa-cart-plus me-1"></i>Add to Cart';
+                }
+            }
+        }
     });
 } 

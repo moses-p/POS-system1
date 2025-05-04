@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+
+{% block title %}Inventory Management{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2>Inventory Management</h2>
+        </div>
+        <div class="col-md-4 text-end">
+            <button id="forceRefreshBtn" class="btn btn-outline-primary me-2">
+                <i class="fas fa-sync-alt me-1"></i> Force Refresh Stock
+            </button>
+            <a href="{{ url_for('add_product') }}" class="btn btn-success">
+                <i class="fas fa-plus me-1"></i> Add Product
+            </a>
+        </div>
+    </div>
+
+    <!-- Inventory Overview -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-boxes fa-2x text-primary"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="card-title">Total Products</h5>
+                            <h3 class="mb-0">{{ products|length }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-exclamation-triangle fa-2x text-warning"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="card-title">Low Stock</h5>
+                            <h3 class="mb-0">{{ low_stock_products }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-times-circle fa-2x text-danger"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="card-title">Out of Stock</h5>
+                            <h3 class="mb-0">{{ out_of_stock_products }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product List -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Products</h5>
+                <div class="input-group" style="width: 300px;">
+                    <input type="text" class="form-control" id="productSearch" placeholder="Search products...">
+                    <button class="btn btn-outline-secondary" type="button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                        <tr>
+                            <td>{{ product.id }}</td>
+                            <td>{{ product.name }}</td>
+                            <td>{{ product.category or 'N/A' }}</td>
+                            <td>{{ product.price }} {{ product.currency }}</td>
+                            <td><span class="product-stock" data-product-id="{{ product.id }}">{{ product.stock }} {{ product.unit }}</span></td>
+                            <td>
+                                {% if product.stock <= product.reorder_point %}
+                                    <span class="badge bg-warning">Low Stock</span>
+                                {% elif product.stock == 0 %}
+                                    <span class="badge bg-danger">Out of Stock</span>
+                                {% elif product.stock >= product.max_stock %}
+                                    <span class="badge bg-info">Overstocked</span>
+                                {% else %}
+                                    <span class="badge bg-success">In Stock</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{{ url_for('edit_product', product_id=product.id) }}" class="btn btn-primary">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{{ url_for('restock_product', product_id=product.id) }}" class="btn btn-success">
+                                        <i class="fas fa-plus"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteProductModal{{ product.id }}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Stock Movements -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Recent Stock Movements</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover" id="stockMovementsTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Product</th>
+                            <th>Type</th>
+                            <th>Quantity</th>
+                            <th>Remaining</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for movement in recent_movements %}
+                        <tr>
+                            <td>{{ movement.timestamp.strftime('%Y-%m-%d %H:%M') if movement.timestamp else 'N/A' }}</td>
+                            <td>{{ movement.product.name }}</td>
+                            <td>
+                                {% if movement.movement_type == 'sale' %}
+                                    <span class="badge bg-danger">Sale</span>
+                                {% elif movement.movement_type == 'restock' %}
+                                    <span class="badge bg-success">Restock</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ movement.movement_type }}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ movement.quantity }} {{ movement.product.unit }}</td>
+                            <td>{{ movement.remaining_stock }} {{ movement.product.unit }}</td>
+                            <td>{{ movement.notes or '' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Product Modals -->
+{% for product in products %}
+<div class="modal fade" id="deleteProductModal{{ product.id }}" tabindex="-1" aria-labelledby="deleteProductModalLabel{{ product.id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteProductModalLabel{{ product.id }}">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the product <strong>{{ product.name }}</strong>?</p>
+                <p class="text-danger">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form action="{{ url_for('delete_product', product_id=product.id) }}" method="POST" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<script>
+    // Product search functionality
+    document.getElementById('productSearch').addEventListener('keyup', function() {
+        const searchTerm = this.value.toLowerCase();
+        const productTable = document.querySelector('table');
+        const productRows = productTable.querySelectorAll('tbody tr');
+        
+        productRows.forEach(row => {
+            const productName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+            const productCategory = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+            
+            if (productName.includes(searchTerm) || productCategory.includes(searchTerm)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+<!-- Add custom JavaScript -->
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/inventory_management.js') }}?v={{ timestamp }}"></script>
+{% endblock %}
+{% endblock %} 

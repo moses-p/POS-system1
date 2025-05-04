@@ -263,4 +263,62 @@ This project is licensed under the MIT License.
 - Flask and extensions contributors
 - Bootstrap for responsive UI components
 - FontAwesome for icons
-- All open source contributors 
+- All open source contributors
+
+# POS System - Distribution Guide
+
+## Desktop Packaging (Windows/Mac/Linux)
+
+This POS system can be packaged as a standalone desktop application using PyInstaller. This allows you to run the app without needing to install Python or any dependencies.
+
+### Build the Desktop App
+
+1. **Install dependencies:**
+   ```sh
+   pip install -r requirements.txt
+   ```
+2. **Build the executable:**
+   ```sh
+   pyinstaller --onefile --add-data "templates;templates" --add-data "static;static" pos_launcher.py
+   ```
+   - On Mac/Linux, replace `;` with `:` in the `--add-data` arguments.
+
+3. **Find the executable in the `dist/` directory.**
+   - On Windows: `dist/pos_launcher.exe`
+   - On Mac/Linux: `dist/pos_launcher`
+
+4. **Run the executable:**
+   - Double-click or run from terminal:
+     ```sh
+     ./dist/pos_launcher.exe  # Windows
+     ./dist/pos_launcher      # Mac/Linux
+     ```
+   - The app will open in your default browser at [http://localhost:5000](http://localhost:5000)
+
+---
+
+## PWA / Mobile Installability
+
+This POS system is a Progressive Web App (PWA). You can install it on your phone or tablet for a native app-like experience.
+
+### How to Install on Mobile
+
+1. **Access the app in your mobile browser** (Chrome, Edge, Safari, etc.).
+2. **Look for the "Install" or "Add to Home Screen" prompt.**
+   - If you don't see it, open the browser menu and select "Add to Home Screen".
+3. **The app will be installed and appear on your home screen like a native app.**
+
+### PWA Features
+- Works offline (limited functionality)
+- Installable on Android and iOS
+- Responsive design for all screen sizes
+
+---
+
+## Notes
+- For PWA features to work, the app must be served over `http://localhost` (for local use) or `https://` (for production).
+- For desktop packaging, all static and template files are bundled automatically.
+
+---
+
+For more details, see the full documentation in `STOCK_SYSTEM_README.md`. 
