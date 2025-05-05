@@ -1,188 +1,180 @@
 {% extends 'base.html' %}
 
-{% block title %}Orders Management{% endblock %}
+{% block title %}Staff - Orders{% endblock %}
 
 {% block content %}
 <div class="container py-4">
-    <h1 class="h3 mb-4">Orders Management</h1>
+    <h1 class="mb-4">Staff Orders Dashboard</h1>
     
+    <!-- Filters -->
     <div class="card mb-4">
-        <div class="card-header bg-light">
+        <div class="card-header">
             <h5 class="mb-0">Filter Orders</h5>
         </div>
         <div class="card-body">
-            <form method="GET" class="row g-3">
-                <div class="col-md-3">
+            <form method="get" action="{{ url_for('staff_orders') }}" class="row g-3">
+                <div class="col-md-4">
                     <label for="status" class="form-label">Status</label>
-                    <select name="status" id="status" class="form-select">
+                    <select class="form-select" id="status" name="status">
+                        <option value="current" {% if status_filter == 'current' or not status_filter %}selected{% endif %}>Current (Pending & Processing)</option>
                         <option value="">All Statuses</option>
-                        <option value="pending" {% if request.args.get('status') == 'pending' %}selected{% endif %}>Pending</option>
-                        <option value="processing" {% if request.args.get('status') == 'processing' %}selected{% endif %}>Processing</option>
-                        <option value="completed" {% if request.args.get('status') == 'completed' %}selected{% endif %}>Completed</option>
-                        <option value="cancelled" {% if request.args.get('status') == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                        {% for status in statuses %}
+                        <option value="{{ status }}" {% if status_filter == status %}selected{% endif %}>
+                            {{ status|title }}
+                        </option>
+                        {% endfor %}
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label for="order_type" class="form-label">Order Type</label>
-                    <select name="order_type" id="order_type" class="form-select">
+                    <select class="form-select" id="order_type" name="order_type">
                         <option value="">All Types</option>
-                        <option value="online" {% if request.args.get('order_type') == 'online' %}selected{% endif %}>Online</option>
-                        <option value="in-store" {% if request.args.get('order_type') == 'in-store' %}selected{% endif %}>In-Store</option>
+                        {% for type in order_types %}
+                        <option value="{{ type }}" {% if order_type_filter == type %}selected{% endif %}>
+                            {{ type|replace('-', ' ')|title }}
+                        </option>
+                        {% endfor %}
                     </select>
                 </div>
-                <div class="col-md-3">
-                    <label for="date_from" class="form-label">Date From</label>
-                    <input type="date" class="form-control" id="date_from" name="date_from" value="{{ request.args.get('date_from', '') }}">
-                </div>
-                <div class="col-md-3">
-                    <label for="date_to" class="form-label">Date To</label>
-                    <input type="date" class="form-control" id="date_to" name="date_to" value="{{ request.args.get('date_to', '') }}">
-                </div>
-                <div class="col-12">
-                    <button type="submit" class="btn btn-primary">Apply Filters</button>
-                    <a href="{{ url_for('all_staff_orders') }}" class="btn btn-outline-secondary">Clear Filters</a>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary me-2">Apply Filters</button>
+                    <a href="{{ url_for('staff_orders') }}" class="btn btn-outline-secondary">Clear</a>
                 </div>
             </form>
         </div>
     </div>
     
+    <!-- Orders Table -->
     <div class="card">
-        <div class="card-header bg-light">
-            <div class="d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">All Orders</h5>
-                <span class="badge bg-primary">{{ orders|length }} orders</span>
-            </div>
+        <div class="card-header">
+            <h5 class="mb-0">Orders</h5>
         </div>
-        <div class="card-body">
+        <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
                         <tr>
-                            <th>Order ID</th>
+                            <th>ID</th>
                             <th>Date</th>
                             <th>Customer</th>
                             <th>Type</th>
-                            <th>Total</th>
                             <th>Status</th>
+                            <th>Total</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {% for order in orders %}
-                        <tr class="{% if not order.viewed %}table-info{% endif %}">
-                            <td>
-                                <a href="{{ url_for('staff_order_detail', order_id=order.id) }}" class="fw-bold">
-                                    #{{ order.id }}
-                                </a>
-                            </td>
-                            <td>
-                                {% if order.order_date %}
-                                    {% if order.order_date is string %}
-                                        {{ order.order_date }}
+                    <tbody id="ordersBody">
+                        {% if orders %}
+                            {% for order in orders %}
+                            <tr {% if order.status in ['pending', 'processing'] %}class="table-warning"{% endif %}>
+                                <td>{{ order.id }}</td>
+                                <td>{{ order.order_date|localtime }}</td>
+                                <td>
+                                    {% if order.customer_name %}
+                                        {{ order.customer_name }}
                                     {% else %}
-                                        {{ order.order_date.strftime('%Y-%m-%d %H:%M') }}
+                                        Anonymous Customer
                                     {% endif %}
-                                {% else %}
-                                    N/A
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if order.customer_name %}
-                                    {{ order.customer_name }}
-                                {% elif order.customer %}
-                                    {{ order.customer.name }}
-                                {% else %}
-                                    Guest
-                                {% endif %}
-                            </td>
-                            <td>
-                                <span class="badge bg-secondary">{{ order.order_type|capitalize }}</span>
-                            </td>
-                            <td>{{ "UGX {:,.0f}".format(order.total_amount) }}</td>
-                            <td>
-                                {% if order.status == 'pending' %}
-                                    <span class="badge bg-warning">Pending</span>
-                                {% elif order.status == 'processing' %}
-                                    <span class="badge bg-info">Processing</span>
-                                {% elif order.status == 'completed' %}
-                                    <span class="badge bg-success">Completed</span>
-                                {% elif order.status == 'cancelled' %}
-                                    <span class="badge bg-danger">Cancelled</span>
-                                {% else %}
-                                    <span class="badge bg-secondary">{{ order.status|capitalize }}</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                <a href="{{ url_for('staff_order_detail', order_id=order.id) }}" class="btn btn-sm btn-outline-primary">
-                                    <i class="bi bi-eye"></i> View
-                                </a>
-                                <a href="{{ url_for('print_receipt', order_id=order.id) }}" class="btn btn-sm btn-outline-secondary" target="_blank">
-                                    <i class="bi bi-printer"></i> Receipt
-                                </a>
-                            </td>
-                        </tr>
+                                </td>
+                                <td>
+                                    <span class="badge bg-{% if order.order_type == 'online' %}info{% else %}primary{% endif %}">
+                                        {{ order.order_type|replace('-', ' ')|title }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-{{ {
+                                        'pending': 'warning',
+                                        'processing': 'info',
+                                        'completed': 'success',
+                                        'cancelled': 'danger'
+                                    }.get(order.status, 'secondary') }}">
+                                        {{ order.status|title }}
+                                    </span>
+                                </td>
+                                <td>UGX {{ order.total_amount|round(2) }}</td>
+                                <td>
+                                    <a href="{{ url_for('staff_order_detail', order_id=order.id) }}" 
+                                       class="btn btn-sm btn-primary">View</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
                         {% else %}
-                        <tr>
-                            <td colspan="7" class="text-center py-4">
-                                <p class="h5 text-muted mb-3">No orders found</p>
-                                {% if request.args %}
-                                <a href="{{ url_for('all_staff_orders') }}" class="btn btn-outline-primary">Clear filters</a>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
+                            <tr>
+                                <td colspan="7" class="text-center py-4">No orders found.</td>
+                            </tr>
+                        {% endif %}
                     </tbody>
                 </table>
             </div>
-            
-            {% if pagination %}
-            <div class="d-flex justify-content-center mt-4">
-                <nav aria-label="Page navigation">
-                    <ul class="pagination">
-                        {% if pagination.has_prev %}
-                        <li class="page-item">
-                            <a class="page-link" href="{{ url_for('all_staff_orders', page=pagination.prev_num, **request.args) }}" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        {% else %}
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        {% endif %}
-                        
-                        {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
-                            {% if page_num %}
-                                {% if page_num == pagination.page %}
-                                <li class="page-item active"><a class="page-link" href="#">{{ page_num }}</a></li>
-                                {% else %}
-                                <li class="page-item"><a class="page-link" href="{{ url_for('all_staff_orders', page=page_num, **request.args) }}">{{ page_num }}</a></li>
-                                {% endif %}
-                            {% else %}
-                                <li class="page-item disabled"><a class="page-link" href="#">…</a></li>
-                            {% endif %}
-                        {% endfor %}
-                        
-                        {% if pagination.has_next %}
-                        <li class="page-item">
-                            <a class="page-link" href="{{ url_for('all_staff_orders', page=pagination.next_num, **request.args) }}" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                        {% else %}
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                        {% endif %}
-                    </ul>
-                </nav>
-            </div>
-            {% endif %}
         </div>
     </div>
+    
+    <!-- Pagination -->
+    {% if total_pages > 1 %}
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+            <li class="page-item {% if page == 1 %}disabled{% endif %}">
+                <a class="page-link" href="{{ url_for('staff_orders', page=page-1, status=status_filter, order_type=order_type_filter) }}">Previous</a>
+            </li>
+            
+            {% for p in range(1, total_pages + 1) %}
+                {% if p >= page - 2 and p <= page + 2 %}
+                <li class="page-item {% if p == page %}active{% endif %}">
+                    <a class="page-link" href="{{ url_for('staff_orders', page=p, status=status_filter, order_type=order_type_filter) }}">{{ p }}</a>
+                </li>
+                {% endif %}
+            {% endfor %}
+            
+            <li class="page-item {% if page == total_pages %}disabled{% endif %}">
+                <a class="page-link" href="{{ url_for('staff_orders', page=page+1, status=status_filter, order_type=order_type_filter) }}">Next</a>
+            </li>
+        </ul>
+    </nav>
+    {% endif %}
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+ document.addEventListener('DOMContentLoaded', () => {
+   refreshOrders();
+   setInterval(refreshOrders, 30000);
+ });
+
+ function refreshOrders() {
+   const params = new URLSearchParams(window.location.search);
+   let status = params.get('status') || 'current';
+   if (status === 'current') status = '';
+   const orderType = params.get('order_type') || '';
+   const url = `/api/staff_orders?status=${encodeURIComponent(status)}&order_type=${encodeURIComponent(orderType)}&_t=${Date.now()}`;
+   fetch(url, {cache: 'no-store'})
+     .then(r => r.json())
+     .then(data => {
+        if (!data.success) throw new Error(data.error || 'Unknown');
+        const tbody = document.getElementById('ordersBody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+        if (data.orders.length === 0) {
+           tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4">No orders found.</td></tr>`;
+           return;
+        }
+        data.orders.forEach(order => {
+          const tr = document.createElement('tr');
+          const badgeMap = {pending:'warning', processing:'info', completed:'success', cancelled:'danger'};
+          const highlight = (order.status === 'pending' || order.status === 'processing') ? 'table-warning' : '';
+          tr.className = highlight;
+          tr.innerHTML = `
+            <td>${order.id}</td>
+            <td>${order.order_date|localtime}</td>
+            <td>${order.customer_name}</td>
+            <td><span class="badge bg-${order.order_type==='online'?'info':'primary'}">${order.order_type.replace('-',' ').replace(/\b\w/g,c=>c.toUpperCase())}</span></td>
+            <td><span class="badge bg-${badgeMap[order.status]||'secondary'}">${order.status.charAt(0).toUpperCase()+order.status.slice(1)}</span></td>
+            <td>UGX ${Number(order.total_amount).toFixed(2)}</td>
+            <td><a href="/staff/order/${order.id}" class="btn btn-sm btn-primary">View</a></td>`;
+          tbody.appendChild(tr);
+        });
+     })
+     .catch(err => console.error('Error refreshing orders', err));
+ }
+</script>
 {% endblock %} 

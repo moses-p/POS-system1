@@ -3,6 +3,72 @@
 {% block title %}Home - POS System{% endblock %}
 
 {% block content %}
+<!-- Responsive mobile improvements -->
+<style>
+input[type="text"].form-control, input[type="search"].form-control {
+    background: #fff !important;
+    color: #222 !important;
+    border: 1px solid #ced4da !important;
+    caret-color: #222 !important;
+    z-index: 10 !important;
+    background-clip: padding-box !important;
+    -webkit-text-fill-color: #222 !important; /* For iOS/Safari/Android */
+}
+input[type="text"].form-control::placeholder, input[type="search"].form-control::placeholder {
+    color: #888 !important;
+    opacity: 1;
+}
+@media (max-width: 767.98px) {
+    .product-card {
+        width: 100% !important;
+        max-width: 100vw;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    .card-img-top {
+        height: 140px !important;
+    }
+    .card-body {
+        padding: 1rem 0.7rem;
+    }
+    .display-4 {
+        font-size: 2rem;
+    }
+    .lead {
+        font-size: 1.1rem;
+    }
+    .input-group, .btn-group {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .btn, .form-control {
+        font-size: 1.1rem;
+        padding: 12px 16px;
+    }
+    .card-title {
+        font-size: 1.1rem;
+    }
+    .card-text {
+        font-size: 0.98rem;
+    }
+    .h5 {
+        font-size: 1rem;
+    }
+    .mb-4 {
+        margin-bottom: 1rem !important;
+    }
+}
+/* Strong override for search input visibility */
+.input-group#searchInputGroup, .input-group#searchInputGroup * {
+    background: #fff !important;
+    color: #222 !important;
+    border: 1px solid #ced4da !important;
+    box-shadow: none !important;
+    z-index: 10 !important;
+    background-clip: padding-box !important;
+}
+</style>
+
 <div class="row mb-4">
     <div class="col-12">
         <div class="bg-primary text-white p-5 rounded-3">
@@ -13,16 +79,16 @@
 </div>
 
 <div class="row mb-4">
-    <div class="col-md-6">
-        <div class="input-group">
+    <div class="col-12 col-md-6 mb-2 mb-md-0">
+        <div class="input-group" id="searchInputGroup" style="background: #fff; border-radius: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.04);">
             <input type="text" id="searchInput" class="form-control" placeholder="Search products...">
             <button class="btn btn-outline-secondary" type="button">
                 <i class="fas fa-search"></i>
             </button>
         </div>
     </div>
-    <div class="col-md-6 text-end">
-        <div class="btn-group">
+    <div class="col-12 col-md-6 text-end">
+        <div class="btn-group w-100 w-md-auto">
             <button class="btn btn-outline-secondary" onclick="sortProducts('price-asc')">
                 <i class="fas fa-sort-amount-down-alt"></i> Price: Low to High
             </button>
@@ -35,7 +101,7 @@
 
 <div class="row" id="productsContainer">
     {% for product in products %}
-    <div class="col-md-4 mb-4 product-card" data-price="{{ product.price }}">
+    <div class="col-12 col-sm-6 col-md-4 mb-4 product-card" data-price="{{ product.price }}">
         <div class="card h-100">
             <div class="position-relative">
                 <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
@@ -51,7 +117,7 @@
                 <div class="mt-auto">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <span class="h5 mb-0">UGX {{ "{:,.0f}".format(product.price) }}</span>
-                        <span class="text-muted">Stock: {{ product.stock }}</span>
+                        <span class="text-muted product-stock" data-product-id="{{ product.id }}">Stock: {{ product.stock }}</span>
                     </div>
                     <button class="btn btn-primary w-100 add-to-cart" data-product-id="{{ product.id }}">
                         <i class="fas fa-cart-plus me-2"></i>Add to Cart
@@ -114,6 +180,41 @@ document.addEventListener('DOMContentLoaded', function() {
     // Search functionality
     const searchInput = document.getElementById('searchInput');
     const productCards = document.querySelectorAll('.product-card');
+    
+    // Refresh stock information every 10 seconds
+    setInterval(function() {
+        if (typeof refreshStock === 'function') {
+            console.log('Auto-refreshing stock information...');
+            refreshStock();
+        }
+    }, 10000);
+    
+    // Refresh stock immediately on page load
+    if (typeof refreshStock === 'function') {
+        console.log('Initial stock refresh...');
+        refreshStock();
+    }
+    
+    // If we've come back from an order completion, force full page refresh
+    if (document.referrer.includes('/receipt') || document.referrer.includes('/checkout')) {
+        console.log('Page loaded after order completion, refreshing stock');
+        if (typeof refreshStock === 'function') {
+            refreshStock();
+        }
+        
+        // Also show a success message if coming from receipt page
+        if (document.referrer.includes('/receipt')) {
+            const orderSuccessDiv = document.createElement('div');
+            orderSuccessDiv.className = 'alert alert-success alert-dismissible fade show';
+            orderSuccessDiv.setAttribute('role', 'alert');
+            orderSuccessDiv.innerHTML = `
+                <i class="fas fa-check-circle me-2"></i>
+                Order successfully processed! Stock levels updated.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            document.querySelector('.container').prepend(orderSuccessDiv);
+        }
+    }
     
     // Customer information storage
     let customerInfo = {
@@ -190,6 +291,12 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', function() {
             const productId = this.dataset.productId;
             
+            // Check if button is already processing
+            if (this.getAttribute('data-processing') === 'true') {
+                console.log('Already processing this request, preventing duplicate');
+                return;
+            }
+            
             // Check if customer info exists
             if (
                 !customerInfo.name || 
@@ -210,12 +317,25 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to add product to cart with customer info
     function addProductToCart(productId) {
         const button = document.querySelector(`.add-to-cart[data-product-id="${productId}"]`);
+        if (!button) return;
+        
+        // Prevent duplicate submissions
+        if (button.getAttribute('data-processing') === 'true') {
+            console.log('Already processing this request, preventing duplicate');
+            return;
+        }
+        
         const originalText = button.innerHTML;
         
+        // Mark as processing
+        button.setAttribute('data-processing', 'true');
         button.disabled = true;
         button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Adding...';
+        
+        // Add a timestamp to the URL to prevent caching issues with service worker
+        const url = `/add_to_cart/${productId}?_t=${Date.now()}`;
 
-        fetch('/add_to_cart/' + productId, {
+        fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -255,6 +375,10 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .finally(() => {
             button.disabled = false;
+            // Reset processing state after delay
+            setTimeout(() => {
+                button.removeAttribute('data-processing');
+            }, 1000);
         });
     }
 });

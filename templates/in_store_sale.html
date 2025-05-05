@@ -2,10 +2,32 @@
 
 {% block title %}In-Store Sale{% endblock %}
 
+{% block styles %}
+<!-- Add custom styles for the notification animation -->
+<style>
+    @keyframes pulse {
+        0% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7); }
+        70% { box-shadow: 0 0 0 15px rgba(255, 193, 7, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0); }
+    }
+    
+    .animate-pulse {
+        animation: pulse 1s infinite;
+    }
+    
+    #onlineOrdersAlert.show {
+        display: flex !important;
+        align-items: center;
+        font-weight: bold;
+        font-size: 1.1em;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container mt-4">
     <!-- Online Orders Alert -->
-    <div id="onlineOrdersAlert" class="alert alert-warning alert-dismissible fade d-none" role="alert">
+    <div id="onlineOrdersAlert" class="alert alert-danger alert-dismissible fade d-none" role="alert" style="font-size: 1.2em; font-weight: bold; border: 2px solid red;">
         <i class="fas fa-bell me-2"></i>
         <strong>New Online Orders!</strong> <span id="onlineOrderCount">0</span> order(s) waiting to be processed.
         <button type="button" class="btn btn-sm btn-primary ms-3" data-bs-toggle="modal" data-bs-target="#onlineOrdersModal">
@@ -78,7 +100,7 @@
                                         <p class="card-text">
                                             <small class="text-muted">{{ product.category }}</small><br>
                                             <strong>Price: {{ "%.2f"|format(product.price) }} UGX</strong><br>
-                                            <small>In Stock: {{ "%.2f"|format(product.stock) }} {{ product.unit }}</small>
+                                            <small>In Stock: <span class="product-stock" data-product-id="{{ product.id }}">{{ "%.2f"|format(product.stock) }}</span> {{ product.unit }}</small>
                                         </p>
                                         <div class="input-group mt-2">
                                             <span class="input-group-text">Qty</span>
@@ -200,9 +222,10 @@
                             <!-- Orders will be added dynamically -->
                         </tbody>
                     </table>
-                </div>
-                <div id="noOrdersMessage" class="text-center py-3 d-none">
-                    <p>No pending online orders.</p>
+                    <!-- No orders message -->
+                    <div id="noOrdersMessage" class="alert alert-info text-center d-none">
+                        <i class="fas fa-info-circle me-2"></i> No pending online orders at this time.
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -217,8 +240,93 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/in_store_sale.js') }}"></script>
+<!-- Make sure app.js is loaded before in_store_sale.js -->
+<script src="{{ url_for('static', filename='js/app.js') }}?v={{ version }}&t={{ timestamp }}"></script>
+<script src="{{ url_for('static', filename='js/in_store_sale.js') }}?v={{ version }}&t={{ timestamp }}"></script>
 <script>
+    // Check for pending online orders
+    let lastOrderCount = 0;
+    // Sound notification disabled per user request - visual alerts only
+    
+    // Display visual notification for new online orders
+    function showOrderNotification() {
+        try {
+            // Make the notification flash by adding a pulse animation
+            const alert = document.getElementById('onlineOrdersAlert');
+            alert.classList.add('animate-pulse');
+            setTimeout(() => {
+                alert.classList.remove('animate-pulse');
+            }, 3000);
+        } catch(e) {
+            console.error("Error during notification:", e);
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Refresh stock information immediately
+        if (typeof window.refreshStock === 'function') {
+            console.log('Initial stock refresh for in-store sale page...');
+            window.refreshStock();
+        } else {
+            console.error('refreshStock function not found, it should be defined in app.js');
+        }
+        
+        // Set up periodic stock refresh every 10 seconds
+        setInterval(function() {
+            if (typeof window.refreshStock === 'function') {
+                console.log('Auto-refreshing stock information...');
+                window.refreshStock();
+            } else {
+                console.error('refreshStock function not found during auto-refresh');
+            }
+        }, 10000);
+        
+        // Initial check for pending orders
+        console.log("Performing initial check for pending orders...");
+        checkOnlineOrders();
+        
+        // Manually check if there are pending orders right now
+        fetch('/api/pending_orders')
+            .then(response => response.json())
+            .then(data => {
+                console.log("Initial order check:", data);
+                if (data.pending_orders && data.pending_orders.length > 0) {
+                    console.log("Found " + data.pending_orders.length + " pending orders on load, showing alert");
+                    // Force the alert to show immediately
+                    const alertElement = document.getElementById('onlineOrdersAlert');
+                    alertElement.classList.add('show');
+                    alertElement.classList.remove('d-none');
+                    // Update counter
+                    document.getElementById('onlineOrderCount').textContent = data.pending_orders.length;
+                    // Set lastOrderCount
+                    lastOrderCount = data.pending_orders.length;
+                }
+            })
+            .catch(error => {
+                console.error("Error checking initial orders:", error);
+            });
+        
+        // Check for new orders more frequently (every 20 seconds) for better responsiveness
+        setInterval(checkOnlineOrders, 20000);
+        
+        // Check if we should auto-open the orders modal based on URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('openOrdersModal') === 'true') {
+            setTimeout(() => {
+                const orderModal = new bootstrap.Modal(document.getElementById('onlineOrdersModal'));
+                orderModal.show();
+            }, 500); // Small delay to ensure page is ready
+        }
+        
+        // Prefill modal fields when shown
+        document.getElementById('customerInfoModal').addEventListener('show.bs.modal', function() {
+            document.getElementById('modal_customer_name').value = document.getElementById('customer_name').value;
+            document.getElementById('modal_customer_phone').value = document.getElementById('customer_phone').value;
+            document.getElementById('modal_customer_email').value = document.getElementById('customer_email').value;
+            document.getElementById('modal_customer_address').value = document.getElementById('customer_address').value;
+        });
+    });
+    
     // Product search functionality
     document.getElementById('productSearch').addEventListener('keyup', function() {
         const searchTerm = this.value.toLowerCase();
@@ -235,55 +343,6 @@
             }
         });
     });
-    
-    // Check for pending online orders
-    let lastOrderCount = 0;
-    // Fix the notification sound reference to use the correct file extension (.wav instead of .mp3)
-    let notificationSound = new Audio('/static/sounds/notification.wav');
-    
-    // Add sound when adding items to cart
-    function playAddToCartSound() {
-        try {
-            // Play a short beep sound when adding items
-            const beep = new Audio('/static/sounds/notification.wav');
-            beep.volume = 0.5; // Lower volume for adding items
-            beep.play();
-        } catch(e) {
-            console.error("Error playing sound:", e);
-        }
-    }
-    
-    // Play a more significant alarm for new orders
-    function playNewOrderAlarm() {
-        try {
-            // Play notification sound 3 times for emphasis
-            notificationSound.volume = 1.0; // Full volume
-            notificationSound.play();
-            
-            // Flash the notification alert
-            const alertElement = document.getElementById('onlineOrdersAlert');
-            if (alertElement) {
-                // Flash the alert 5 times
-                let flashCount = 0;
-                const flashInterval = setInterval(() => {
-                    alertElement.style.opacity = alertElement.style.opacity === '0.3' ? '1' : '0.3';
-                    flashCount++;
-                    if (flashCount >= 10) {
-                        clearInterval(flashInterval);
-                        alertElement.style.opacity = '1';
-                    }
-                }, 300);
-                
-                // Also open the modal automatically if enabled
-                if (localStorage.getItem('autoOpenNewOrders') === 'true') {
-                    const orderModal = new bootstrap.Modal(document.getElementById('onlineOrdersModal'));
-                    orderModal.show();
-                }
-            }
-        } catch(e) {
-            console.error("Error playing notification sound:", e);
-        }
-    }
     
     // Update order summary when quantity changes
     function updateOrderSummary(input) {
@@ -320,13 +379,10 @@
                 row.innerHTML = `
                     <td>${productName}</td>
                     <td>${quantity}</td>
-                    <td>${productPrice.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
-                    <td>${total.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                    <td>UGX ${productPrice.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                    <td>UGX ${total.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
                 `;
                 tbody.appendChild(row);
-                
-                // Play sound when adding a new product
-                playAddToCartSound();
                 
                 // Show customer info modal immediately when adding a new product
                 if (!hasCustomerInfo()) {
@@ -338,8 +394,8 @@
                 row.innerHTML = `
                     <td>${productName}</td>
                     <td>${quantity}</td>
-                    <td>${productPrice.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
-                    <td>${total.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                    <td>UGX ${productPrice.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                    <td>UGX ${total.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
                 `;
             }
         }
@@ -392,22 +448,123 @@
         document.getElementById('completeSaleBtn').disabled = false;
     }
     
-    // Form validation before submission
+    // Intercept form submission and submit as JSON instead
     document.getElementById('saleForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+        
         const hasProducts = document.querySelectorAll('#orderSummary tbody tr').length > 0;
         
         if (!hasProducts) {
-            event.preventDefault();
             alert('Please add at least one product to the order.');
             return;
         }
         
         if (!hasCustomerInfo()) {
-            event.preventDefault();
             const customerInfoModal = new bootstrap.Modal(document.getElementById('customerInfoModal'));
             customerInfoModal.show();
             return;
         }
+        
+        // Prepare customer data
+        const customerData = {
+            customer_name: document.getElementById('customer_name').value.trim(),
+            customer_phone: document.getElementById('customer_phone').value.trim(),
+            customer_email: document.getElementById('customer_email').value.trim(),
+            customer_address: document.getElementById('customer_address').value.trim()
+        };
+        
+        // Prepare items data
+        const itemsData = [];
+        const quantityInputs = document.querySelectorAll('input[type="number"]');
+        
+        quantityInputs.forEach(input => {
+            const quantity = parseInt(input.value) || 0;
+            if (quantity > 0) {
+                itemsData.push({
+                    product_id: parseInt(input.dataset.productId),
+                    quantity: quantity,
+                    price: parseFloat(input.dataset.productPrice),
+                    name: input.dataset.productName,
+                    currency: 'UGX'
+                });
+            }
+        });
+        
+        // Disable submit button and show processing
+        const submitButton = document.getElementById('completeSaleBtn');
+        const originalButtonText = submitButton.textContent;
+        submitButton.disabled = true;
+        submitButton.textContent = 'Processing...';
+        
+        // Prepare the full payload
+        const payload = {
+            customer_name: customerData.customer_name,
+            customer_phone: customerData.customer_phone,
+            customer_email: customerData.customer_email,
+            customer_address: customerData.customer_address,
+            items: itemsData
+        };
+        
+        // Log the payload for debugging
+        console.log("Sending order payload:", payload);
+        
+        // Submit the data as JSON
+        fetch('{{ url_for("in_store_sale") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(response => {
+            if (!response.ok) {
+                console.error("Server error:", response.status, response.statusText);
+                throw new Error(`Server responded with status: ${response.status}`);
+            }
+            // Try to parse JSON, but handle text response as well
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.indexOf("application/json") !== -1) {
+                return response.json().catch(error => {
+                    console.error("JSON parse error:", error);
+                    return response.text().then(text => {
+                        console.log("Raw response:", text);
+                        throw new Error("Failed to parse JSON response");
+                    });
+                });
+            } else {
+                return response.text().then(text => {
+                    console.log("Non-JSON response:", text);
+                    try {
+                        // Try to parse it as JSON anyway
+                        return JSON.parse(text);
+                    } catch (e) {
+                        throw new Error("Received non-JSON response: " + text.substring(0, 100));
+                    }
+                });
+            }
+        })
+        .then(data => {
+            if (data.success) {
+                console.log("Order success, redirecting to:", data.redirect_url);
+                // Redirect to the receipt page
+                window.location.href = data.redirect_url;
+            } else {
+                // Show error message
+                alert('Error: ' + (data.error || 'Unknown error'));
+                console.error("Order failed:", data);
+                // Re-enable the submit button
+                submitButton.disabled = false;
+                submitButton.textContent = originalButtonText;
+            }
+        })
+        .catch(error => {
+            console.error('Error submitting order:', error);
+            alert('An error occurred while submitting the order. Please try again.');
+            // Re-enable the submit button
+            submitButton.disabled = false;
+            submitButton.textContent = originalButtonText;
+        });
     });
     
     // Calculate and update grand total
@@ -417,11 +574,14 @@
         
         rows.forEach(row => {
             const cells = row.querySelectorAll('td');
-            const rowTotal = parseFloat(cells[3].textContent.replace(/,/g, ''));
+            // Extract the numeric value from "UGX 12,345.67" format
+            const rowTotalText = cells[3].textContent;
+            const numericValue = rowTotalText.replace(/[^0-9.]/g, '');
+            const rowTotal = parseFloat(numericValue);
             grandTotal += rowTotal;
         });
         
-        document.getElementById('grandTotal').textContent = grandTotal.toLocaleString('en-US', {minimumFractionDigits: 2}) + ' UGX';
+        document.getElementById('grandTotal').textContent = 'UGX ' + grandTotal.toLocaleString('en-US', {minimumFractionDigits: 2});
     }
     
     // Reset the form
@@ -432,7 +592,7 @@
         });
         
         document.querySelector('#orderSummary tbody').innerHTML = '';
-        document.getElementById('grandTotal').textContent = '0.00 UGX';
+        document.getElementById('grandTotal').textContent = 'UGX 0.00';
         
         // Clear customer info
         document.getElementById('customer_name').value = '';
@@ -499,48 +659,118 @@
     
     // Separate function to update the orders display
     function updateOrdersDisplay(data) {
-        const orderCount = data.count;
+        console.log("Received API data:", data); // Debug output
+        
+        // Check if we have pending_orders in the response
+        const pendingOrders = data.pending_orders || [];
+        const orderCount = pendingOrders.length;
+        
+        console.log("Found " + orderCount + " pending orders"); // Debug output
+        
         document.getElementById('onlineOrderCount').textContent = orderCount;
         
         if (orderCount > 0) {
-            document.getElementById('onlineOrdersAlert').classList.add('show');
-            document.getElementById('onlineOrdersAlert').classList.remove('d-none');
+            // Ensure the alert is visible
+            const alertElement = document.getElementById('onlineOrdersAlert');
+            alertElement.classList.add('show');
+            alertElement.classList.remove('d-none');
             
-            // If there are new orders since last check, play sound
+            // If there are new orders since last check, show notification
             if (orderCount > lastOrderCount) {
-                playNewOrderAlarm();
+                // Show visual notification
+                showOrderNotification();
+                
+                // Highlight the alert more prominently
+                const alert = document.getElementById('onlineOrdersAlert');
+                alert.style.backgroundColor = '#fff3cd';
+                alert.style.color = '#664d03';
+                alert.style.borderColor = '#ffecb5';
+                
+                // Flash the alert a few times
+                let flashCount = 0;
+                const flashInterval = setInterval(() => {
+                    alert.style.backgroundColor = flashCount % 2 === 0 ? '#ffc107' : '#fff3cd';
+                    flashCount++;
+                    if (flashCount >= 6) {
+                        clearInterval(flashInterval);
+                        alert.style.backgroundColor = '#fff3cd';
+                    }
+                }, 500);
+                
+                // Show info toast message
+                if (typeof bootstrap !== 'undefined' && typeof bootstrap.Toast !== 'undefined') {
+                    const toastEl = document.createElement('div');
+                    toastEl.className = 'toast position-fixed top-0 end-0 m-3';
+                    toastEl.setAttribute('role', 'alert');
+                    toastEl.setAttribute('aria-live', 'assertive');
+                    toastEl.setAttribute('aria-atomic', 'true');
+                    toastEl.innerHTML = `
+                        <div class="toast-header bg-primary text-white">
+                            <i class="fas fa-bell me-2"></i>
+                            <strong class="me-auto">New Online Orders</strong>
+                            <small>${new Date().toLocaleTimeString()}</small>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">
+                            ${orderCount - lastOrderCount} new order(s) waiting to be processed.
+                            <div class="mt-2">
+                                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#onlineOrdersModal">
+                                    View Orders
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    document.body.appendChild(toastEl);
+                    const toast = new bootstrap.Toast(toastEl, { autohide: false });
+                    toast.show();
+                    
+                    // Remove toast when closed
+                    toastEl.addEventListener('hidden.bs.toast', function() {
+                        document.body.removeChild(toastEl);
+                    });
+                }
             }
             
             // Populate the orders table
             const tbody = document.querySelector('#onlineOrdersTable tbody');
             tbody.innerHTML = '';
             
-            data.orders.forEach(order => {
+            pendingOrders.forEach(order => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>#${order.id}</td>
                     <td>${order.customer_name}</td>
                     <td>
-                        <strong>Phone:</strong> ${order.customer_phone}<br>
+                        <strong>Phone:</strong> ${order.customer_phone || 'N/A'}<br>
                         <strong>Email:</strong> ${order.customer_email || 'N/A'}
                     </td>
                     <td>${order.customer_address || 'N/A'}</td>
                     <td>${order.order_date}</td>
-                    <td>${order.items_count} item(s)</td>
-                    <td>${order.total_amount.toLocaleString('en-US', {minimumFractionDigits: 2})} UGX</td>
+                    <td>${order.items_count || 1} item(s)</td>
+                    <td>UGX ${parseFloat(order.total_amount).toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
                     <td>
                         <a href="/receipt/${order.id}" class="btn btn-sm btn-info" target="_blank">View</a>
-                        <button onclick="markOrderProcessed(${order.id})" class="btn btn-sm btn-success">Mark Processed</button>
+                        <button onclick="markOrderProcessed(${order.id})" class="btn btn-sm btn-success">Process</button>
                     </td>
                 `;
                 tbody.appendChild(row);
             });
             
-            document.getElementById('noOrdersMessage').classList.add('d-none');
+            // If there's a no orders message, hide it
+            const noOrdersMessage = document.getElementById('noOrdersMessage');
+            if (noOrdersMessage) {
+                noOrdersMessage.classList.add('d-none');
+            }
         } else {
             document.getElementById('onlineOrdersAlert').classList.remove('show');
             document.getElementById('onlineOrdersAlert').classList.add('d-none');
-            document.getElementById('noOrdersMessage').classList.remove('d-none');
+            
+            // If there's a no orders message, show it
+            const noOrdersMessage = document.getElementById('noOrdersMessage');
+            if (noOrdersMessage) {
+                noOrdersMessage.classList.remove('d-none');
+            }
+            
             document.querySelector('#onlineOrdersTable tbody').innerHTML = '';
         }
         
@@ -548,6 +778,7 @@
     }
     
     function checkOnlineOrders() {
+        console.log("Checking for pending orders...");
         fetch('/api/pending_orders')
             .then(response => {
                 if (!response.ok) {
@@ -556,29 +787,26 @@
                 return response.json();
             })
             .then(data => {
+                console.log("Pending orders API response:", data);
                 updateOrdersDisplay(data);
+                
+                // Double-check display state
+                const pendingOrders = data.pending_orders || [];
+                if (pendingOrders.length > 0) {
+                    console.log("Ensuring alert is visible for " + pendingOrders.length + " orders");
+                    const alertElement = document.getElementById('onlineOrdersAlert');
+                    if (!alertElement.classList.contains('show') || alertElement.classList.contains('d-none')) {
+                        console.log("Alert was hidden, making it visible");
+                        alertElement.classList.add('show');
+                        alertElement.classList.remove('d-none');
+                    }
+                }
             })
             .catch(error => {
                 console.error('Error checking online orders:', error);
                 // Don't show error in the alert area during automatic checks
             });
     }
-    
-    // Check for online orders on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        checkOnlineOrders();
-        
-        // Check for new orders more frequently (every 20 seconds) for better responsiveness
-        setInterval(checkOnlineOrders, 20000);
-        
-        // Prefill modal fields when shown
-        document.getElementById('customerInfoModal').addEventListener('show.bs.modal', function() {
-            document.getElementById('modal_customer_name').value = document.getElementById('customer_name').value;
-            document.getElementById('modal_customer_phone').value = document.getElementById('customer_phone').value;
-            document.getElementById('modal_customer_email').value = document.getElementById('customer_email').value;
-            document.getElementById('modal_customer_address').value = document.getElementById('customer_address').value;
-        });
-    });
     
     // Add the markOrderProcessed function to the script section
     function markOrderProcessed(orderId) {

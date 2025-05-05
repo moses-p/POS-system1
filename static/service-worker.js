@@ -34,7 +34,15 @@ const NEVER_CACHE_ROUTES = [
   '/in_store_sale',
   '/reports',
   '/index',
-  '/edit_product'
+  '/edit_product',
+  '/api/stock_status',
+  '/product',
+  '/api/sales',
+  '/restock',
+  '/staff/orders',
+  '/staff/order',
+  '/get_cart_count',
+  '/receipt'
 ];
 
 // Flag to know if icon database is ready
@@ -148,7 +156,7 @@ self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
   const shouldNeverCache = NEVER_CACHE_ROUTES.some(route => {
     return url.pathname === route || url.pathname.endsWith(route);
-  });
+  }) || shouldAvoidCaching(event.request.url);
   
   // Dynamic page requested - NEVER cache, always go to network
   if (shouldNeverCache || url.pathname === '/' || event.request.mode === 'navigate') {
@@ -438,4 +446,31 @@ self.addEventListener('notificationclick', event => {
         return clients.openWindow('/in_store_sale');
     })
   );
-}); 
+});
+
+// Additional check to prevent caching for any URLs with product-related information
+function shouldAvoidCaching(url) {
+  const path = new URL(url).pathname;
+  const urlObj = new URL(url);
+  
+  // Check for paths that should never be cached
+  if (path.includes('product') || 
+      path.includes('inventory') || 
+      path.includes('stock') || 
+      path.includes('cart') ||
+      path.includes('order') ||
+      path.includes('api') ||
+      path.includes('checkout') ||
+      path.includes('receipt')) {
+    return true;
+  }
+  
+  // Check for query params that indicate fresh data is needed
+  if (urlObj.searchParams.has('_t') || 
+      urlObj.searchParams.has('cache_bust') ||
+      urlObj.searchParams.has('fresh')) {
+    return true;
+  }
+  
+  return false;
+} 

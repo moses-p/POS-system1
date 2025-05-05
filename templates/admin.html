@@ -36,7 +36,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Today's Total Sales</h5>
-                    <h2 class="card-text">UGX {{ "%.2f"|format(today_sales) }}</h2>
+                    <h2 class="card-text" id="todaySales">UGX {{ "%.2f"|format(today_sales) }}</h2>
                 </div>
             </div>
         </div>
@@ -44,7 +44,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Total Products</h5>
-                    <h2 class="card-text">{{ total_products }}</h2>
+                    <h2 class="card-text" id="totalProducts">{{ total_products }}</h2>
                 </div>
             </div>
         </div>
@@ -52,7 +52,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Low Stock Products</h5>
-                    <h2 class="card-text">{{ low_stock_products }}</h2>
+                    <h2 class="card-text" id="lowStockProducts">{{ low_stock_products }}</h2>
                 </div>
             </div>
         </div>
@@ -60,7 +60,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Out of Stock</h5>
-                    <h2 class="card-text">{{ out_of_stock_products }}</h2>
+                    <h2 class="card-text" id="outOfStockProducts">{{ out_of_stock_products }}</h2>
                 </div>
             </div>
         </div>
@@ -73,7 +73,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table">
+                <table class="table" id="stock-movements-table">
                     <thead>
                         <tr>
                             <th>Product</th>
@@ -106,7 +106,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table">
+                <table class="table" id="products-table">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -212,6 +212,18 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize dashboard and set up auto-refresh
+    initDashboard();
+    
+    // Immediately fetch latest stats after initializing chart
+    refreshDashboardData();
+    
+    // Set up auto-refresh for dashboard data every 30 seconds
+    setInterval(refreshDashboardData, 30000);
+});
+
+// Initialize the dashboard with chart and data
+function initDashboard() {
     const canvas = document.getElementById('salesChart');
     const dates = JSON.parse(canvas.dataset.dates);
     const salesData = JSON.parse(canvas.dataset.sales);
@@ -262,7 +274,184 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
-});
+}
+
+// Refresh dashboard data without page reload
+function refreshDashboardData() {
+    console.log("Refreshing dashboard data...");
+    
+    // Add a visual indicator that data is refreshing
+    const refreshIndicator = document.createElement('div');
+    refreshIndicator.id = 'refreshIndicator';
+    refreshIndicator.style.position = 'fixed';
+    refreshIndicator.style.top = '10px';
+    refreshIndicator.style.right = '10px';
+    refreshIndicator.style.backgroundColor = 'rgba(0, 123, 255, 0.8)';
+    refreshIndicator.style.color = 'white';
+    refreshIndicator.style.padding = '5px 10px';
+    refreshIndicator.style.borderRadius = '5px';
+    refreshIndicator.style.fontSize = '12px';
+    refreshIndicator.style.zIndex = '9999';
+    refreshIndicator.innerHTML = '<i class="fas fa-sync fa-spin me-1"></i> Refreshing...';
+    
+    // Add indicator to the page
+    document.body.appendChild(refreshIndicator);
+    
+    // Fetch updated statistics with cache-busting parameter and no-store cache mode
+    const statsUrl = `/api/admin_stats?_t=${Date.now()}`;
+    fetch(statsUrl, {
+        method: 'GET',
+        cache: 'no-store',
+        headers: {
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0',
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Update product statistics
+        const todaySalesEl = document.getElementById('todaySales');
+        if (todaySalesEl) todaySalesEl.textContent = 'UGX ' + parseFloat(data.today_sales).toFixed(2);
+
+        const totalProductsEl = document.getElementById('totalProducts');
+        if (totalProductsEl) totalProductsEl.textContent = data.total_products;
+
+        const lowStockEl = document.getElementById('lowStockProducts');
+        if (lowStockEl) lowStockEl.textContent = data.low_stock_products;
+
+        const outOfStockEl = document.getElementById('outOfStockProducts');
+        if (outOfStockEl) outOfStockEl.textContent = data.out_of_stock_products;
+        
+        // Update chart if sales data is available
+        if (data.sales_data && data.dates) {
+            updateSalesChart(data.dates, data.sales_data);
+        }
+        
+        // Success animation
+        refreshIndicator.style.backgroundColor = 'rgba(40, 167, 69, 0.8)';
+        refreshIndicator.innerHTML = '<i class="fas fa-check me-1"></i> Updated!';
+        
+        // Fade out and remove
+        setTimeout(() => {
+            refreshIndicator.style.opacity = '0';
+            refreshIndicator.style.transition = 'opacity 0.5s';
+            setTimeout(() => {
+                if (refreshIndicator.parentNode) {
+                    refreshIndicator.parentNode.removeChild(refreshIndicator);
+                }
+            }, 500);
+        }, 1000);
+        
+        console.log("Dashboard updated successfully");
+    })
+    .catch(error => {
+        console.error('Error refreshing dashboard:', error);
+        refreshIndicator.style.backgroundColor = 'rgba(220, 53, 69, 0.8)';
+        refreshIndicator.innerHTML = '<i class="fas fa-exclamation-triangle me-1"></i> Update failed!';
+        
+        // Fade out and remove after longer delay
+        setTimeout(() => {
+            refreshIndicator.style.opacity = '0';
+            refreshIndicator.style.transition = 'opacity 0.5s';
+            setTimeout(() => {
+                if (refreshIndicator.parentNode) {
+                    refreshIndicator.parentNode.removeChild(refreshIndicator);
+                }
+            }, 500);
+        }, 2000);
+    });
+    
+    // Refresh stock movements
+    refreshStockMovements();
+    
+    // Refresh product list
+    refreshProducts();
+}
+
+// Update sales chart with new data
+function updateSalesChart(dates, salesData) {
+    if (window.salesChart) {
+        window.salesChart.data.labels = dates;
+        window.salesChart.data.datasets[0].data = salesData;
+        window.salesChart.update();
+    }
+}
+
+// Refresh stock movements
+function refreshStockMovements() {
+    fetch('/api/stock_movements')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.movements) {
+                const tbody = document.querySelector('#stock-movements-table tbody');
+                if (tbody) {
+                    tbody.innerHTML = '';
+                    data.movements.forEach(movement => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${movement.product_name}</td>
+                            <td>${movement.movement_type}</td>
+                            <td>${movement.quantity} ${movement.unit}</td>
+                            <td>${movement.remaining_stock} ${movement.unit}</td>
+                            <td>${movement.timestamp}</td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                }
+            }
+        })
+        .catch(error => console.error('Error refreshing stock movements:', error));
+}
+
+// Refresh products list
+function refreshProducts() {
+    fetch('/api/products')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.products) {
+                const tbody = document.querySelector('#products-table tbody');
+                if (tbody) {
+                    // We don't want to completely replace the tbody as it has interactive elements
+                    // So just update the stock values and status
+                    const rows = tbody.querySelectorAll('tr');
+                    rows.forEach(row => {
+                        const productId = row.querySelector('button[data-product-id]')?.getAttribute('data-product-id');
+                        if (productId && data.products[productId]) {
+                            const product = data.products[productId];
+                            // Update stock field (4th column)
+                            const stockCell = row.cells[3];
+                            if (stockCell) {
+                                stockCell.textContent = parseFloat(product.stock).toFixed(2) + ' ' + product.unit;
+                            }
+                            
+                            // Update stock status (5th column) 
+                            const statusCell = row.cells[4];
+                            if (statusCell) {
+                                let badgeClass;
+                                let statusText;
+                                
+                                if (product.stock_status === 'low') {
+                                    badgeClass = 'bg-danger';
+                                    statusText = 'Low Stock';
+                                } else if (product.stock_status === 'high') {
+                                    badgeClass = 'bg-success';
+                                    statusText = 'High Stock';
+                                } else {
+                                    badgeClass = 'bg-primary';
+                                    statusText = 'Normal';
+                                }
+                                
+                                statusCell.innerHTML = `<span class="badge ${badgeClass}">${statusText}</span>`;
+                            }
+                        }
+                    });
+                }
+            }
+        })
+        .catch(error => console.error('Error refreshing products:', error));
+}
 
 // Function to update product price
 function updatePrice(productId) {
@@ -274,19 +463,47 @@ function updatePrice(productId) {
         return;
     }
     
-    // Create a form and submit it
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = `/quick_price_update/${productId}`;
+    // Show updating indicator
+    const updateBtn = document.querySelector(`button[data-product-id="${productId}"]`);
+    const originalText = updateBtn.textContent;
+    updateBtn.innerHTML = '<i class="fas fa-spin fa-spinner"></i>';
+    updateBtn.disabled = true;
     
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'price';
-    input.value = newPrice;
+    // Use AJAX instead of form submission to avoid page reload
+    fetch(`/quick_price_update/${productId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `price=${newPrice}`
+    })
+    .then(response => {
+        if (response.ok) {
+            // Show success
+            updateBtn.innerHTML = '<i class="fas fa-check"></i>';
+            setTimeout(() => {
+                updateBtn.innerHTML = originalText;
+                updateBtn.disabled = false;
+            }, 1500);
+            
+            // Also refresh the dashboard 
+            refreshDashboardData();
+        } else {
+            throw new Error('Price update failed');
+        }
+    })
+    .catch(error => {
+        console.error('Error updating price:', error);
+        updateBtn.innerHTML = '<i class="fas fa-times"></i>';
+        setTimeout(() => {
+            updateBtn.innerHTML = originalText;
+            updateBtn.disabled = false;
+        }, 1500);
+        alert('Failed to update price. Please try again.');
+    });
     
-    form.appendChild(input);
-    document.body.appendChild(form);
-    form.submit();
+    // Prevent default form submission
+    return false;
 }
 </script>
 {% endblock %}

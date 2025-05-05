@@ -31,16 +31,16 @@
                                 {% for item in order.items %}
                                 <tr>
                                     <td>{{ item.product.name }}</td>
-                                    <td>${{ "%.2f"|format(item.price) }}</td>
+                                    <td>UGX {{ "%.2f"|format(item.price) }}</td>
                                     <td>{{ item.quantity }}</td>
-                                    <td>${{ "%.2f"|format(item.price * item.quantity) }}</td>
+                                    <td>UGX {{ "%.2f"|format(item.price * item.quantity) }}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <td colspan="3" class="text-end"><strong>Total:</strong></td>
-                                    <td><strong>${{ "%.2f"|format(order.items|sum(attribute='price') * order.items|sum(attribute='quantity')) }}</strong></td>
+                                    <td><strong>UGX {{ "%.2f"|format(order.items|sum(attribute='price') * order.items|sum(attribute='quantity')) }}</strong></td>
                                 </tr>
                             </tfoot>
                         </table>

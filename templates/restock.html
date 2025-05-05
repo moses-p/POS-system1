@@ -15,7 +15,7 @@
                     <div class="progress mb-3">
                         <div class="progress-bar bg-{{ 'danger' if product.stock_percentage < 20 else 'warning' if product.stock_percentage < 50 else 'success' }}"
                              role="progressbar"
-                             style="width: {{ product.stock_percentage }}%"
+                             style="width: {{ product.stock_percentage|default(0, true) ~ '%' }}"
                              aria-valuenow="{{ product.stock_percentage }}"
                              aria-valuemin="0"
                              aria-valuemax="100">
@@ -33,12 +33,17 @@
                                    step="0.01" 
                                    min="0.01" 
                                    max="{{ product.max_stock - product.stock }}"
-                                   required>
+                                   required{% if product.max_stock - product.stock <= 0 %} disabled{% endif %}>
                             <div class="form-text">
                                 Maximum amount you can add: {{ "%.2f"|format(product.max_stock - product.stock) }} {{ product.unit }}
                             </div>
                         </div>
+                        {% if product.max_stock - product.stock <= 0 %}
+                        <div class="alert alert-info">Product is already at maximum stock.</div>
+                        <button type="submit" class="btn btn-primary" disabled>Restock</button>
+                        {% else %}
                         <button type="submit" class="btn btn-primary">Restock</button>
+                        {% endif %}
                         <a href="{{ url_for('admin') }}" class="btn btn-secondary">Cancel</a>
                     </form>
                 </div>

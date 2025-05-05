@@ -10,16 +10,21 @@
     <div class="card mb-4" id="dailyDateSelector">
         <div class="card-body">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label for="startDate" class="form-label">Start Date</label>
                     <input type="date" class="form-control" id="startDate">
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label for="endDate" class="form-label">End Date</label>
                     <input type="date" class="form-control" id="endDate">
                 </div>
-                <div class="col-md-4 d-flex align-items-end">
+                <div class="col-md-3 d-flex align-items-end">
                     <button class="btn btn-primary" id="updateDailyReportBtn">Update Report</button>
+                </div>
+                <div class="col-md-3 d-flex align-items-end justify-content-end">
+                    <button class="btn btn-outline-secondary" id="refreshReportBtn">
+                        <i class="fas fa-sync-alt me-1"></i> Refresh Data
+                    </button>
                 </div>
             </div>
         </div>
@@ -658,14 +663,14 @@
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${date}</td>
-                <td>${sales.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
-                <td>${profit.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                <td>UGX ${sales.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                <td>UGX ${profit.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
             `;
             tbody.appendChild(row);
         });
         
-        document.getElementById('dailySalesTotal').textContent = totalSales.toLocaleString('en-US', {minimumFractionDigits: 2});
-        document.getElementById('dailyProfitTotal').textContent = totalProfit.toLocaleString('en-US', {minimumFractionDigits: 2});
+        document.getElementById('dailySalesTotal').textContent = 'UGX ' + totalSales.toLocaleString('en-US', {minimumFractionDigits: 2});
+        document.getElementById('dailyProfitTotal').textContent = 'UGX ' + totalProfit.toLocaleString('en-US', {minimumFractionDigits: 2});
     }
     
     function updateWeeklyTable(data) {
@@ -685,14 +690,14 @@
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${week}</td>
-                <td>${sales.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
-                <td>${profit.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                <td>UGX ${sales.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                <td>UGX ${profit.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
             `;
             tbody.appendChild(row);
         });
         
-        document.getElementById('weeklySalesTotal').textContent = totalSales.toLocaleString('en-US', {minimumFractionDigits: 2});
-        document.getElementById('weeklyProfitTotal').textContent = totalProfit.toLocaleString('en-US', {minimumFractionDigits: 2});
+        document.getElementById('weeklySalesTotal').textContent = 'UGX ' + totalSales.toLocaleString('en-US', {minimumFractionDigits: 2});
+        document.getElementById('weeklyProfitTotal').textContent = 'UGX ' + totalProfit.toLocaleString('en-US', {minimumFractionDigits: 2});
     }
     
     function updateMonthlyTable(data) {
@@ -712,14 +717,14 @@
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${month}</td>
-                <td>${sales.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
-                <td>${profit.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                <td>UGX ${sales.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                <td>UGX ${profit.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
             `;
             tbody.appendChild(row);
         });
         
-        document.getElementById('monthlySalesTotal').textContent = totalSales.toLocaleString('en-US', {minimumFractionDigits: 2});
-        document.getElementById('monthlyProfitTotal').textContent = totalProfit.toLocaleString('en-US', {minimumFractionDigits: 2});
+        document.getElementById('monthlySalesTotal').textContent = 'UGX ' + totalSales.toLocaleString('en-US', {minimumFractionDigits: 2});
+        document.getElementById('monthlyProfitTotal').textContent = 'UGX ' + totalProfit.toLocaleString('en-US', {minimumFractionDigits: 2});
     }
     
     function updateYearlyTable(data) {
@@ -739,14 +744,16 @@
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${year}</td>
-                <td>${sales.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
-                <td>${profit.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                <td>UGX ${sales.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                <td>UGX ${profit.toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
             `;
             tbody.appendChild(row);
         });
         
-        document.getElementById('yearlySalesTotal').textContent = totalSales.toLocaleString('en-US', {minimumFractionDigits: 2});
-        document.getElementById('yearlyProfitTotal').textContent = totalProfit.toLocaleString('en-US', {minimumFractionDigits: 2});
+        document.getElementById('yearlySalesTotal').textContent = 'UGX ' + totalSales.toLocaleString('en-US', {minimumFractionDigits: 2});
+        document.getElementById('yearlyProfitTotal').textContent = 'UGX ' + totalProfit.toLocaleString('en-US', {minimumFractionDigits: 2});
     }
 </script>
+<!-- Add auto-refresh functionality -->
+<script src="{{ url_for('static', filename='js/reports.js') }}?v={{ timestamp }}"></script>
 {% endblock %} 

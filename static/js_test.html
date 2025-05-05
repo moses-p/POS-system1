@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JavaScript Loading Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        h1 {
+            color: #333;
+        }
+        .test-section {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+        .result {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #log {
+            padding: 10px;
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>JavaScript Loading Test</h1>
+        
+        <div class="test-section">
+            <h2>1. Testing app.js Loading</h2>
+            <div id="loadResult" class="result">Testing...</div>
+            <button id="reloadBtn">Reload Script</button>
+        </div>
+        
+        <div class="test-section">
+            <h2>2. Testing refreshStock Function</h2>
+            <div id="refreshResult" class="result">Not tested yet</div>
+            <button id="testRefreshBtn">Test refreshStock()</button>
+        </div>
+        
+        <div class="test-section">
+            <h2>3. Testing Stock API</h2>
+            <div id="apiResult" class="result">Not tested yet</div>
+            <button id="testApiBtn">Test API Call</button>
+        </div>
+        
+        <div class="test-section">
+            <h2>Console Log</h2>
+            <div id="log"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Override console.log to show in our log div
+        const originalConsoleLog = console.log;
+        console.log = function() {
+            const args = Array.from(arguments);
+            const log = document.getElementById('log');
+            log.innerHTML += args.map(arg => 
+                typeof arg === 'object' ? JSON.stringify(arg) : arg
+            ).join(' ') + '<br>';
+            log.scrollTop = log.scrollHeight;
+            originalConsoleLog.apply(console, arguments);
+        };
+        
+        // Testing app.js loading
+        function testAppJs() {
+            const loadResult = document.getElementById('loadResult');
+            
+            try {
+                // Create script element
+                const script = document.createElement('script');
+                script.src = '/static/js/app.js?_t=' + new Date().getTime();
+                script.id = 'appJsScript';
+                
+                // Set up onload and onerror handlers
+                script.onload = function() {
+                    loadResult.textContent = 'app.js loaded successfully!';
+                    loadResult.className = 'result success';
+                    console.log('app.js loaded successfully');
+                    
+                    // Check if refreshStock function exists
+                    if (typeof window.refreshStock === 'function') {
+                        console.log('refreshStock function found');
+                    } else {
+                        console.log('refreshStock function NOT found');
+                    }
+                };
+                
+                script.onerror = function() {
+                    loadResult.textContent = 'Failed to load app.js';
+                    loadResult.className = 'result error';
+                    console.log('Failed to load app.js');
+                };
+                
+                // Remove any existing script
+                const existingScript = document.getElementById('appJsScript');
+                if (existingScript) {
+                    existingScript.remove();
+                }
+                
+                // Add the script to the document
+                document.body.appendChild(script);
+            } catch (error) {
+                loadResult.textContent = 'Error: ' + error.message;
+                loadResult.className = 'result error';
+                console.log('Error testing app.js:', error);
+            }
+        }
+        
+        // Testing refreshStock function
+        document.getElementById('testRefreshBtn').addEventListener('click', function() {
+            const refreshResult = document.getElementById('refreshResult');
+            
+            try {
+                if (typeof window.refreshStock === 'function') {
+                    console.log('Calling refreshStock()...');
+                    
+                    // Create a mock product stock element for testing
+                    const testElement = document.createElement('div');
+                    testElement.className = 'product-stock';
+                    testElement.setAttribute('data-product-id', '1');
+                    testElement.textContent = 'Stock: 0';
+                    document.body.appendChild(testElement);
+                    
+                    // Call the refreshStock function
+                    window.refreshStock()
+                        .then(result => {
+                            console.log('refreshStock result:', result);
+                            refreshResult.textContent = 'refreshStock called successfully';
+                            refreshResult.className = 'result success';
+                            
+                            // Check if the test element was updated
+                            setTimeout(() => {
+                                console.log('Test element content after refresh:', testElement.textContent);
+                            }, 1000);
+                        })
+                        .catch(error => {
+                            console.log('refreshStock error:', error);
+                            refreshResult.textContent = 'Error: ' + error.message;
+                            refreshResult.className = 'result error';
+                        });
+                } else {
+                    refreshResult.textContent = 'refreshStock function not found';
+                    refreshResult.className = 'result error';
+                    console.log('refreshStock function not found');
+                }
+            } catch (error) {
+                refreshResult.textContent = 'Error: ' + error.message;
+                refreshResult.className = 'result error';
+                console.log('Error testing refreshStock:', error);
+            }
+        });
+        
+        // Testing Stock API directly
+        document.getElementById('testApiBtn').addEventListener('click', function() {
+            const apiResult = document.getElementById('apiResult');
+            
+            try {
+                console.log('Testing API directly...');
+                
+                // Add timestamp to prevent caching
+                const timestamp = new Date().getTime();
+                const url = `/api/stock_status?_t=${timestamp}`;
+                
+                fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
+                    }
+                })
+                .then(response => {
+                    console.log('API response status:', response.status);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('API response data:', data);
+                    
+                    if (data.success) {
+                        const productCount = Object.keys(data.products || {}).length;
+                        apiResult.textContent = `Success! Found ${productCount} products`;
+                        apiResult.className = 'result success';
+                    } else {
+                        apiResult.textContent = 'API returned error: ' + (data.error || 'Unknown error');
+                        apiResult.className = 'result error';
+                    }
+                })
+                .catch(error => {
+                    console.log('API fetch error:', error);
+                    apiResult.textContent = 'Error: ' + error.message;
+                    apiResult.className = 'result error';
+                });
+            } catch (error) {
+                apiResult.textContent = 'Error: ' + error.message;
+                apiResult.className = 'result error';
+                console.log('Error testing API:', error);
+            }
+        });
+        
+        // Reload script button
+        document.getElementById('reloadBtn').addEventListener('click', function() {
+            testAppJs();
+        });
+        
+        // Run the test when the page loads
+        window.onload = testAppJs;
+    </script>
+</body>
+</html> 

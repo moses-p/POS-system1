@@ -9,7 +9,7 @@ if exist "build" rmdir /s /q "build"
 
 REM Run PyInstaller
 echo Running PyInstaller...
-python -m PyInstaller pos_app.spec --noconfirm
+python -m PyInstaller --onefile --windowed --name "POS System" --add-data "templates;templates" --add-data "static;static" --add-data "instance;instance" --add-data "migrations;migrations" --add-data ".env;." --add-data "check_and_init_db.py;." --add-data "Install.bat;." pos_launcher.py
 
 REM Copy the Install.bat file to the distribution folder
 echo Copying installation script...

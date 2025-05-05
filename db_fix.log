@@ -1,3 +1,4 @@
 2025-04-30 20:02:05,875 INFO: Database backed up to backups/pos_backup_20250430_200205.db
 2025-04-30 20:02:05,876 INFO: Current order table columns: ['id', 'reference_number', 'customer_id', 'order_date', 'total_amount', 'status', 'customer_name', 'customer_phone', 'customer_email', 'customer_address', 'order_type', 'created_by_id', 'updated_at', 'completed_at', 'viewed', 'viewed_at']
 2025-04-30 20:02:05,877 INFO: Order table schema is already correct
+2025-05-03 03:34:41,426 INFO: Database backed up to backups/pos_backup_20250503_033441.db

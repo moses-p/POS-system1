@@ -204,14 +204,15 @@
             <h1>AG GENIUS UG LTD</h1>
             <p>Quality Fresh Produce</p>
             <p>Kampala, Uganda</p>
-            <p>Tel: +256 743232445 / +256752215976</p>
+            <p>Make your order now and get it delivered to your doorstep</p>
+            <p>Tel: +256752215976</p>
         </div>
         
         <div class="receipt-body">
             <div class="receipt-info">
                 <div><strong>RECEIPT</strong></div>
                 <div>Order #: {{ order.id }}</div>
-                <div>Date: {% if order.order_date is string %}{{ order.order_date }}{% else %}{{ order.order_date.strftime('%Y-%m-%d %H:%M:%S') if order.order_date else 'N/A' }}{% endif %}</div>
+                <div>Date: {{ order.order_date|localtime if order.order_date else 'N/A' }}</div>
                 <div>Customer: {{ order.customer_name or 'Guest' }}</div>
                 <div>Type: {{ order.order_type|capitalize }}</div>
             </div>
@@ -229,7 +230,7 @@
                     <tr>
                         <td class="qty">{{ item.quantity }}</td>
                         <td class="desc">{{ item.product.name }}</td>
-                        <td class="amount">{{ "{:,.0f}".format(item.price * item.quantity) }}</td>
+                        <td class="amount">UGX {{ "{:,.0f}".format(item.price * item.quantity) }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
