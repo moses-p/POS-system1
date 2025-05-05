@@ -1,8 +1,15 @@
 // Service Worker for POS System
 // Handles caching and offline functionality
 
-const CACHE_NAME = 'pos-system-v3'; // Increment cache version to force refresh
-const OFFLINE_URL = '/offline.html';
+const CACHE_NAME = 'pos-system-cache-v1';
+const urlsToCache = [
+    '/',
+    '/static/css/style.css',
+    '/static/js/app.js',
+    '/static/js/inventory_management.js',
+    '/static/js/reports.js',
+    '/templates/offline.html'
+];
 
 // Don't add volatile timestamps that change with every request
 // const CACHE_VERSION = new Date().toISOString(); 
@@ -96,198 +103,43 @@ self.addEventListener('message', (event) => {
 
 // Install event - cache the assets
 self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Opened cache');
-        return cache.addAll(ASSETS_TO_CACHE);
-      })
-      .then(() => self.skipWaiting())
-  );
+    event.waitUntil(
+        caches.open(CACHE_NAME)
+            .then(cache => cache.addAll(urlsToCache))
+    );
 });
 
 // Activate event - clean up old caches and claim clients immediately
 self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys()
-      .then(cacheNames => {
-      return Promise.all(
-          cacheNames
-            .filter(cacheName => {
-              return cacheName.startsWith('pos-system-') && cacheName !== CACHE_NAME;
-            })
-            .map(cacheName => {
-              console.log('Deleting old cache:', cacheName);
-          return caches.delete(cacheName);
+    event.waitUntil(
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.map(cacheName => {
+                    if (cacheName !== CACHE_NAME) {
+                        return caches.delete(cacheName);
+                    }
+                })
+            );
         })
-      );
-      })
-      .then(() => {
-        // Claim any clients immediately to update service worker
-        return self.clients.claim();
-      })
-  );
+    );
 });
 
 // Fetch event - serve from cache or fetch from network
 self.addEventListener('fetch', event => {
-  // Skip cross-origin requests
-  if (!event.request.url.startsWith(self.location.origin)) {
-    return;
-  }
-
-  // Skip non-GET requests
-  if (event.request.method !== 'GET') {
-    // For API calls when offline, we'll handle them in the app
-    if (event.request.url.includes('/api/') && !navigator.onLine) {
-      event.respondWith(
-        new Response(JSON.stringify({ 
-          error: 'You are offline',
-          offline: true
-        }), {
-          headers: { 'Content-Type': 'application/json' }
-        })
-      );
-    }
-    return;
-  }
-
-  // Check if URL should never be cached
-  const url = new URL(event.request.url);
-  const shouldNeverCache = NEVER_CACHE_ROUTES.some(route => {
-    return url.pathname === route || url.pathname.endsWith(route);
-  }) || shouldAvoidCaching(event.request.url);
-  
-  // Dynamic page requested - NEVER cache, always go to network
-  if (shouldNeverCache || url.pathname === '/' || event.request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request)
-        .catch(() => {
-          // If network fails, serve the offline page
-          return caches.match(OFFLINE_URL);
-        })
-    );
-    return;
-  }
-
-  // Handle generated icon requests - these are special URLs we'll intercept
-  if (event.request.url.includes('generated-icons/icon-')) {
-    const sizeMatch = event.request.url.match(/icon-(\d+)\.png/);
-    if (sizeMatch && sizeMatch[1]) {
-      const size = parseInt(sizeMatch[1]);
-      event.respondWith(createIconResponse(size));
-      return;
-    }
-  }
-
-  // Special handling for icon requests from the manifest
-  if (event.request.url.includes('/images/icons/')) {
-    event.respondWith(
-      caches.match(event.request)
-        .then(cachedResponse => {
-          if (cachedResponse) {
-            return cachedResponse;
-          }
-          
-          // Try to get from network
-          return fetch(event.request)
+        caches.match(event.request)
             .then(response => {
-              // Clone the response - one to return, one to cache
-              if (response && response.status === 200) {
-                const responseToCache = response.clone();
-                caches.open(CACHE_NAME)
-                  .then(cache => {
-                    cache.put(event.request, responseToCache);
-                  });
-                return response;
-              }
-              
-              // If icon not found, get a dynamically generated one
-              const sizeMatch = event.request.url.match(/icon-(\d+)x(\d+)\.png/);
-              if (sizeMatch && sizeMatch[1]) {
-                const size = parseInt(sizeMatch[1]);
-                return getIconFromIndexedDB(`icon-${size}x${size}`);
-              }
-              
-              // Default fallback
-              return getIconFromIndexedDB('icon-144x144');
+                if (response) {
+                    return response;
+                }
+                return fetch(event.request)
+                    .catch(() => {
+                        if (event.request.mode === 'navigate') {
+                            return caches.match('/templates/offline.html');
+                        }
+                    });
             })
-            .catch(() => {
-              // Network error, try to get from IndexedDB
-              const sizeMatch = event.request.url.match(/icon-(\d+)x(\d+)\.png/);
-              if (sizeMatch && sizeMatch[1]) {
-                const size = parseInt(sizeMatch[1]);
-                return getIconFromIndexedDB(`icon-${size}x${size}`);
-              }
-              
-              // Default fallback
-              return getIconFromIndexedDB('icon-144x144');
-            });
-        })
     );
-    return;
-  }
-
-  // Handle API requests - never cache these, always go to network
-  if (event.request.url.includes('/api/')) {
-    event.respondWith(
-      fetch(event.request)
-        .catch(error => {
-          // Network unavailable
-          return new Response(JSON.stringify({ 
-            error: 'You are offline',
-            offline: true
-          }), {
-            headers: { 'Content-Type': 'application/json' }
-          });
-        })
-    );
-    return;
-  }
-
-  // Handle static assets - use cache-first strategy
-  event.respondWith(
-    caches.match(event.request)
-      .then(cachedResponse => {
-        if (cachedResponse) {
-          return cachedResponse;
-        }
-
-        return fetch(event.request)
-          .then(response => {
-            // Don't cache responses that aren't successful
-            if (!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-
-            // Clone the response - one to return, one to cache
-            const responseToCache = response.clone();
-
-            caches.open(CACHE_NAME)
-              .then(cache => {
-                cache.put(event.request, responseToCache);
-              });
-
-            return response;
-          })
-          .catch(error => {
-            // If the network is unavailable, try to serve the offline page
-            if (event.request.mode === 'navigate') {
-              return caches.match(OFFLINE_URL);
-            }
-            
-            // For image requests, return a fallback
-            if (event.request.destination === 'image') {
-              return getIconFromIndexedDB('offline-image');
-            }
-
-            return new Response('Network error happened', {
-              status: 408,
-              headers: { 'Content-Type': 'text/plain' }
-            });
-          });
-      })
-  );
 });
 
 // Function to get an icon from IndexedDB
