@@ -27943,3 +27943,964 @@ WHERE user.username = ?
 2025-05-18 11:01:32,916 INFO: 127.0.0.1 - - [18/May/2025 11:01:32] "GET /api/stock_status?_t=1747555292904 HTTP/1.1" 200 -
 2025-05-18 11:02:32,913 INFO: 127.0.0.1 - - [18/May/2025 11:02:32] "GET /api/stock_status?_t=1747555352900 HTTP/1.1" 200 -
 2025-05-18 11:03:32,906 INFO: 127.0.0.1 - - [18/May/2025 11:03:32] "GET /api/stock_status?_t=1747555412895 HTTP/1.1" 200 -
+2025-05-18 11:04:32,919 INFO: 127.0.0.1 - - [18/May/2025 11:04:32] "GET /api/stock_status?_t=1747555472898 HTTP/1.1" 200 -
+2025-05-18 11:05:32,901 INFO: 127.0.0.1 - - [18/May/2025 11:05:32] "GET /api/stock_status?_t=1747555532895 HTTP/1.1" 200 -
+2025-05-18 11:06:12,392 INFO: Database tables created successfully
+2025-05-18 11:06:12,394 INFO: Database integrity check passed
+2025-05-18 11:06:12,416 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.162:5000
+2025-05-18 11:06:12,417 INFO: [33mPress CTRL+C to quit[0m
+2025-05-18 11:06:12,418 INFO:  * Restarting with stat
+2025-05-18 11:06:15,199 INFO: Database tables created successfully
+2025-05-18 11:06:15,203 INFO: Database integrity check passed
+2025-05-18 11:06:15,221 WARNING:  * Debugger is active!
+2025-05-18 11:06:15,232 INFO:  * Debugger PIN: 316-371-929
+2025-05-18 11:06:15,271 INFO: 127.0.0.1 - - [18/May/2025 11:06:15] "GET /socket.io/?EIO=4&transport=polling&t=PRYRTob HTTP/1.1" 200 -
+2025-05-18 11:06:15,284 INFO: 127.0.0.1 - - [18/May/2025 11:06:15] "POST /socket.io/?EIO=4&transport=polling&t=PRYRUNi&sid=PBqUpNmIdKHqQCxoAAAA HTTP/1.1" 200 -
+2025-05-18 11:06:15,292 INFO: 127.0.0.1 - - [18/May/2025 11:06:15] "GET /socket.io/?EIO=4&transport=polling&t=PRYRUNk&sid=PBqUpNmIdKHqQCxoAAAA HTTP/1.1" 200 -
+2025-05-18 11:06:18,069 INFO: 127.0.0.1 - - [18/May/2025 11:06:18] "GET /api/stock_status?_t=1747555578026 HTTP/1.1" 200 -
+2025-05-18 11:06:21,749 INFO: 127.0.0.1 - - [18/May/2025 11:06:21] "GET /socket.io/?EIO=4&transport=websocket&sid=PBqUpNmIdKHqQCxoAAAA HTTP/1.1" 200 -
+2025-05-18 11:06:21,920 INFO: 127.0.0.1 - - [18/May/2025 11:06:21] "GET / HTTP/1.1" 200 -
+2025-05-18 11:06:21,987 WARNING: Unhandled path requested: None
+2025-05-18 11:06:21,990 INFO: 127.0.0.1 - - [18/May/2025 11:06:21] "[32mGET /None HTTP/1.1[0m" 302 -
+2025-05-18 11:06:22,013 INFO: 127.0.0.1 - - [18/May/2025 11:06:22] "GET / HTTP/1.1" 200 -
+2025-05-18 11:06:22,161 INFO: 127.0.0.1 - - [18/May/2025 11:06:22] "GET /static/css/style.css?v=b8bbf966&t=1747555574 HTTP/1.1" 200 -
+2025-05-18 11:06:22,161 INFO: 127.0.0.1 - - [18/May/2025 11:06:22] "GET /static/images/logo.png HTTP/1.1" 200 -
+2025-05-18 11:06:22,376 WARNING: Unhandled path requested: None
+2025-05-18 11:06:22,390 INFO: 127.0.0.1 - - [18/May/2025 11:06:22] "[32mGET /None HTTP/1.1[0m" 302 -
+2025-05-18 11:06:22,395 INFO: 127.0.0.1 - - [18/May/2025 11:06:22] "GET /static/js/app.js?v=1747555574 HTTP/1.1" 200 -
+2025-05-18 11:06:22,396 INFO: 127.0.0.1 - - [18/May/2025 11:06:22] "GET /static/js/manifest-fix.js HTTP/1.1" 200 -
+2025-05-18 11:06:22,398 INFO: 127.0.0.1 - - [18/May/2025 11:06:22] "GET /static/js/main.js HTTP/1.1" 200 -
+2025-05-18 11:06:22,404 INFO: 127.0.0.1 - - [18/May/2025 11:06:22] "GET /static/js/service-worker-update.js HTTP/1.1" 200 -
+2025-05-18 11:06:22,459 INFO: 127.0.0.1 - - [18/May/2025 11:06:22] "GET / HTTP/1.1" 200 -
+2025-05-18 11:06:22,672 INFO: 127.0.0.1 - - [18/May/2025 11:06:22] "GET /socket.io/?EIO=4&transport=polling&t=PRYRWB7 HTTP/1.1" 200 -
+2025-05-18 11:06:22,702 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:06:22,711 INFO: 127.0.0.1 - - [18/May/2025 11:06:22] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:06:22,723 INFO: 127.0.0.1 - - [18/May/2025 11:06:22] "GET /service-worker.js?v=1747555582689 HTTP/1.1" 200 -
+2025-05-18 11:06:22,739 INFO: 127.0.0.1 - - [18/May/2025 11:06:22] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:06:22,760 INFO: 127.0.0.1 - - [18/May/2025 11:06:22] "GET /api/stock_status?_t=1747555582694 HTTP/1.1" 200 -
+2025-05-18 11:06:22,774 INFO: 127.0.0.1 - - [18/May/2025 11:06:22] "GET /api/stock_status?_t=1747555582705 HTTP/1.1" 200 -
+2025-05-18 11:06:22,782 INFO: 127.0.0.1 - - [18/May/2025 11:06:22] "POST /socket.io/?EIO=4&transport=polling&t=PRYRWB-&sid=8NSPe48Rel_S3QCsAAAC HTTP/1.1" 200 -
+2025-05-18 11:06:22,806 INFO: 127.0.0.1 - - [18/May/2025 11:06:22] "GET /socket.io/?EIO=4&transport=polling&t=PRYRWC1&sid=8NSPe48Rel_S3QCsAAAC HTTP/1.1" 200 -
+2025-05-18 11:06:22,826 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:06:22,839 INFO: 127.0.0.1 - - [18/May/2025 11:06:22] "GET / HTTP/1.1" 200 -
+2025-05-18 11:06:22,841 INFO: 127.0.0.1 - - [18/May/2025 11:06:22] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:06:22,887 INFO: 127.0.0.1 - - [18/May/2025 11:06:22] "GET / HTTP/1.1" 200 -
+2025-05-18 11:06:23,033 INFO: 127.0.0.1 - - [18/May/2025 11:06:23] "GET /static/images/icons/favicon-32x32.png?v=b8bbf966 HTTP/1.1" 200 -
+2025-05-18 11:06:32,715 INFO: 127.0.0.1 - - [18/May/2025 11:06:32] "GET /api/stock_status?_t=1747555592705 HTTP/1.1" 200 -
+2025-05-18 11:06:42,724 INFO: 127.0.0.1 - - [18/May/2025 11:06:42] "GET /api/stock_status?_t=1747555602712 HTTP/1.1" 200 -
+2025-05-18 11:06:52,714 INFO: 127.0.0.1 - - [18/May/2025 11:06:52] "GET /api/stock_status?_t=1747555612705 HTTP/1.1" 200 -
+2025-05-18 11:07:02,728 INFO: 127.0.0.1 - - [18/May/2025 11:07:02] "GET /api/stock_status?_t=1747555622718 HTTP/1.1" 200 -
+2025-05-18 11:07:12,727 INFO: 127.0.0.1 - - [18/May/2025 11:07:12] "GET /api/stock_status?_t=1747555632715 HTTP/1.1" 200 -
+2025-05-18 11:07:22,715 INFO: 127.0.0.1 - - [18/May/2025 11:07:22] "GET /api/stock_status?_t=1747555642705 HTTP/1.1" 200 -
+2025-05-18 11:07:32,716 INFO: 127.0.0.1 - - [18/May/2025 11:07:32] "GET /api/stock_status?_t=1747555652706 HTTP/1.1" 200 -
+2025-05-18 11:07:42,716 INFO: 127.0.0.1 - - [18/May/2025 11:07:42] "GET /api/stock_status?_t=1747555662711 HTTP/1.1" 200 -
+2025-05-18 11:07:52,731 INFO: 127.0.0.1 - - [18/May/2025 11:07:52] "GET /api/stock_status?_t=1747555672719 HTTP/1.1" 200 -
+2025-05-18 11:08:02,918 INFO: 127.0.0.1 - - [18/May/2025 11:08:02] "GET /api/stock_status?_t=1747555682908 HTTP/1.1" 200 -
+2025-05-18 11:08:12,916 INFO: 127.0.0.1 - - [18/May/2025 11:08:12] "GET /api/stock_status?_t=1747555692903 HTTP/1.1" 200 -
+2025-05-18 11:08:22,927 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:08:22,929 INFO: 127.0.0.1 - - [18/May/2025 11:08:22] "GET /api/stock_status?_t=1747555702912 HTTP/1.1" 200 -
+2025-05-18 11:08:22,936 INFO: 127.0.0.1 - - [18/May/2025 11:08:22] "GET /service-worker.js?v=1747555582689 HTTP/1.1" 200 -
+2025-05-18 11:08:32,906 INFO: 127.0.0.1 - - [18/May/2025 11:08:32] "GET /api/stock_status?_t=1747555712898 HTTP/1.1" 200 -
+2025-05-18 11:08:42,917 INFO: 127.0.0.1 - - [18/May/2025 11:08:42] "GET /api/stock_status?_t=1747555722904 HTTP/1.1" 200 -
+2025-05-18 11:08:52,922 INFO: 127.0.0.1 - - [18/May/2025 11:08:52] "GET /api/stock_status?_t=1747555732909 HTTP/1.1" 200 -
+2025-05-18 11:09:32,917 INFO: 127.0.0.1 - - [18/May/2025 11:09:32] "GET /api/stock_status?_t=1747555772904 HTTP/1.1" 200 -
+2025-05-18 11:10:27,810 INFO: Database tables created successfully
+2025-05-18 11:10:27,814 INFO: Database integrity check passed
+2025-05-18 11:10:27,852 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.162:5000
+2025-05-18 11:10:27,854 INFO: [33mPress CTRL+C to quit[0m
+2025-05-18 11:10:27,855 INFO:  * Restarting with stat
+2025-05-18 11:10:30,835 INFO: Database tables created successfully
+2025-05-18 11:10:30,839 INFO: Database integrity check passed
+2025-05-18 11:10:30,856 WARNING:  * Debugger is active!
+2025-05-18 11:10:30,866 INFO:  * Debugger PIN: 316-371-929
+2025-05-18 11:10:30,908 INFO: 127.0.0.1 - - [18/May/2025 11:10:30] "GET /socket.io/?EIO=4&transport=polling&t=PRYSS2t HTTP/1.1" 200 -
+2025-05-18 11:10:30,919 INFO: 127.0.0.1 - - [18/May/2025 11:10:30] "POST /socket.io/?EIO=4&transport=polling&t=PRYSSo1&sid=jD5YHdt9UmL9gNqyAAAA HTTP/1.1" 200 -
+2025-05-18 11:10:30,926 INFO: 127.0.0.1 - - [18/May/2025 11:10:30] "GET /socket.io/?EIO=4&transport=polling&t=PRYSSo3&sid=jD5YHdt9UmL9gNqyAAAA HTTP/1.1" 200 -
+2025-05-18 11:10:32,777 INFO: 127.0.0.1 - - [18/May/2025 11:10:32] "GET /api/stock_status?_t=1747555832743 HTTP/1.1" 200 -
+2025-05-18 11:10:38,820 INFO: 127.0.0.1 - - [18/May/2025 11:10:38] "GET /socket.io/?EIO=4&transport=websocket&sid=jD5YHdt9UmL9gNqyAAAA HTTP/1.1" 200 -
+2025-05-18 11:10:38,986 INFO: 127.0.0.1 - - [18/May/2025 11:10:38] "GET / HTTP/1.1" 200 -
+2025-05-18 11:10:39,047 WARNING: Unhandled path requested: None
+2025-05-18 11:10:39,051 INFO: 127.0.0.1 - - [18/May/2025 11:10:39] "[32mGET /None HTTP/1.1[0m" 302 -
+2025-05-18 11:10:39,074 INFO: 127.0.0.1 - - [18/May/2025 11:10:39] "GET / HTTP/1.1" 200 -
+2025-05-18 11:10:39,295 INFO: 127.0.0.1 - - [18/May/2025 11:10:39] "GET /static/images/logo.png HTTP/1.1" 200 -
+2025-05-18 11:10:39,297 INFO: 127.0.0.1 - - [18/May/2025 11:10:39] "GET /static/css/style.css?v=c711c4a3&t=1747555830 HTTP/1.1" 200 -
+2025-05-18 11:10:39,439 WARNING: Unhandled path requested: None
+2025-05-18 11:10:39,444 INFO: 127.0.0.1 - - [18/May/2025 11:10:39] "[32mGET /None HTTP/1.1[0m" 302 -
+2025-05-18 11:10:39,451 INFO: 127.0.0.1 - - [18/May/2025 11:10:39] "GET /static/js/app.js?v=1747555830 HTTP/1.1" 200 -
+2025-05-18 11:10:39,458 INFO: 127.0.0.1 - - [18/May/2025 11:10:39] "GET /static/js/service-worker-update.js HTTP/1.1" 200 -
+2025-05-18 11:10:39,459 INFO: 127.0.0.1 - - [18/May/2025 11:10:39] "GET /static/js/main.js HTTP/1.1" 200 -
+2025-05-18 11:10:39,460 INFO: 127.0.0.1 - - [18/May/2025 11:10:39] "GET /static/js/manifest-fix.js HTTP/1.1" 200 -
+2025-05-18 11:10:39,526 INFO: 127.0.0.1 - - [18/May/2025 11:10:39] "GET / HTTP/1.1" 200 -
+2025-05-18 11:10:39,743 INFO: 127.0.0.1 - - [18/May/2025 11:10:39] "GET /socket.io/?EIO=4&transport=polling&t=PRYSUxs HTTP/1.1" 200 -
+2025-05-18 11:10:39,782 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:10:39,796 INFO: 127.0.0.1 - - [18/May/2025 11:10:39] "GET /api/stock_status?_t=1747555839775 HTTP/1.1" 200 -
+2025-05-18 11:10:39,805 INFO: 127.0.0.1 - - [18/May/2025 11:10:39] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:10:39,811 INFO: 127.0.0.1 - - [18/May/2025 11:10:39] "GET /service-worker.js?v=1747555839769 HTTP/1.1" 200 -
+2025-05-18 11:10:39,820 INFO: 127.0.0.1 - - [18/May/2025 11:10:39] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:10:39,858 INFO: 127.0.0.1 - - [18/May/2025 11:10:39] "GET /api/stock_status?_t=1747555839782 HTTP/1.1" 200 -
+2025-05-18 11:10:39,874 INFO: 127.0.0.1 - - [18/May/2025 11:10:39] "POST /socket.io/?EIO=4&transport=polling&t=PRYSUyo&sid=pW9k_ogEYbpiIMexAAAC HTTP/1.1" 200 -
+2025-05-18 11:10:39,904 INFO: 127.0.0.1 - - [18/May/2025 11:10:39] "GET /socket.io/?EIO=4&transport=polling&t=PRYSUyr&sid=pW9k_ogEYbpiIMexAAAC HTTP/1.1" 200 -
+2025-05-18 11:10:39,931 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:10:39,939 INFO: 127.0.0.1 - - [18/May/2025 11:10:39] "GET / HTTP/1.1" 200 -
+2025-05-18 11:10:39,942 INFO: 127.0.0.1 - - [18/May/2025 11:10:39] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:10:39,944 INFO: 127.0.0.1 - - [18/May/2025 11:10:39] "GET /socket.io/?EIO=4&transport=polling&t=PRYSU-u&sid=pW9k_ogEYbpiIMexAAAC HTTP/1.1" 200 -
+2025-05-18 11:10:39,973 INFO: 127.0.0.1 - - [18/May/2025 11:10:39] "GET / HTTP/1.1" 200 -
+2025-05-18 11:10:39,993 INFO: 127.0.0.1 - - [18/May/2025 11:10:39] "GET /static/images/icons/favicon-32x32.png?v=c711c4a3 HTTP/1.1" 200 -
+2025-05-18 11:10:49,802 INFO: 127.0.0.1 - - [18/May/2025 11:10:49] "GET /api/stock_status?_t=1747555849793 HTTP/1.1" 200 -
+2025-05-18 11:10:59,884 INFO: 127.0.0.1 - - [18/May/2025 11:10:59] "GET /api/stock_status?_t=1747555859783 HTTP/1.1" 200 -
+2025-05-18 11:11:09,802 INFO: 127.0.0.1 - - [18/May/2025 11:11:09] "GET /api/stock_status?_t=1747555869792 HTTP/1.1" 200 -
+2025-05-18 11:11:19,805 INFO: 127.0.0.1 - - [18/May/2025 11:11:19] "GET /api/stock_status?_t=1747555879795 HTTP/1.1" 200 -
+2025-05-18 11:11:27,640 INFO: 127.0.0.1 - - [18/May/2025 11:11:27] "GET /socket.io/?EIO=4&transport=websocket&sid=pW9k_ogEYbpiIMexAAAC HTTP/1.1" 200 -
+2025-05-18 11:11:27,703 INFO: 127.0.0.1 - - [18/May/2025 11:11:27] "GET /login?_t=1747555879812 HTTP/1.1" 200 -
+2025-05-18 11:11:27,932 INFO: 127.0.0.1 - - [18/May/2025 11:11:27] "GET /socket.io/?EIO=4&transport=polling&t=PRYSgiu HTTP/1.1" 200 -
+2025-05-18 11:11:27,957 INFO: 127.0.0.1 - - [18/May/2025 11:11:27] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:11:27,959 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:11:27,963 INFO: 127.0.0.1 - - [18/May/2025 11:11:27] "GET /service-worker.js?v=1747555887951 HTTP/1.1" 200 -
+2025-05-18 11:11:27,964 INFO: 127.0.0.1 - - [18/May/2025 11:11:27] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:11:27,977 INFO: 127.0.0.1 - - [18/May/2025 11:11:27] "POST /socket.io/?EIO=4&transport=polling&t=PRYSgjR&sid=HtxsiDMFpWeAvOhaAAAE HTTP/1.1" 200 -
+2025-05-18 11:11:27,991 INFO: 127.0.0.1 - - [18/May/2025 11:11:27] "GET /socket.io/?EIO=4&transport=polling&t=PRYSgjT&sid=HtxsiDMFpWeAvOhaAAAE HTTP/1.1" 200 -
+2025-05-18 11:11:28,008 INFO: 127.0.0.1 - - [18/May/2025 11:11:28] "GET / HTTP/1.1" 200 -
+2025-05-18 11:11:28,018 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:11:28,020 INFO: 127.0.0.1 - - [18/May/2025 11:11:28] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:11:28,034 INFO: 127.0.0.1 - - [18/May/2025 11:11:28] "GET / HTTP/1.1" 200 -
+2025-05-18 11:11:29,606 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:11:29,611 INFO: 127.0.0.1 - - [18/May/2025 11:11:29] "GET /service-worker.js?v=1747555887951 HTTP/1.1" 200 -
+2025-05-18 11:11:36,679 INFO: 127.0.0.1 - - [18/May/2025 11:11:36] "GET /socket.io/?EIO=4&transport=websocket&sid=HtxsiDMFpWeAvOhaAAAE HTTP/1.1" 200 -
+2025-05-18 11:11:36,740 INFO: 127.0.0.1 - - [18/May/2025 11:11:36] "POST /login HTTP/1.1" 200 -
+2025-05-18 11:11:36,852 INFO: 127.0.0.1 - - [18/May/2025 11:11:36] "GET /socket.io/?EIO=4&transport=polling&t=PRYSiuB HTTP/1.1" 200 -
+2025-05-18 11:11:36,882 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:11:36,889 INFO: 127.0.0.1 - - [18/May/2025 11:11:36] "GET /service-worker.js?v=1747555896867 HTTP/1.1" 200 -
+2025-05-18 11:11:36,912 INFO: 127.0.0.1 - - [18/May/2025 11:11:36] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:11:36,931 INFO: 127.0.0.1 - - [18/May/2025 11:11:36] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:11:36,945 INFO: 127.0.0.1 - - [18/May/2025 11:11:36] "GET /?cache_bust=1747555896868 HTTP/1.1" 200 -
+2025-05-18 11:11:36,984 INFO: 127.0.0.1 - - [18/May/2025 11:11:36] "GET / HTTP/1.1" 200 -
+2025-05-18 11:11:37,004 WARNING: Unhandled path requested: None
+2025-05-18 11:11:37,006 INFO: 127.0.0.1 - - [18/May/2025 11:11:37] "[32mGET /None HTTP/1.1[0m" 302 -
+2025-05-18 11:11:37,019 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:11:37,023 INFO: 127.0.0.1 - - [18/May/2025 11:11:37] "GET /socket.io/?EIO=4&transport=polling&t=PRYSiwq HTTP/1.1" 200 -
+2025-05-18 11:11:37,027 INFO: 127.0.0.1 - - [18/May/2025 11:11:37] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:11:37,032 INFO: 127.0.0.1 - - [18/May/2025 11:11:37] "GET / HTTP/1.1" 200 -
+2025-05-18 11:11:37,045 INFO: 127.0.0.1 - - [18/May/2025 11:11:37] "GET / HTTP/1.1" 200 -
+2025-05-18 11:11:37,088 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:11:37,097 INFO: 127.0.0.1 - - [18/May/2025 11:11:37] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:11:37,097 INFO: 127.0.0.1 - - [18/May/2025 11:11:37] "GET /service-worker.js?v=1747555897074 HTTP/1.1" 200 -
+2025-05-18 11:11:37,099 INFO: 127.0.0.1 - - [18/May/2025 11:11:37] "GET /api/stock_status?_t=1747555897085 HTTP/1.1" 200 -
+2025-05-18 11:11:37,105 INFO: 127.0.0.1 - - [18/May/2025 11:11:37] "GET /api/stock_status?_t=1747555897093 HTTP/1.1" 200 -
+2025-05-18 11:11:37,112 INFO: 127.0.0.1 - - [18/May/2025 11:11:37] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:11:37,131 INFO: 127.0.0.1 - - [18/May/2025 11:11:37] "POST /socket.io/?EIO=4&transport=polling&t=PRYSiyT&sid=EQn47mrj181l74coAAAH HTTP/1.1" 200 -
+2025-05-18 11:11:37,137 INFO: 127.0.0.1 - - [18/May/2025 11:11:37] "GET /socket.io/?EIO=4&transport=polling&t=PRYSiyU&sid=EQn47mrj181l74coAAAH HTTP/1.1" 200 -
+2025-05-18 11:11:37,154 INFO: 127.0.0.1 - - [18/May/2025 11:11:37] "GET / HTTP/1.1" 200 -
+2025-05-18 11:11:37,158 INFO: 127.0.0.1 - - [18/May/2025 11:11:37] "GET /socket.io/?EIO=4&transport=polling&t=PRYSiy-&sid=EQn47mrj181l74coAAAH HTTP/1.1" 200 -
+2025-05-18 11:11:37,166 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:11:37,169 INFO: 127.0.0.1 - - [18/May/2025 11:11:37] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:11:37,181 INFO: 127.0.0.1 - - [18/May/2025 11:11:37] "GET / HTTP/1.1" 200 -
+2025-05-18 11:11:38,733 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:11:38,739 INFO: 127.0.0.1 - - [18/May/2025 11:11:38] "GET /service-worker.js?v=1747555897074 HTTP/1.1" 200 -
+2025-05-18 11:11:39,944 INFO: 127.0.0.1 - - [18/May/2025 11:11:39] "GET /socket.io/?EIO=4&transport=websocket&sid=EQn47mrj181l74coAAAH HTTP/1.1" 200 -
+2025-05-18 11:11:39,980 INFO: 127.0.0.1 - - [18/May/2025 11:11:39] "GET /login?_t=1747555897131 HTTP/1.1" 200 -
+2025-05-18 11:11:40,103 INFO: 127.0.0.1 - - [18/May/2025 11:11:40] "GET /socket.io/?EIO=4&transport=polling&t=PRYSjg- HTTP/1.1" 200 -
+2025-05-18 11:11:40,142 INFO: 127.0.0.1 - - [18/May/2025 11:11:40] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:11:40,147 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:11:40,167 INFO: 127.0.0.1 - - [18/May/2025 11:11:40] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:11:40,181 INFO: 127.0.0.1 - - [18/May/2025 11:11:40] "GET /service-worker.js?v=1747555900123 HTTP/1.1" 200 -
+2025-05-18 11:11:40,211 INFO: 127.0.0.1 - - [18/May/2025 11:11:40] "POST /socket.io/?EIO=4&transport=polling&t=PRYSjh-&sid=TyTxeg1a4DrcW0OlAAAJ HTTP/1.1" 200 -
+2025-05-18 11:11:40,235 INFO: 127.0.0.1 - - [18/May/2025 11:11:40] "GET /socket.io/?EIO=4&transport=polling&t=PRYSji2&sid=TyTxeg1a4DrcW0OlAAAJ HTTP/1.1" 200 -
+2025-05-18 11:11:40,297 INFO: 127.0.0.1 - - [18/May/2025 11:11:40] "GET / HTTP/1.1" 200 -
+2025-05-18 11:11:40,306 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:11:40,310 INFO: 127.0.0.1 - - [18/May/2025 11:11:40] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:11:40,330 INFO: 127.0.0.1 - - [18/May/2025 11:11:40] "GET / HTTP/1.1" 200 -
+2025-05-18 11:11:41,828 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:11:41,833 INFO: 127.0.0.1 - - [18/May/2025 11:11:41] "GET /service-worker.js?v=1747555900123 HTTP/1.1" 200 -
+2025-05-18 11:11:45,321 INFO: 127.0.0.1 - - [18/May/2025 11:11:45] "GET /socket.io/?EIO=4&transport=websocket&sid=TyTxeg1a4DrcW0OlAAAJ HTTP/1.1" 200 -
+2025-05-18 11:11:45,364 INFO: 127.0.0.1 - - [18/May/2025 11:11:45] "POST /login HTTP/1.1" 200 -
+2025-05-18 11:11:45,506 INFO: 127.0.0.1 - - [18/May/2025 11:11:45] "GET /socket.io/?EIO=4&transport=polling&t=PRYSk_A HTTP/1.1" 200 -
+2025-05-18 11:11:45,526 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:11:45,540 INFO: 127.0.0.1 - - [18/May/2025 11:11:45] "GET /service-worker.js?v=1747555905511 HTTP/1.1" 200 -
+2025-05-18 11:11:45,555 INFO: 127.0.0.1 - - [18/May/2025 11:11:45] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:11:45,589 INFO: 127.0.0.1 - - [18/May/2025 11:11:45] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:11:45,598 INFO: 127.0.0.1 - - [18/May/2025 11:11:45] "GET /?cache_bust=1747555905513 HTTP/1.1" 200 -
+2025-05-18 11:11:45,655 WARNING: Unhandled path requested: None
+2025-05-18 11:11:45,657 INFO: 127.0.0.1 - - [18/May/2025 11:11:45] "[32mGET /None HTTP/1.1[0m" 302 -
+2025-05-18 11:11:45,659 INFO: 127.0.0.1 - - [18/May/2025 11:11:45] "GET / HTTP/1.1" 200 -
+2025-05-18 11:11:45,673 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:11:45,675 INFO: 127.0.0.1 - - [18/May/2025 11:11:45] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:11:45,677 INFO: 127.0.0.1 - - [18/May/2025 11:11:45] "GET /socket.io/?EIO=4&transport=polling&t=PRYSl20 HTTP/1.1" 200 -
+2025-05-18 11:11:45,701 INFO: 127.0.0.1 - - [18/May/2025 11:11:45] "GET / HTTP/1.1" 200 -
+2025-05-18 11:11:45,711 INFO: 127.0.0.1 - - [18/May/2025 11:11:45] "GET / HTTP/1.1" 200 -
+2025-05-18 11:11:45,767 INFO: 127.0.0.1 - - [18/May/2025 11:11:45] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:11:45,770 INFO: 127.0.0.1 - - [18/May/2025 11:11:45] "GET /api/stock_status?_t=1747555905752 HTTP/1.1" 200 -
+2025-05-18 11:11:45,776 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:11:45,787 INFO: 127.0.0.1 - - [18/May/2025 11:11:45] "GET /api/stock_status?_t=1747555905755 HTTP/1.1" 200 -
+2025-05-18 11:11:45,792 INFO: 127.0.0.1 - - [18/May/2025 11:11:45] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:11:45,792 INFO: 127.0.0.1 - - [18/May/2025 11:11:45] "GET /service-worker.js?v=1747555905750 HTTP/1.1" 200 -
+2025-05-18 11:11:45,805 INFO: 127.0.0.1 - - [18/May/2025 11:11:45] "POST /socket.io/?EIO=4&transport=polling&t=PRYSl3i&sid=wNbwjqGWj4q5CrzQAAAM HTTP/1.1" 200 -
+2025-05-18 11:11:45,816 INFO: 127.0.0.1 - - [18/May/2025 11:11:45] "GET /socket.io/?EIO=4&transport=polling&t=PRYSl3k&sid=wNbwjqGWj4q5CrzQAAAM HTTP/1.1" 200 -
+2025-05-18 11:11:45,843 INFO: 127.0.0.1 - - [18/May/2025 11:11:45] "GET / HTTP/1.1" 200 -
+2025-05-18 11:11:45,846 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:11:45,851 INFO: 127.0.0.1 - - [18/May/2025 11:11:45] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:11:45,869 INFO: 127.0.0.1 - - [18/May/2025 11:11:45] "GET / HTTP/1.1" 200 -
+2025-05-18 11:11:47,423 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:11:47,428 INFO: 127.0.0.1 - - [18/May/2025 11:11:47] "GET /service-worker.js?v=1747555905750 HTTP/1.1" 200 -
+2025-05-18 11:11:48,452 INFO: 127.0.0.1 - - [18/May/2025 11:11:48] "GET /socket.io/?EIO=4&transport=websocket&sid=wNbwjqGWj4q5CrzQAAAM HTTP/1.1" 200 -
+2025-05-18 11:11:48,485 INFO: 127.0.0.1 - - [18/May/2025 11:11:48] "GET /login?_t=1747555905811 HTTP/1.1" 200 -
+2025-05-18 11:11:48,617 INFO: 127.0.0.1 - - [18/May/2025 11:11:48] "GET /socket.io/?EIO=4&transport=polling&t=PRYSll_ HTTP/1.1" 200 -
+2025-05-18 11:11:48,656 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:11:48,663 INFO: 127.0.0.1 - - [18/May/2025 11:11:48] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:11:48,671 INFO: 127.0.0.1 - - [18/May/2025 11:11:48] "GET /service-worker.js?v=1747555908638 HTTP/1.1" 200 -
+2025-05-18 11:11:48,692 INFO: 127.0.0.1 - - [18/May/2025 11:11:48] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:11:48,728 INFO: 127.0.0.1 - - [18/May/2025 11:11:48] "POST /socket.io/?EIO=4&transport=polling&t=PRYSln5&sid=0ellezOoUt2EmxJDAAAO HTTP/1.1" 200 -
+2025-05-18 11:11:48,741 INFO: 127.0.0.1 - - [18/May/2025 11:11:48] "GET /socket.io/?EIO=4&transport=polling&t=PRYSln8&sid=0ellezOoUt2EmxJDAAAO HTTP/1.1" 200 -
+2025-05-18 11:11:48,765 INFO: 127.0.0.1 - - [18/May/2025 11:11:48] "GET / HTTP/1.1" 200 -
+2025-05-18 11:11:48,768 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:11:48,770 INFO: 127.0.0.1 - - [18/May/2025 11:11:48] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:11:48,782 INFO: 127.0.0.1 - - [18/May/2025 11:11:48] "GET / HTTP/1.1" 200 -
+2025-05-18 11:11:50,354 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:11:50,359 INFO: 127.0.0.1 - - [18/May/2025 11:11:50] "GET /service-worker.js?v=1747555908638 HTTP/1.1" 200 -
+2025-05-18 11:12:13,258 INFO: 127.0.0.1 - - [18/May/2025 11:12:13] "GET /socket.io/?EIO=4&transport=websocket&sid=0ellezOoUt2EmxJDAAAO HTTP/1.1" 200 -
+2025-05-18 11:12:13,301 INFO: 127.0.0.1 - - [18/May/2025 11:12:13] "POST /login HTTP/1.1" 200 -
+2025-05-18 11:12:13,427 INFO: 127.0.0.1 - - [18/May/2025 11:12:13] "GET /socket.io/?EIO=4&transport=polling&t=PRYSrpe HTTP/1.1" 200 -
+2025-05-18 11:12:13,516 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:12:13,523 INFO: 127.0.0.1 - - [18/May/2025 11:12:13] "GET /service-worker.js?v=1747555933506 HTTP/1.1" 200 -
+2025-05-18 11:12:13,544 INFO: 127.0.0.1 - - [18/May/2025 11:12:13] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:12:13,566 INFO: 127.0.0.1 - - [18/May/2025 11:12:13] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:12:13,603 INFO: 127.0.0.1 - - [18/May/2025 11:12:13] "GET /?cache_bust=1747555933507 HTTP/1.1" 200 -
+2025-05-18 11:12:13,635 INFO: 127.0.0.1 - - [18/May/2025 11:12:13] "GET / HTTP/1.1" 200 -
+2025-05-18 11:12:13,678 WARNING: Unhandled path requested: None
+2025-05-18 11:12:13,680 INFO: 127.0.0.1 - - [18/May/2025 11:12:13] "[32mGET /None HTTP/1.1[0m" 302 -
+2025-05-18 11:12:13,683 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:12:13,686 INFO: 127.0.0.1 - - [18/May/2025 11:12:13] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:12:13,704 INFO: 127.0.0.1 - - [18/May/2025 11:12:13] "GET / HTTP/1.1" 200 -
+2025-05-18 11:12:13,715 INFO: 127.0.0.1 - - [18/May/2025 11:12:13] "GET / HTTP/1.1" 200 -
+2025-05-18 11:12:13,716 INFO: 127.0.0.1 - - [18/May/2025 11:12:13] "GET /socket.io/?EIO=4&transport=polling&t=PRYSruD HTTP/1.1" 200 -
+2025-05-18 11:12:13,756 INFO: 127.0.0.1 - - [18/May/2025 11:12:13] "GET /api/stock_status?_t=1747555933743 HTTP/1.1" 200 -
+2025-05-18 11:12:13,759 INFO: 127.0.0.1 - - [18/May/2025 11:12:13] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:12:13,771 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:12:13,775 INFO: 127.0.0.1 - - [18/May/2025 11:12:13] "GET /api/stock_status?_t=1747555933746 HTTP/1.1" 200 -
+2025-05-18 11:12:13,780 INFO: 127.0.0.1 - - [18/May/2025 11:12:13] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:12:13,783 INFO: 127.0.0.1 - - [18/May/2025 11:12:13] "POST /socket.io/?EIO=4&transport=polling&t=PRYSrv1&sid=t2XjIT446ryw6B0PAAAR HTTP/1.1" 200 -
+2025-05-18 11:12:13,789 INFO: 127.0.0.1 - - [18/May/2025 11:12:13] "GET /service-worker.js?v=1747555933742 HTTP/1.1" 200 -
+2025-05-18 11:12:13,795 INFO: 127.0.0.1 - - [18/May/2025 11:12:13] "GET /socket.io/?EIO=4&transport=polling&t=PRYSrv2&sid=t2XjIT446ryw6B0PAAAR HTTP/1.1" 200 -
+2025-05-18 11:12:13,825 INFO: 127.0.0.1 - - [18/May/2025 11:12:13] "GET / HTTP/1.1" 200 -
+2025-05-18 11:12:13,827 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:12:13,829 INFO: 127.0.0.1 - - [18/May/2025 11:12:13] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:12:13,843 INFO: 127.0.0.1 - - [18/May/2025 11:12:13] "GET / HTTP/1.1" 200 -
+2025-05-18 11:12:15,372 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:12:15,377 INFO: 127.0.0.1 - - [18/May/2025 11:12:15] "GET /service-worker.js?v=1747555933742 HTTP/1.1" 200 -
+2025-05-18 11:12:15,494 INFO: 127.0.0.1 - - [18/May/2025 11:12:15] "GET /socket.io/?EIO=4&transport=websocket&sid=t2XjIT446ryw6B0PAAAR HTTP/1.1" 200 -
+2025-05-18 11:12:15,530 INFO: 127.0.0.1 - - [18/May/2025 11:12:15] "GET /login?_t=1747555933792 HTTP/1.1" 200 -
+2025-05-18 11:12:15,651 INFO: 127.0.0.1 - - [18/May/2025 11:12:15] "GET /socket.io/?EIO=4&transport=polling&t=PRYSsMN HTTP/1.1" 200 -
+2025-05-18 11:12:15,688 INFO: 127.0.0.1 - - [18/May/2025 11:12:15] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:12:15,693 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:12:15,703 INFO: 127.0.0.1 - - [18/May/2025 11:12:15] "GET /service-worker.js?v=1747555935669 HTTP/1.1" 200 -
+2025-05-18 11:12:15,721 INFO: 127.0.0.1 - - [18/May/2025 11:12:15] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:12:15,756 INFO: 127.0.0.1 - - [18/May/2025 11:12:15] "POST /socket.io/?EIO=4&transport=polling&t=PRYSsNU&sid=J8ky4KLL55zstCUDAAAT HTTP/1.1" 200 -
+2025-05-18 11:12:15,764 INFO: 127.0.0.1 - - [18/May/2025 11:12:15] "GET /socket.io/?EIO=4&transport=polling&t=PRYSsNd&sid=J8ky4KLL55zstCUDAAAT HTTP/1.1" 200 -
+2025-05-18 11:12:15,793 INFO: 127.0.0.1 - - [18/May/2025 11:12:15] "GET /socket.io/?EIO=4&transport=polling&t=PRYSsOf&sid=J8ky4KLL55zstCUDAAAT HTTP/1.1" 200 -
+2025-05-18 11:12:15,811 INFO: 127.0.0.1 - - [18/May/2025 11:12:15] "GET / HTTP/1.1" 200 -
+2025-05-18 11:12:15,813 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:12:15,815 INFO: 127.0.0.1 - - [18/May/2025 11:12:15] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:12:15,826 INFO: 127.0.0.1 - - [18/May/2025 11:12:15] "GET / HTTP/1.1" 200 -
+2025-05-18 11:12:17,372 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:12:17,377 INFO: 127.0.0.1 - - [18/May/2025 11:12:17] "GET /service-worker.js?v=1747555935669 HTTP/1.1" 200 -
+2025-05-18 11:12:53,899 INFO: 127.0.0.1 - - [18/May/2025 11:12:53] "GET /socket.io/?EIO=4&transport=websocket&sid=J8ky4KLL55zstCUDAAAT HTTP/1.1" 200 -
+2025-05-18 11:12:57,201 INFO: 127.0.0.1 - - [18/May/2025 11:12:57] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-18 11:12:57,327 INFO: 127.0.0.1 - - [18/May/2025 11:12:57] "GET /admin HTTP/1.1" 200 -
+2025-05-18 11:12:57,475 INFO: 127.0.0.1 - - [18/May/2025 11:12:57] "GET /socket.io/?EIO=4&transport=polling&t=PRYT0Z_ HTTP/1.1" 200 -
+2025-05-18 11:12:57,564 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:12:57,569 INFO: 127.0.0.1 - - [18/May/2025 11:12:57] "GET /service-worker.js?v=1747555977541 HTTP/1.1" 200 -
+2025-05-18 11:12:57,585 INFO: 127.0.0.1 - - [18/May/2025 11:12:57] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:12:57,623 INFO: 127.0.0.1 - - [18/May/2025 11:12:57] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:12:57,640 INFO: 127.0.0.1 - - [18/May/2025 11:12:57] "[36mGET /static/js/inventory_management.js HTTP/1.1[0m" 304 -
+2025-05-18 11:12:57,681 INFO: 127.0.0.1 - - [18/May/2025 11:12:57] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-18 11:12:57,700 INFO: 127.0.0.1 - - [18/May/2025 11:12:57] "[36mGET /static/js/reports.js HTTP/1.1[0m" 304 -
+2025-05-18 11:12:57,716 INFO: 127.0.0.1 - - [18/May/2025 11:12:57] "GET / HTTP/1.1" 200 -
+2025-05-18 11:12:57,747 INFO: 127.0.0.1 - - [18/May/2025 11:12:57] "POST /socket.io/?EIO=4&transport=polling&t=PRYT0dc&sid=6tGSxSaQd7nJLn-AAAAV HTTP/1.1" 200 -
+2025-05-18 11:12:57,761 INFO: 127.0.0.1 - - [18/May/2025 11:12:57] "GET /socket.io/?EIO=4&transport=polling&t=PRYT0de&sid=6tGSxSaQd7nJLn-AAAAV HTTP/1.1" 200 -
+2025-05-18 11:12:57,779 INFO: 127.0.0.1 - - [18/May/2025 11:12:57] "GET /socket.io/?EIO=4&transport=polling&t=PRYT0ed&sid=6tGSxSaQd7nJLn-AAAAV HTTP/1.1" 200 -
+2025-05-18 11:12:57,789 INFO: 127.0.0.1 - - [18/May/2025 11:12:57] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:12:57,813 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:12:57,815 INFO: 127.0.0.1 - - [18/May/2025 11:12:57] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:12:57,850 INFO: 127.0.0.1 - - [18/May/2025 11:12:57] "GET /static/images/icons/favicon-32x32.png?v= HTTP/1.1" 200 -
+2025-05-18 11:12:57,862 INFO: 127.0.0.1 - - [18/May/2025 11:12:57] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:12:57,879 INFO: 127.0.0.1 - - [18/May/2025 11:12:57] "GET /api/admin_stats?_t=1747555977650 HTTP/1.1" 200 -
+2025-05-18 11:12:57,887 INFO: 127.0.0.1 - - [18/May/2025 11:12:57] "GET / HTTP/1.1" 200 -
+2025-05-18 11:12:59,654 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:12:59,660 INFO: 127.0.0.1 - - [18/May/2025 11:12:59] "GET /service-worker.js?v=1747555977541 HTTP/1.1" 200 -
+2025-05-18 11:13:15,045 INFO: 127.0.0.1 - - [18/May/2025 11:13:15] "GET /socket.io/?EIO=4&transport=websocket&sid=6tGSxSaQd7nJLn-AAAAV HTTP/1.1" 200 -
+2025-05-18 11:13:15,150 INFO: 127.0.0.1 - - [18/May/2025 11:13:15] "GET /admin?_t=1747555979460 HTTP/1.1" 200 -
+2025-05-18 11:13:15,342 INFO: 127.0.0.1 - - [18/May/2025 11:13:15] "GET /socket.io/?EIO=4&transport=polling&t=PRYT4wl HTTP/1.1" 200 -
+2025-05-18 11:13:15,404 INFO: 127.0.0.1 - - [18/May/2025 11:13:15] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:13:15,430 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:13:15,470 INFO: 127.0.0.1 - - [18/May/2025 11:13:15] "GET /service-worker.js?v=1747555995345 HTTP/1.1" 200 -
+2025-05-18 11:13:15,514 INFO: 127.0.0.1 - - [18/May/2025 11:13:15] "POST /socket.io/?EIO=4&transport=polling&t=PRYT4zb&sid=Ijax2HlIXjxGsy1aAAAX HTTP/1.1" 200 -
+2025-05-18 11:13:15,521 INFO: 127.0.0.1 - - [18/May/2025 11:13:15] "GET /socket.io/?EIO=4&transport=polling&t=PRYT4ze&sid=Ijax2HlIXjxGsy1aAAAX HTTP/1.1" 200 -
+2025-05-18 11:13:15,552 INFO: 127.0.0.1 - - [18/May/2025 11:13:15] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:13:15,561 INFO: 127.0.0.1 - - [18/May/2025 11:13:15] "GET /socket.io/?EIO=4&transport=polling&t=PRYT4-N&sid=Ijax2HlIXjxGsy1aAAAX HTTP/1.1" 200 -
+2025-05-18 11:13:15,591 INFO: 127.0.0.1 - - [18/May/2025 11:13:15] "GET / HTTP/1.1" 200 -
+2025-05-18 11:13:15,618 INFO: 127.0.0.1 - - [18/May/2025 11:13:15] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:13:15,643 INFO: 127.0.0.1 - - [18/May/2025 11:13:15] "GET /api/admin_stats?_t=1747555995428 HTTP/1.1" 200 -
+2025-05-18 11:13:15,658 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:13:15,660 INFO: 127.0.0.1 - - [18/May/2025 11:13:15] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:13:15,665 INFO: 127.0.0.1 - - [18/May/2025 11:13:15] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:13:15,696 INFO: 127.0.0.1 - - [18/May/2025 11:13:15] "GET / HTTP/1.1" 200 -
+2025-05-18 11:13:17,473 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:13:17,478 INFO: 127.0.0.1 - - [18/May/2025 11:13:17] "GET /service-worker.js?v=1747555995345 HTTP/1.1" 200 -
+2025-05-18 11:13:45,494 INFO: 127.0.0.1 - - [18/May/2025 11:13:45] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:13:45,517 INFO: 127.0.0.1 - - [18/May/2025 11:13:45] "GET /api/admin_stats?_t=1747556025437 HTTP/1.1" 200 -
+2025-05-18 11:13:45,526 INFO: 127.0.0.1 - - [18/May/2025 11:13:45] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:13:48,468 INFO: 127.0.0.1 - - [18/May/2025 11:13:48] "GET /socket.io/?EIO=4&transport=websocket&sid=Ijax2HlIXjxGsy1aAAAX HTTP/1.1" 200 -
+2025-05-18 11:13:48,552 INFO: 127.0.0.1 - - [18/May/2025 11:13:48] "[32mPOST /admin/delete_staff/6 HTTP/1.1[0m" 302 -
+2025-05-18 11:13:48,665 INFO: 127.0.0.1 - - [18/May/2025 11:13:48] "GET /admin/manage_staff HTTP/1.1" 200 -
+2025-05-18 11:13:48,839 INFO: 127.0.0.1 - - [18/May/2025 11:13:48] "GET /socket.io/?EIO=4&transport=polling&t=PRYTD6J HTTP/1.1" 200 -
+2025-05-18 11:13:48,895 INFO: 127.0.0.1 - - [18/May/2025 11:13:48] "POST /socket.io/?EIO=4&transport=polling&t=PRYTD7B&sid=7hY63XShnM5n6RzYAAAZ HTTP/1.1" 200 -
+2025-05-18 11:13:48,910 INFO: 127.0.0.1 - - [18/May/2025 11:13:48] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:13:48,932 INFO: 127.0.0.1 - - [18/May/2025 11:13:48] "GET /socket.io/?EIO=4&transport=polling&t=PRYTD7E&sid=7hY63XShnM5n6RzYAAAZ HTTP/1.1" 200 -
+2025-05-18 11:13:48,954 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:13:48,981 INFO: 127.0.0.1 - - [18/May/2025 11:13:48] "GET /service-worker.js?v=1747556028842 HTTP/1.1" 200 -
+2025-05-18 11:13:49,012 INFO: 127.0.0.1 - - [18/May/2025 11:13:49] "[36mGET /static/images/icons/favicon-32x32.png?v= HTTP/1.1[0m" 304 -
+2025-05-18 11:13:49,022 INFO: 127.0.0.1 - - [18/May/2025 11:13:49] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:13:49,050 INFO: 127.0.0.1 - - [18/May/2025 11:13:49] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-18 11:13:49,062 INFO: 127.0.0.1 - - [18/May/2025 11:13:49] "[36mGET /static/js/inventory_management.js HTTP/1.1[0m" 304 -
+2025-05-18 11:13:49,090 INFO: 127.0.0.1 - - [18/May/2025 11:13:49] "GET / HTTP/1.1" 200 -
+2025-05-18 11:13:49,100 INFO: 127.0.0.1 - - [18/May/2025 11:13:49] "[36mGET /static/js/reports.js HTTP/1.1[0m" 304 -
+2025-05-18 11:13:49,112 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:13:49,114 INFO: 127.0.0.1 - - [18/May/2025 11:13:49] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:13:49,143 INFO: 127.0.0.1 - - [18/May/2025 11:13:49] "GET / HTTP/1.1" 200 -
+2025-05-18 11:13:50,558 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:13:50,562 INFO: 127.0.0.1 - - [18/May/2025 11:13:50] "GET /service-worker.js?v=1747556028842 HTTP/1.1" 200 -
+2025-05-18 11:13:59,582 INFO: 127.0.0.1 - - [18/May/2025 11:13:59] "GET /socket.io/?EIO=4&transport=websocket&sid=7hY63XShnM5n6RzYAAAZ HTTP/1.1" 200 -
+2025-05-18 11:13:59,665 INFO: 127.0.0.1 - - [18/May/2025 11:13:59] "GET /admin/monitor?_t=1747556029030 HTTP/1.1" 200 -
+2025-05-18 11:13:59,786 INFO: 127.0.0.1 - - [18/May/2025 11:13:59] "GET /socket.io/?EIO=4&transport=polling&t=PRYTFnV HTTP/1.1" 200 -
+2025-05-18 11:13:59,880 INFO: 127.0.0.1 - - [18/May/2025 11:13:59] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:13:59,886 INFO: 127.0.0.1 - - [18/May/2025 11:13:59] "POST /socket.io/?EIO=4&transport=polling&t=PRYTFoy&sid=sZdFjqrWOb9ucwW-AAAb HTTP/1.1" 200 -
+2025-05-18 11:13:59,908 INFO: 127.0.0.1 - - [18/May/2025 11:13:59] "GET /socket.io/?EIO=4&transport=polling&t=PRYTFo-&sid=sZdFjqrWOb9ucwW-AAAb HTTP/1.1" 200 -
+2025-05-18 11:13:59,925 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:13:59,939 INFO: 127.0.0.1 - - [18/May/2025 11:13:59] "GET /service-worker.js?v=1747556039812 HTTP/1.1" 200 -
+2025-05-18 11:13:59,967 INFO: 127.0.0.1 - - [18/May/2025 11:13:59] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:14:00,015 INFO: 127.0.0.1 - - [18/May/2025 11:14:00] "GET /admin/monitor_staff HTTP/1.1" 200 -
+2025-05-18 11:14:00,024 INFO: 127.0.0.1 - - [18/May/2025 11:14:00] "GET / HTTP/1.1" 200 -
+2025-05-18 11:14:00,044 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:14:00,047 INFO: 127.0.0.1 - - [18/May/2025 11:14:00] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:14:00,080 INFO: 127.0.0.1 - - [18/May/2025 11:14:00] "GET / HTTP/1.1" 200 -
+2025-05-18 11:14:01,522 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:14:01,525 INFO: 127.0.0.1 - - [18/May/2025 11:14:01] "GET /service-worker.js?v=1747556039812 HTTP/1.1" 200 -
+2025-05-18 11:14:10,271 INFO: 127.0.0.1 - - [18/May/2025 11:14:10] "GET /socket.io/?EIO=4&transport=websocket&sid=sZdFjqrWOb9ucwW-AAAb HTTP/1.1" 200 -
+2025-05-18 11:14:10,331 INFO: 127.0.0.1 - - [18/May/2025 11:14:10] "GET /admin/manage_staff HTTP/1.1" 200 -
+2025-05-18 11:14:10,495 INFO: 127.0.0.1 - - [18/May/2025 11:14:10] "GET /socket.io/?EIO=4&transport=polling&t=PRYTIOj HTTP/1.1" 200 -
+2025-05-18 11:14:10,568 INFO: 127.0.0.1 - - [18/May/2025 11:14:10] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:14:10,588 INFO: 127.0.0.1 - - [18/May/2025 11:14:10] "POST /socket.io/?EIO=4&transport=polling&t=PRYTIPs&sid=lNLxSbs0C7safoISAAAd HTTP/1.1" 200 -
+2025-05-18 11:14:10,599 INFO: 127.0.0.1 - - [18/May/2025 11:14:10] "GET /socket.io/?EIO=4&transport=polling&t=PRYTIPv&sid=lNLxSbs0C7safoISAAAd HTTP/1.1" 200 -
+2025-05-18 11:14:10,635 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:14:10,644 INFO: 127.0.0.1 - - [18/May/2025 11:14:10] "GET /service-worker.js?v=1747556050513 HTTP/1.1" 200 -
+2025-05-18 11:14:10,652 INFO: 127.0.0.1 - - [18/May/2025 11:14:10] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:14:10,703 INFO: 127.0.0.1 - - [18/May/2025 11:14:10] "GET / HTTP/1.1" 200 -
+2025-05-18 11:14:10,707 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:14:10,709 INFO: 127.0.0.1 - - [18/May/2025 11:14:10] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:14:10,741 INFO: 127.0.0.1 - - [18/May/2025 11:14:10] "GET / HTTP/1.1" 200 -
+2025-05-18 11:14:12,267 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:14:12,272 INFO: 127.0.0.1 - - [18/May/2025 11:14:12] "GET /service-worker.js?v=1747556050513 HTTP/1.1" 200 -
+2025-05-18 11:14:30,519 INFO: 127.0.0.1 - - [18/May/2025 11:14:30] "GET /socket.io/?EIO=4&transport=websocket&sid=lNLxSbs0C7safoISAAAd HTTP/1.1" 200 -
+2025-05-18 11:14:30,594 INFO: 127.0.0.1 - - [18/May/2025 11:14:30] "[32mGET /logout?_t=1747556050659 HTTP/1.1[0m" 302 -
+2025-05-18 11:14:30,674 WARNING: Unhandled path requested: None
+2025-05-18 11:14:30,679 INFO: 127.0.0.1 - - [18/May/2025 11:14:30] "[32mGET /None HTTP/1.1[0m" 302 -
+2025-05-18 11:14:30,715 INFO: 127.0.0.1 - - [18/May/2025 11:14:30] "GET / HTTP/1.1" 200 -
+2025-05-18 11:14:30,800 INFO: 127.0.0.1 - - [18/May/2025 11:14:30] "GET /socket.io/?EIO=4&transport=polling&t=PRYTNM5 HTTP/1.1" 200 -
+2025-05-18 11:14:30,859 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:14:30,861 INFO: 127.0.0.1 - - [18/May/2025 11:14:30] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:14:30,865 INFO: 127.0.0.1 - - [18/May/2025 11:14:30] "GET /api/stock_status?_t=1747556070846 HTTP/1.1" 200 -
+2025-05-18 11:14:30,874 INFO: 127.0.0.1 - - [18/May/2025 11:14:30] "GET /service-worker.js?v=1747556070844 HTTP/1.1" 200 -
+2025-05-18 11:14:30,880 INFO: 127.0.0.1 - - [18/May/2025 11:14:30] "GET /api/stock_status?_t=1747556070852 HTTP/1.1" 200 -
+2025-05-18 11:14:30,888 INFO: 127.0.0.1 - - [18/May/2025 11:14:30] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:14:30,906 INFO: 127.0.0.1 - - [18/May/2025 11:14:30] "POST /socket.io/?EIO=4&transport=polling&t=PRYTNNa&sid=OmPmOUGvl2l2Fj0nAAAf HTTP/1.1" 200 -
+2025-05-18 11:14:30,918 INFO: 127.0.0.1 - - [18/May/2025 11:14:30] "GET /socket.io/?EIO=4&transport=polling&t=PRYTNNc&sid=OmPmOUGvl2l2Fj0nAAAf HTTP/1.1" 200 -
+2025-05-18 11:14:30,938 INFO: 127.0.0.1 - - [18/May/2025 11:14:30] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-18 11:14:30,947 INFO: 127.0.0.1 - - [18/May/2025 11:14:30] "GET / HTTP/1.1" 200 -
+2025-05-18 11:14:30,948 INFO: 127.0.0.1 - - [18/May/2025 11:14:30] "[36mGET /static/js/inventory_management.js HTTP/1.1[0m" 304 -
+2025-05-18 11:14:30,961 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:14:30,968 INFO: 127.0.0.1 - - [18/May/2025 11:14:30] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:14:30,968 INFO: 127.0.0.1 - - [18/May/2025 11:14:30] "[36mGET /static/js/reports.js HTTP/1.1[0m" 304 -
+2025-05-18 11:14:30,985 INFO: 127.0.0.1 - - [18/May/2025 11:14:30] "GET / HTTP/1.1" 200 -
+2025-05-18 11:14:32,501 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:14:32,507 INFO: 127.0.0.1 - - [18/May/2025 11:14:32] "GET /service-worker.js?v=1747556070844 HTTP/1.1" 200 -
+2025-05-18 11:14:34,161 INFO: 127.0.0.1 - - [18/May/2025 11:14:34] "GET /socket.io/?EIO=4&transport=websocket&sid=OmPmOUGvl2l2Fj0nAAAf HTTP/1.1" 200 -
+2025-05-18 11:14:34,187 INFO: 127.0.0.1 - - [18/May/2025 11:14:34] "[32mGET /logout?_t=1747556070917 HTTP/1.1[0m" 302 -
+2025-05-18 11:14:34,228 INFO: 127.0.0.1 - - [18/May/2025 11:14:34] "GET /login?next=/logout?_t%3D1747556070917 HTTP/1.1" 200 -
+2025-05-18 11:14:34,367 INFO: 127.0.0.1 - - [18/May/2025 11:14:34] "GET /socket.io/?EIO=4&transport=polling&t=PRYTODo HTTP/1.1" 200 -
+2025-05-18 11:14:34,420 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:14:34,428 INFO: 127.0.0.1 - - [18/May/2025 11:14:34] "GET /service-worker.js?v=1747556074409 HTTP/1.1" 200 -
+2025-05-18 11:14:34,453 INFO: 127.0.0.1 - - [18/May/2025 11:14:34] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:14:34,485 INFO: 127.0.0.1 - - [18/May/2025 11:14:34] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:14:34,513 INFO: 127.0.0.1 - - [18/May/2025 11:14:34] "GET /?cache_bust=1747556074410 HTTP/1.1" 200 -
+2025-05-18 11:14:34,560 INFO: 127.0.0.1 - - [18/May/2025 11:14:34] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-18 11:14:34,563 INFO: 127.0.0.1 - - [18/May/2025 11:14:34] "GET / HTTP/1.1" 200 -
+2025-05-18 11:14:34,578 WARNING: Unhandled path requested: None
+2025-05-18 11:14:34,579 INFO: 127.0.0.1 - - [18/May/2025 11:14:34] "[32mGET /None HTTP/1.1[0m" 302 -
+2025-05-18 11:14:34,583 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:14:34,591 INFO: 127.0.0.1 - - [18/May/2025 11:14:34] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:14:34,594 INFO: 127.0.0.1 - - [18/May/2025 11:14:34] "[36mGET /static/js/inventory_management.js HTTP/1.1[0m" 304 -
+2025-05-18 11:14:34,598 INFO: 127.0.0.1 - - [18/May/2025 11:14:34] "[36mGET /static/js/reports.js HTTP/1.1[0m" 304 -
+2025-05-18 11:14:34,606 INFO: 127.0.0.1 - - [18/May/2025 11:14:34] "GET / HTTP/1.1" 200 -
+2025-05-18 11:14:34,621 INFO: 127.0.0.1 - - [18/May/2025 11:14:34] "GET /socket.io/?EIO=4&transport=polling&t=PRYTOHs HTTP/1.1" 200 -
+2025-05-18 11:14:34,624 INFO: 127.0.0.1 - - [18/May/2025 11:14:34] "GET / HTTP/1.1" 200 -
+2025-05-18 11:14:34,681 INFO: 127.0.0.1 - - [18/May/2025 11:14:34] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:14:34,683 INFO: 127.0.0.1 - - [18/May/2025 11:14:34] "GET /api/stock_status?_t=1747556074674 HTTP/1.1" 200 -
+2025-05-18 11:14:34,685 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:14:34,694 INFO: 127.0.0.1 - - [18/May/2025 11:14:34] "GET /api/stock_status?_t=1747556074679 HTTP/1.1" 200 -
+2025-05-18 11:14:34,701 INFO: 127.0.0.1 - - [18/May/2025 11:14:34] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:14:34,709 INFO: 127.0.0.1 - - [18/May/2025 11:14:34] "GET /service-worker.js?v=1747556074672 HTTP/1.1" 200 -
+2025-05-18 11:14:34,712 INFO: 127.0.0.1 - - [18/May/2025 11:14:34] "POST /socket.io/?EIO=4&transport=polling&t=PRYTOJ2&sid=1-yJuHQnbUc5BEVLAAAi HTTP/1.1" 200 -
+2025-05-18 11:14:34,720 INFO: 127.0.0.1 - - [18/May/2025 11:14:34] "GET /socket.io/?EIO=4&transport=polling&t=PRYTOJ3&sid=1-yJuHQnbUc5BEVLAAAi HTTP/1.1" 200 -
+2025-05-18 11:14:34,749 INFO: 127.0.0.1 - - [18/May/2025 11:14:34] "GET / HTTP/1.1" 200 -
+2025-05-18 11:14:34,752 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:14:34,756 INFO: 127.0.0.1 - - [18/May/2025 11:14:34] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:14:34,768 INFO: 127.0.0.1 - - [18/May/2025 11:14:34] "GET / HTTP/1.1" 200 -
+2025-05-18 11:14:36,026 INFO: 127.0.0.1 - - [18/May/2025 11:14:36] "GET /socket.io/?EIO=4&transport=websocket&sid=1-yJuHQnbUc5BEVLAAAi HTTP/1.1" 200 -
+2025-05-18 11:14:36,060 INFO: 127.0.0.1 - - [18/May/2025 11:14:36] "GET /login?_t=1747556074721 HTTP/1.1" 200 -
+2025-05-18 11:14:36,183 INFO: 127.0.0.1 - - [18/May/2025 11:14:36] "GET /socket.io/?EIO=4&transport=polling&t=PRYTOgE HTTP/1.1" 200 -
+2025-05-18 11:14:36,216 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:14:36,229 INFO: 127.0.0.1 - - [18/May/2025 11:14:36] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:14:36,234 INFO: 127.0.0.1 - - [18/May/2025 11:14:36] "GET /service-worker.js?v=1747556076201 HTTP/1.1" 200 -
+2025-05-18 11:14:36,254 INFO: 127.0.0.1 - - [18/May/2025 11:14:36] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:14:36,289 INFO: 127.0.0.1 - - [18/May/2025 11:14:36] "POST /socket.io/?EIO=4&transport=polling&t=PRYTOhC&sid=Xtz2LCZlAMmj2ut0AAAk HTTP/1.1" 200 -
+2025-05-18 11:14:36,307 INFO: 127.0.0.1 - - [18/May/2025 11:14:36] "GET /socket.io/?EIO=4&transport=polling&t=PRYTOhG&sid=Xtz2LCZlAMmj2ut0AAAk HTTP/1.1" 200 -
+2025-05-18 11:14:36,358 INFO: 127.0.0.1 - - [18/May/2025 11:14:36] "GET / HTTP/1.1" 200 -
+2025-05-18 11:14:36,363 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:14:36,366 INFO: 127.0.0.1 - - [18/May/2025 11:14:36] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:14:36,383 INFO: 127.0.0.1 - - [18/May/2025 11:14:36] "GET / HTTP/1.1" 200 -
+2025-05-18 11:14:36,443 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:14:36,446 INFO: 127.0.0.1 - - [18/May/2025 11:14:36] "GET /service-worker.js?v=1747556076201 HTTP/1.1" 200 -
+2025-05-18 11:14:37,894 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:14:37,898 INFO: 127.0.0.1 - - [18/May/2025 11:14:37] "GET /service-worker.js?v=1747556076201 HTTP/1.1" 200 -
+2025-05-18 11:15:04,013 INFO: 127.0.0.1 - - [18/May/2025 11:15:04] "GET /socket.io/?EIO=4&transport=websocket&sid=Xtz2LCZlAMmj2ut0AAAk HTTP/1.1" 200 -
+2025-05-18 11:15:10,141 INFO: Email sent to ['givenwholesalers1@gmail.com'] with subject 'User Login Notification: Eddy Mutwe'
+2025-05-18 11:15:10,147 INFO: 127.0.0.1 - - [18/May/2025 11:15:10] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-18 11:15:10,554 INFO: 127.0.0.1 - - [18/May/2025 11:15:10] "GET /staff_orders HTTP/1.1" 200 -
+2025-05-18 11:15:10,589 INFO: 127.0.0.1 - - [18/May/2025 11:15:10] "GET /static/js/location_tracker.js HTTP/1.1" 200 -
+2025-05-18 11:15:10,626 INFO: 127.0.0.1 - - [18/May/2025 11:15:10] "GET /socket.io/?EIO=4&transport=polling&t=PRYTX4P HTTP/1.1" 200 -
+2025-05-18 11:15:10,671 INFO: 127.0.0.1 - - [18/May/2025 11:15:10] "GET /api/staff_orders?status=&order_type=&_t=1747556110638 HTTP/1.1" 200 -
+2025-05-18 11:15:10,673 INFO: 127.0.0.1 - - [18/May/2025 11:15:10] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:15:10,690 INFO: 127.0.0.1 - - [18/May/2025 11:15:10] "POST /socket.io/?EIO=4&transport=polling&t=PRYTX4p&sid=3WLGP919iRIPxt5QAAAm HTTP/1.1" 200 -
+2025-05-18 11:15:10,692 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:15:10,698 INFO: 127.0.0.1 - - [18/May/2025 11:15:10] "GET /service-worker.js?v=1747556110632 HTTP/1.1" 200 -
+2025-05-18 11:15:10,707 INFO: 127.0.0.1 - - [18/May/2025 11:15:10] "GET /socket.io/?EIO=4&transport=polling&t=PRYTX4q&sid=3WLGP919iRIPxt5QAAAm HTTP/1.1" 200 -
+2025-05-18 11:15:10,714 INFO: 127.0.0.1 - - [18/May/2025 11:15:10] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:15:10,763 INFO: 127.0.0.1 - - [18/May/2025 11:15:10] "GET / HTTP/1.1" 200 -
+2025-05-18 11:15:10,780 INFO: 127.0.0.1 - - [18/May/2025 11:15:10] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-18 11:15:10,798 INFO: 127.0.0.1 - - [18/May/2025 11:15:10] "[36mGET /static/js/inventory_management.js HTTP/1.1[0m" 304 -
+2025-05-18 11:15:10,801 INFO: 127.0.0.1 - - [18/May/2025 11:15:10] "GET /socket.io/?EIO=4&transport=polling&t=PRYTX7B&sid=3WLGP919iRIPxt5QAAAm HTTP/1.1" 200 -
+2025-05-18 11:15:10,819 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:15:10,822 INFO: 127.0.0.1 - - [18/May/2025 11:15:10] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:15:10,838 INFO: 127.0.0.1 - - [18/May/2025 11:15:10] "[36mGET /static/js/reports.js HTTP/1.1[0m" 304 -
+2025-05-18 11:15:10,853 INFO: 127.0.0.1 - - [18/May/2025 11:15:10] "GET / HTTP/1.1" 200 -
+2025-05-18 11:15:12,410 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:15:12,416 INFO: 127.0.0.1 - - [18/May/2025 11:15:12] "GET /service-worker.js?v=1747556110632 HTTP/1.1" 200 -
+2025-05-18 11:15:27,600 INFO: 127.0.0.1 - - [18/May/2025 11:15:27] "POST /api/update_location HTTP/1.1" 200 -
+2025-05-18 11:15:40,682 INFO: 127.0.0.1 - - [18/May/2025 11:15:40] "GET /api/staff_orders?status=&order_type=&_t=1747556140643 HTTP/1.1" 200 -
+2025-05-18 11:16:10,946 INFO: 127.0.0.1 - - [18/May/2025 11:16:10] "GET /api/staff_orders?status=&order_type=&_t=1747556170900 HTTP/1.1" 200 -
+2025-05-18 11:16:40,981 INFO: 127.0.0.1 - - [18/May/2025 11:16:40] "GET /api/staff_orders?status=&order_type=&_t=1747556200900 HTTP/1.1" 200 -
+2025-05-18 11:17:10,951 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:17:10,956 INFO: 127.0.0.1 - - [18/May/2025 11:17:10] "GET /service-worker.js?v=1747556110632 HTTP/1.1" 200 -
+2025-05-18 11:17:10,959 INFO: 127.0.0.1 - - [18/May/2025 11:17:10] "GET /api/staff_orders?status=&order_type=&_t=1747556230908 HTTP/1.1" 200 -
+2025-05-18 11:17:40,941 INFO: 127.0.0.1 - - [18/May/2025 11:17:40] "GET /api/staff_orders?status=&order_type=&_t=1747556260910 HTTP/1.1" 200 -
+2025-05-18 11:18:10,945 INFO: 127.0.0.1 - - [18/May/2025 11:18:10] "GET /api/staff_orders?status=&order_type=&_t=1747556290907 HTTP/1.1" 200 -
+2025-05-18 11:18:40,988 INFO: 127.0.0.1 - - [18/May/2025 11:18:40] "GET /api/staff_orders?status=&order_type=&_t=1747556320908 HTTP/1.1" 200 -
+2025-05-18 11:19:10,966 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:19:10,974 INFO: 127.0.0.1 - - [18/May/2025 11:19:10] "GET /service-worker.js?v=1747556110632 HTTP/1.1" 200 -
+2025-05-18 11:19:10,985 INFO: 127.0.0.1 - - [18/May/2025 11:19:10] "GET /api/staff_orders?status=&order_type=&_t=1747556350900 HTTP/1.1" 200 -
+2025-05-18 11:19:38,129 INFO:  * Detected change in 'C:\\Users\\Genius\\Documents\\POS-system1\\setup.py', reloading
+2025-05-18 11:19:38,552 INFO:  * Restarting with stat
+2025-05-18 11:19:43,684 INFO: Admin user created successfully
+2025-05-18 11:19:43,684 INFO: Database tables created successfully
+2025-05-18 11:19:43,688 INFO: Database integrity check passed
+2025-05-18 11:19:43,700 WARNING:  * Debugger is active!
+2025-05-18 11:19:43,705 INFO:  * Debugger PIN: 316-371-929
+2025-05-18 11:19:43,727 INFO: 127.0.0.1 - - [18/May/2025 11:19:43] "GET /socket.io/?EIO=4&transport=polling&t=PRYUYp- HTTP/1.1" 200 -
+2025-05-18 11:19:43,738 INFO: 127.0.0.1 - - [18/May/2025 11:19:43] "POST /socket.io/?EIO=4&transport=polling&t=PRYUZlo&sid=MGXpVhiDj7zi1k0tAAAA HTTP/1.1" 200 -
+2025-05-18 11:19:43,740 INFO: 127.0.0.1 - - [18/May/2025 11:19:43] "GET /socket.io/?EIO=4&transport=polling&t=PRYUZlp&sid=MGXpVhiDj7zi1k0tAAAA HTTP/1.1" 200 -
+2025-05-18 11:19:51,054 INFO:  * Detected change in 'C:\\Users\\Genius\\Documents\\POS-system1\\build_dist.py', reloading
+2025-05-18 11:19:51,344 INFO:  * Restarting with stat
+2025-05-18 11:19:54,399 INFO: Database tables created successfully
+2025-05-18 11:19:54,403 INFO: Database integrity check passed
+2025-05-18 11:19:54,416 WARNING:  * Debugger is active!
+2025-05-18 11:19:54,424 INFO:  * Debugger PIN: 316-371-929
+2025-05-18 11:19:54,454 INFO: 127.0.0.1 - - [18/May/2025 11:19:54] "GET /socket.io/?EIO=4&transport=polling&t=PRYUb_1 HTTP/1.1" 200 -
+2025-05-18 11:19:54,466 INFO: 127.0.0.1 - - [18/May/2025 11:19:54] "POST /socket.io/?EIO=4&transport=polling&t=PRYUcNP&sid=uAN761iN7TOE4HS2AAAA HTTP/1.1" 200 -
+2025-05-18 11:19:54,469 INFO: 127.0.0.1 - - [18/May/2025 11:19:54] "GET /socket.io/?EIO=4&transport=polling&t=PRYUcNQ&sid=uAN761iN7TOE4HS2AAAA HTTP/1.1" 200 -
+2025-05-18 11:20:20,644 INFO: 127.0.0.1 - - [18/May/2025 11:20:20] "GET /api/staff_orders?status=&order_type=&_t=1747556420606 HTTP/1.1" 200 -
+2025-05-18 11:20:22,984 INFO: 127.0.0.1 - - [18/May/2025 11:20:22] "POST /api/update_location HTTP/1.1" 200 -
+2025-05-18 11:20:34,019 INFO: 127.0.0.1 - - [18/May/2025 11:20:34] "GET /socket.io/?EIO=4&transport=websocket&sid=uAN761iN7TOE4HS2AAAA HTTP/1.1" 200 -
+2025-05-18 11:20:34,085 INFO: 127.0.0.1 - - [18/May/2025 11:20:34] "[32mGET /logout?_t=1747556420694 HTTP/1.1[0m" 302 -
+2025-05-18 11:20:34,159 WARNING: Unhandled path requested: None
+2025-05-18 11:20:34,163 INFO: 127.0.0.1 - - [18/May/2025 11:20:34] "[32mGET /None HTTP/1.1[0m" 302 -
+2025-05-18 11:20:34,367 INFO: 127.0.0.1 - - [18/May/2025 11:20:34] "GET / HTTP/1.1" 200 -
+2025-05-18 11:20:34,373 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:20:34,374 INFO: 127.0.0.1 - - [18/May/2025 11:20:34] "GET /socket.io/?EIO=4&transport=polling&t=PRYUm5T HTTP/1.1" 200 -
+2025-05-18 11:20:34,408 INFO: 127.0.0.1 - - [18/May/2025 11:20:34] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:20:34,415 INFO: 127.0.0.1 - - [18/May/2025 11:20:34] "GET /api/stock_status?_t=1747556434351 HTTP/1.1" 200 -
+2025-05-18 11:20:34,439 INFO: 127.0.0.1 - - [18/May/2025 11:20:34] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:20:34,451 INFO: 127.0.0.1 - - [18/May/2025 11:20:34] "GET /api/stock_status?_t=1747556434360 HTTP/1.1" 200 -
+2025-05-18 11:20:34,460 INFO: 127.0.0.1 - - [18/May/2025 11:20:34] "POST /socket.io/?EIO=4&transport=polling&t=PRYUm7r&sid=kZBe04wK4j9AlMw8AAAC HTTP/1.1" 200 -
+2025-05-18 11:20:34,487 INFO: 127.0.0.1 - - [18/May/2025 11:20:34] "GET /socket.io/?EIO=4&transport=polling&t=PRYUm7v&sid=kZBe04wK4j9AlMw8AAAC HTTP/1.1" 200 -
+2025-05-18 11:20:34,509 INFO: 127.0.0.1 - - [18/May/2025 11:20:34] "GET /socket.io/?EIO=4&transport=polling&t=PRYUm98&sid=kZBe04wK4j9AlMw8AAAC HTTP/1.1" 200 -
+2025-05-18 11:20:34,581 INFO: 127.0.0.1 - - [18/May/2025 11:20:34] "GET /service-worker.js?v=1747556434348 HTTP/1.1" 200 -
+2025-05-18 11:20:34,606 INFO: 127.0.0.1 - - [18/May/2025 11:20:34] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-18 11:20:34,609 INFO: 127.0.0.1 - - [18/May/2025 11:20:34] "GET / HTTP/1.1" 200 -
+2025-05-18 11:20:34,622 INFO: 127.0.0.1 - - [18/May/2025 11:20:34] "[36mGET /static/js/inventory_management.js HTTP/1.1[0m" 304 -
+2025-05-18 11:20:34,626 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:20:34,630 INFO: 127.0.0.1 - - [18/May/2025 11:20:34] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:20:34,630 INFO: 127.0.0.1 - - [18/May/2025 11:20:34] "[36mGET /static/js/reports.js HTTP/1.1[0m" 304 -
+2025-05-18 11:20:34,649 INFO: 127.0.0.1 - - [18/May/2025 11:20:34] "GET / HTTP/1.1" 200 -
+2025-05-18 11:20:34,758 INFO: 127.0.0.1 - - [18/May/2025 11:20:34] "[32mPOST /api/update_location HTTP/1.1[0m" 302 -
+2025-05-18 11:20:34,805 INFO: 127.0.0.1 - - [18/May/2025 11:20:34] "GET /login?next=/api/update_location HTTP/1.1" 200 -
+2025-05-18 11:20:36,114 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:20:36,118 INFO: 127.0.0.1 - - [18/May/2025 11:20:36] "GET /service-worker.js?v=1747556434348 HTTP/1.1" 200 -
+2025-05-18 11:20:37,699 INFO: 127.0.0.1 - - [18/May/2025 11:20:37] "GET /socket.io/?EIO=4&transport=websocket&sid=kZBe04wK4j9AlMw8AAAC HTTP/1.1" 200 -
+2025-05-18 11:20:37,734 INFO: 127.0.0.1 - - [18/May/2025 11:20:37] "[32mGET /logout?_t=1747556434488 HTTP/1.1[0m" 302 -
+2025-05-18 11:20:37,769 INFO: 127.0.0.1 - - [18/May/2025 11:20:37] "GET /login?next=/logout?_t%3D1747556434488 HTTP/1.1" 200 -
+2025-05-18 11:20:37,847 INFO: 127.0.0.1 - - [18/May/2025 11:20:37] "GET /static/css/style.css?v=ae0880cd&t=1747556394 HTTP/1.1" 200 -
+2025-05-18 11:20:37,851 INFO: 127.0.0.1 - - [18/May/2025 11:20:37] "GET /static/js/app.js?v=1747556394 HTTP/1.1" 200 -
+2025-05-18 11:20:37,975 INFO: 127.0.0.1 - - [18/May/2025 11:20:37] "GET /socket.io/?EIO=4&transport=polling&t=PRYUm_D HTTP/1.1" 200 -
+2025-05-18 11:20:38,005 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:20:38,014 INFO: 127.0.0.1 - - [18/May/2025 11:20:38] "GET /service-worker.js?v=1747556437993 HTTP/1.1" 200 -
+2025-05-18 11:20:38,038 INFO: 127.0.0.1 - - [18/May/2025 11:20:38] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:20:38,097 INFO: 127.0.0.1 - - [18/May/2025 11:20:38] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:20:38,103 INFO: 127.0.0.1 - - [18/May/2025 11:20:38] "GET /?cache_bust=1747556438000 HTTP/1.1" 200 -
+2025-05-18 11:20:38,124 INFO: 127.0.0.1 - - [18/May/2025 11:20:38] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-18 11:20:38,129 INFO: 127.0.0.1 - - [18/May/2025 11:20:38] "GET / HTTP/1.1" 200 -
+2025-05-18 11:20:38,132 INFO: 127.0.0.1 - - [18/May/2025 11:20:38] "[36mGET /static/js/inventory_management.js HTTP/1.1[0m" 304 -
+2025-05-18 11:20:38,145 WARNING: Unhandled path requested: None
+2025-05-18 11:20:38,147 INFO: 127.0.0.1 - - [18/May/2025 11:20:38] "[32mGET /None HTTP/1.1[0m" 302 -
+2025-05-18 11:20:38,165 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:20:38,167 INFO: 127.0.0.1 - - [18/May/2025 11:20:38] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:20:38,173 INFO: 127.0.0.1 - - [18/May/2025 11:20:38] "[36mGET /static/js/reports.js HTTP/1.1[0m" 304 -
+2025-05-18 11:20:38,181 INFO: 127.0.0.1 - - [18/May/2025 11:20:38] "GET / HTTP/1.1" 200 -
+2025-05-18 11:20:38,197 INFO: 127.0.0.1 - - [18/May/2025 11:20:38] "GET /socket.io/?EIO=4&transport=polling&t=PRYUn2h HTTP/1.1" 200 -
+2025-05-18 11:20:38,199 INFO: 127.0.0.1 - - [18/May/2025 11:20:38] "GET / HTTP/1.1" 200 -
+2025-05-18 11:20:38,209 INFO: 127.0.0.1 - - [18/May/2025 11:20:38] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:20:38,234 INFO: 127.0.0.1 - - [18/May/2025 11:20:38] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:20:38,234 INFO: 127.0.0.1 - - [18/May/2025 11:20:38] "GET /api/stock_status?_t=1747556438199 HTTP/1.1" 200 -
+2025-05-18 11:20:38,238 INFO: 127.0.0.1 - - [18/May/2025 11:20:38] "POST /socket.io/?EIO=4&transport=polling&t=PRYUn38&sid=ZA6cgVPko6uqKoANAAAF HTTP/1.1" 200 -
+2025-05-18 11:20:38,249 INFO: 127.0.0.1 - - [18/May/2025 11:20:38] "GET /api/stock_status?_t=1747556438203 HTTP/1.1" 200 -
+2025-05-18 11:20:38,267 INFO: 127.0.0.1 - - [18/May/2025 11:20:38] "GET /socket.io/?EIO=4&transport=polling&t=PRYUn3A&sid=ZA6cgVPko6uqKoANAAAF HTTP/1.1" 200 -
+2025-05-18 11:20:38,276 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:20:38,279 INFO: 127.0.0.1 - - [18/May/2025 11:20:38] "GET /static/images/icons/favicon-32x32.png?v=ae0880cd HTTP/1.1" 200 -
+2025-05-18 11:20:38,285 INFO: 127.0.0.1 - - [18/May/2025 11:20:38] "GET /service-worker.js?v=1747556438197 HTTP/1.1" 200 -
+2025-05-18 11:20:38,312 INFO: 127.0.0.1 - - [18/May/2025 11:20:38] "GET / HTTP/1.1" 200 -
+2025-05-18 11:20:38,315 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:20:38,317 INFO: 127.0.0.1 - - [18/May/2025 11:20:38] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:20:38,333 INFO: 127.0.0.1 - - [18/May/2025 11:20:38] "GET / HTTP/1.1" 200 -
+2025-05-18 11:20:39,313 INFO: 127.0.0.1 - - [18/May/2025 11:20:39] "GET /socket.io/?EIO=4&transport=websocket&sid=ZA6cgVPko6uqKoANAAAF HTTP/1.1" 200 -
+2025-05-18 11:20:39,347 INFO: 127.0.0.1 - - [18/May/2025 11:20:39] "GET /login?_t=1747556438268 HTTP/1.1" 200 -
+2025-05-18 11:20:39,479 INFO: 127.0.0.1 - - [18/May/2025 11:20:39] "GET /socket.io/?EIO=4&transport=polling&t=PRYUnMj HTTP/1.1" 200 -
+2025-05-18 11:20:39,516 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:20:39,517 INFO: 127.0.0.1 - - [18/May/2025 11:20:39] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:20:39,526 INFO: 127.0.0.1 - - [18/May/2025 11:20:39] "GET /service-worker.js?v=1747556439493 HTTP/1.1" 200 -
+2025-05-18 11:20:39,542 INFO: 127.0.0.1 - - [18/May/2025 11:20:39] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:20:39,565 INFO: 127.0.0.1 - - [18/May/2025 11:20:39] "POST /socket.io/?EIO=4&transport=polling&t=PRYUnNV&sid=dHdpR7ugXks6LnbxAAAH HTTP/1.1" 200 -
+2025-05-18 11:20:39,569 INFO: 127.0.0.1 - - [18/May/2025 11:20:39] "GET /socket.io/?EIO=4&transport=polling&t=PRYUnNY&sid=dHdpR7ugXks6LnbxAAAH HTTP/1.1" 200 -
+2025-05-18 11:20:39,617 INFO: 127.0.0.1 - - [18/May/2025 11:20:39] "GET /socket.io/?EIO=4&transport=polling&t=PRYUnOp&sid=dHdpR7ugXks6LnbxAAAH HTTP/1.1" 200 -
+2025-05-18 11:20:39,638 INFO: 127.0.0.1 - - [18/May/2025 11:20:39] "GET / HTTP/1.1" 200 -
+2025-05-18 11:20:39,643 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:20:39,645 INFO: 127.0.0.1 - - [18/May/2025 11:20:39] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:20:39,660 INFO: 127.0.0.1 - - [18/May/2025 11:20:39] "GET / HTTP/1.1" 200 -
+2025-05-18 11:20:39,917 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:20:39,922 INFO: 127.0.0.1 - - [18/May/2025 11:20:39] "GET /service-worker.js?v=1747556439493 HTTP/1.1" 200 -
+2025-05-18 11:20:41,222 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:20:41,227 INFO: 127.0.0.1 - - [18/May/2025 11:20:41] "GET /service-worker.js?v=1747556439493 HTTP/1.1" 200 -
+2025-05-18 11:20:52,067 INFO: 127.0.0.1 - - [18/May/2025 11:20:52] "GET /socket.io/?EIO=4&transport=websocket&sid=dHdpR7ugXks6LnbxAAAH HTTP/1.1" 200 -
+2025-05-18 11:20:55,235 INFO: 127.0.0.1 - - [18/May/2025 11:20:55] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-05-18 11:20:55,349 INFO: 127.0.0.1 - - [18/May/2025 11:20:55] "GET /admin HTTP/1.1" 200 -
+2025-05-18 11:20:55,423 INFO: 127.0.0.1 - - [18/May/2025 11:20:55] "GET /socket.io/?EIO=4&transport=polling&t=PRYUrFw HTTP/1.1" 200 -
+2025-05-18 11:20:55,462 INFO: 127.0.0.1 - - [18/May/2025 11:20:55] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:20:55,464 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:20:55,474 INFO: 127.0.0.1 - - [18/May/2025 11:20:55] "GET /service-worker.js?v=1747556455431 HTTP/1.1" 200 -
+2025-05-18 11:20:55,519 INFO: 127.0.0.1 - - [18/May/2025 11:20:55] "POST /socket.io/?EIO=4&transport=polling&t=PRYUrHB&sid=_jaZXaiinAmbZUTRAAAJ HTTP/1.1" 200 -
+2025-05-18 11:20:55,528 INFO: 127.0.0.1 - - [18/May/2025 11:20:55] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:20:55,532 INFO: 127.0.0.1 - - [18/May/2025 11:20:55] "GET /socket.io/?EIO=4&transport=polling&t=PRYUrHD&sid=_jaZXaiinAmbZUTRAAAJ HTTP/1.1" 200 -
+2025-05-18 11:20:55,568 INFO: 127.0.0.1 - - [18/May/2025 11:20:55] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:20:55,611 INFO: 127.0.0.1 - - [18/May/2025 11:20:55] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-18 11:20:55,629 INFO: 127.0.0.1 - - [18/May/2025 11:20:55] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:20:55,634 INFO: 127.0.0.1 - - [18/May/2025 11:20:55] "[36mGET /static/js/inventory_management.js HTTP/1.1[0m" 304 -
+2025-05-18 11:20:55,656 INFO: 127.0.0.1 - - [18/May/2025 11:20:55] "[36mGET /static/js/reports.js HTTP/1.1[0m" 304 -
+2025-05-18 11:20:55,671 INFO: 127.0.0.1 - - [18/May/2025 11:20:55] "GET / HTTP/1.1" 200 -
+2025-05-18 11:20:55,678 INFO: 127.0.0.1 - - [18/May/2025 11:20:55] "GET /api/admin_stats?_t=1747556455463 HTTP/1.1" 200 -
+2025-05-18 11:20:55,692 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:20:55,695 INFO: 127.0.0.1 - - [18/May/2025 11:20:55] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:20:55,732 INFO: 127.0.0.1 - - [18/May/2025 11:20:55] "GET / HTTP/1.1" 200 -
+2025-05-18 11:20:57,373 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:20:57,379 INFO: 127.0.0.1 - - [18/May/2025 11:20:57] "GET /service-worker.js?v=1747556455431 HTTP/1.1" 200 -
+2025-05-18 11:21:00,975 INFO: 127.0.0.1 - - [18/May/2025 11:21:00] "GET /socket.io/?EIO=4&transport=websocket&sid=_jaZXaiinAmbZUTRAAAJ HTTP/1.1" 200 -
+2025-05-18 11:21:01,078 INFO: 127.0.0.1 - - [18/May/2025 11:21:01] "GET /admin/manage_staff?_t=1747556457210 HTTP/1.1" 200 -
+2025-05-18 11:21:01,240 INFO: 127.0.0.1 - - [18/May/2025 11:21:01] "GET /socket.io/?EIO=4&transport=polling&t=PRYUsgW HTTP/1.1" 200 -
+2025-05-18 11:21:01,320 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:21:01,327 INFO: 127.0.0.1 - - [18/May/2025 11:21:01] "POST /socket.io/?EIO=4&transport=polling&t=PRYUshk&sid=dcPdRl029Un43x4BAAAL HTTP/1.1" 200 -
+2025-05-18 11:21:01,341 INFO: 127.0.0.1 - - [18/May/2025 11:21:01] "GET /socket.io/?EIO=4&transport=polling&t=PRYUshn&sid=dcPdRl029Un43x4BAAAL HTTP/1.1" 200 -
+2025-05-18 11:21:01,349 INFO: 127.0.0.1 - - [18/May/2025 11:21:01] "GET /service-worker.js?v=1747556461260 HTTP/1.1" 200 -
+2025-05-18 11:21:01,359 INFO: 127.0.0.1 - - [18/May/2025 11:21:01] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:21:01,405 INFO: 127.0.0.1 - - [18/May/2025 11:21:01] "GET /socket.io/?EIO=4&transport=polling&t=PRYUsi_&sid=dcPdRl029Un43x4BAAAL HTTP/1.1" 200 -
+2025-05-18 11:21:01,430 INFO: 127.0.0.1 - - [18/May/2025 11:21:01] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:21:01,450 INFO: 127.0.0.1 - - [18/May/2025 11:21:01] "GET / HTTP/1.1" 200 -
+2025-05-18 11:21:01,461 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:21:01,463 INFO: 127.0.0.1 - - [18/May/2025 11:21:01] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:21:01,493 INFO: 127.0.0.1 - - [18/May/2025 11:21:01] "GET / HTTP/1.1" 200 -
+2025-05-18 11:21:02,906 INFO: 127.0.0.1 - - [18/May/2025 11:21:02] "GET /socket.io/?EIO=4&transport=websocket&sid=dcPdRl029Un43x4BAAAL HTTP/1.1" 200 -
+2025-05-18 11:21:02,994 INFO: 127.0.0.1 - - [18/May/2025 11:21:02] "GET /admin/monitor?_t=1747556461438 HTTP/1.1" 200 -
+2025-05-18 11:21:03,017 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:21:03,025 INFO: 127.0.0.1 - - [18/May/2025 11:21:03] "GET /service-worker.js?v=1747556461260 HTTP/1.1" 200 -
+2025-05-18 11:21:03,124 INFO: 127.0.0.1 - - [18/May/2025 11:21:03] "GET /socket.io/?EIO=4&transport=polling&t=PRYUt8E HTTP/1.1" 200 -
+2025-05-18 11:21:03,167 INFO: 127.0.0.1 - - [18/May/2025 11:21:03] "POST /socket.io/?EIO=4&transport=polling&t=PRYUt8q&sid=jqSd1--udPnLxskdAAAN HTTP/1.1" 200 -
+2025-05-18 11:21:03,174 INFO: 127.0.0.1 - - [18/May/2025 11:21:03] "GET /socket.io/?EIO=4&transport=polling&t=PRYUt8r&sid=jqSd1--udPnLxskdAAAN HTTP/1.1" 200 -
+2025-05-18 11:21:03,182 INFO: 127.0.0.1 - - [18/May/2025 11:21:03] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:21:03,189 INFO: 127.0.0.1 - - [18/May/2025 11:21:03] "GET /socket.io/?EIO=4&transport=polling&t=PRYUt9C&sid=jqSd1--udPnLxskdAAAN HTTP/1.1" 200 -
+2025-05-18 11:21:03,206 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:21:03,211 INFO: 127.0.0.1 - - [18/May/2025 11:21:03] "GET /service-worker.js?v=1747556463130 HTTP/1.1" 200 -
+2025-05-18 11:21:03,230 INFO: 127.0.0.1 - - [18/May/2025 11:21:03] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:21:03,280 INFO: 127.0.0.1 - - [18/May/2025 11:21:03] "GET / HTTP/1.1" 200 -
+2025-05-18 11:21:03,328 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:21:03,333 INFO: 127.0.0.1 - - [18/May/2025 11:21:03] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:21:03,339 INFO: 127.0.0.1 - - [18/May/2025 11:21:03] "GET /admin/monitor_staff HTTP/1.1" 200 -
+2025-05-18 11:21:03,374 INFO: 127.0.0.1 - - [18/May/2025 11:21:03] "GET / HTTP/1.1" 200 -
+2025-05-18 11:21:04,824 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:21:04,828 INFO: 127.0.0.1 - - [18/May/2025 11:21:04] "GET /service-worker.js?v=1747556463130 HTTP/1.1" 200 -
+2025-05-18 11:21:33,193 INFO: 127.0.0.1 - - [18/May/2025 11:21:33] "GET /admin/monitor_staff HTTP/1.1" 200 -
+2025-05-18 11:21:52,225 INFO: 127.0.0.1 - - [18/May/2025 11:21:52] "GET /socket.io/?EIO=4&transport=websocket&sid=jqSd1--udPnLxskdAAAN HTTP/1.1" 200 -
+2025-05-18 11:21:52,311 INFO: 127.0.0.1 - - [18/May/2025 11:21:52] "GET /profile?_t=1747556512218 HTTP/1.1" 200 -
+2025-05-18 11:21:52,458 INFO: 127.0.0.1 - - [18/May/2025 11:21:52] "GET /socket.io/?EIO=4&transport=polling&t=PRYV3B0 HTTP/1.1" 200 -
+2025-05-18 11:21:52,555 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:21:52,571 INFO: 127.0.0.1 - - [18/May/2025 11:21:52] "GET /service-worker.js?v=1747556512506 HTTP/1.1" 200 -
+2025-05-18 11:21:52,599 INFO: 127.0.0.1 - - [18/May/2025 11:21:52] "POST /socket.io/?EIO=4&transport=polling&t=PRYV3CX&sid=TUlKIXg9HyYA1-W1AAAP HTTP/1.1" 200 -
+2025-05-18 11:21:52,623 INFO: 127.0.0.1 - - [18/May/2025 11:21:52] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:21:52,627 INFO: 127.0.0.1 - - [18/May/2025 11:21:52] "GET /socket.io/?EIO=4&transport=polling&t=PRYV3Ca&sid=TUlKIXg9HyYA1-W1AAAP HTTP/1.1" 200 -
+2025-05-18 11:21:52,696 INFO: 127.0.0.1 - - [18/May/2025 11:21:52] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:21:52,722 INFO: 127.0.0.1 - - [18/May/2025 11:21:52] "GET / HTTP/1.1" 200 -
+2025-05-18 11:21:52,726 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:21:52,728 INFO: 127.0.0.1 - - [18/May/2025 11:21:52] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:21:52,769 INFO: 127.0.0.1 - - [18/May/2025 11:21:52] "GET / HTTP/1.1" 200 -
+2025-05-18 11:21:54,269 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:21:54,274 INFO: 127.0.0.1 - - [18/May/2025 11:21:54] "GET /service-worker.js?v=1747556512506 HTTP/1.1" 200 -
+2025-05-18 11:22:00,029 INFO: 127.0.0.1 - - [18/May/2025 11:22:00] "GET /socket.io/?EIO=4&transport=websocket&sid=TUlKIXg9HyYA1-W1AAAP HTTP/1.1" 200 -
+2025-05-18 11:22:00,092 INFO: 127.0.0.1 - - [18/May/2025 11:22:00] "GET /profile?_t=1747556512704 HTTP/1.1" 200 -
+2025-05-18 11:22:00,245 INFO: 127.0.0.1 - - [18/May/2025 11:22:00] "GET /socket.io/?EIO=4&transport=polling&t=PRYV54Y HTTP/1.1" 200 -
+2025-05-18 11:22:00,319 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:22:00,325 INFO: 127.0.0.1 - - [18/May/2025 11:22:00] "POST /socket.io/?EIO=4&transport=polling&t=PRYV55e&sid=Ku_TyJRMurZJFcz_AAAR HTTP/1.1" 200 -
+2025-05-18 11:22:00,345 INFO: 127.0.0.1 - - [18/May/2025 11:22:00] "GET /socket.io/?EIO=4&transport=polling&t=PRYV55h&sid=Ku_TyJRMurZJFcz_AAAR HTTP/1.1" 200 -
+2025-05-18 11:22:00,358 INFO: 127.0.0.1 - - [18/May/2025 11:22:00] "GET /service-worker.js?v=1747556520259 HTTP/1.1" 200 -
+2025-05-18 11:22:00,368 INFO: 127.0.0.1 - - [18/May/2025 11:22:00] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:22:00,415 INFO: 127.0.0.1 - - [18/May/2025 11:22:00] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:22:00,436 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:22:00,439 INFO: 127.0.0.1 - - [18/May/2025 11:22:00] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:22:00,445 INFO: 127.0.0.1 - - [18/May/2025 11:22:00] "GET / HTTP/1.1" 200 -
+2025-05-18 11:22:00,473 INFO: 127.0.0.1 - - [18/May/2025 11:22:00] "GET / HTTP/1.1" 200 -
+2025-05-18 11:22:02,006 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:22:02,011 INFO: 127.0.0.1 - - [18/May/2025 11:22:02] "GET /service-worker.js?v=1747556520259 HTTP/1.1" 200 -
+2025-05-18 11:22:04,641 INFO: 127.0.0.1 - - [18/May/2025 11:22:04] "GET /socket.io/?EIO=4&transport=websocket&sid=Ku_TyJRMurZJFcz_AAAR HTTP/1.1" 200 -
+2025-05-18 11:22:04,697 INFO: 127.0.0.1 - - [18/May/2025 11:22:04] "GET /admin/manage_staff?_t=1747556520419 HTTP/1.1" 200 -
+2025-05-18 11:22:04,882 INFO: 127.0.0.1 - - [18/May/2025 11:22:04] "GET /socket.io/?EIO=4&transport=polling&t=PRYV6Ct HTTP/1.1" 200 -
+2025-05-18 11:22:04,980 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:22:04,993 INFO: 127.0.0.1 - - [18/May/2025 11:22:04] "POST /socket.io/?EIO=4&transport=polling&t=PRYV6EZ&sid=l9rOh3R1djOk-BQoAAAT HTTP/1.1" 200 -
+2025-05-18 11:22:05,009 INFO: 127.0.0.1 - - [18/May/2025 11:22:05] "GET /service-worker.js?v=1747556524921 HTTP/1.1" 200 -
+2025-05-18 11:22:05,015 INFO: 127.0.0.1 - - [18/May/2025 11:22:05] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:22:05,024 INFO: 127.0.0.1 - - [18/May/2025 11:22:05] "GET /socket.io/?EIO=4&transport=polling&t=PRYV6Ee&sid=l9rOh3R1djOk-BQoAAAT HTTP/1.1" 200 -
+2025-05-18 11:22:05,080 INFO: 127.0.0.1 - - [18/May/2025 11:22:05] "GET /socket.io/?EIO=4&transport=polling&t=PRYV6GB&sid=l9rOh3R1djOk-BQoAAAT HTTP/1.1" 200 -
+2025-05-18 11:22:05,111 INFO: 127.0.0.1 - - [18/May/2025 11:22:05] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:22:05,130 INFO: 127.0.0.1 - - [18/May/2025 11:22:05] "GET / HTTP/1.1" 200 -
+2025-05-18 11:22:05,148 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:22:05,149 INFO: 127.0.0.1 - - [18/May/2025 11:22:05] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:22:05,179 INFO: 127.0.0.1 - - [18/May/2025 11:22:05] "GET / HTTP/1.1" 200 -
+2025-05-18 11:22:06,695 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:22:06,699 INFO: 127.0.0.1 - - [18/May/2025 11:22:06] "GET /service-worker.js?v=1747556524921 HTTP/1.1" 200 -
+2025-05-18 11:22:14,363 INFO: 127.0.0.1 - - [18/May/2025 11:22:14] "GET /socket.io/?EIO=4&transport=websocket&sid=l9rOh3R1djOk-BQoAAAT HTTP/1.1" 200 -
+2025-05-18 11:22:14,437 INFO: 127.0.0.1 - - [18/May/2025 11:22:14] "[32mPOST /admin/toggle_admin/6 HTTP/1.1[0m" 302 -
+2025-05-18 11:22:14,500 INFO: 127.0.0.1 - - [18/May/2025 11:22:14] "GET /admin/manage_staff HTTP/1.1" 200 -
+2025-05-18 11:22:14,666 INFO: 127.0.0.1 - - [18/May/2025 11:22:14] "GET /socket.io/?EIO=4&transport=polling&t=PRYV8bp HTTP/1.1" 200 -
+2025-05-18 11:22:14,740 INFO: 127.0.0.1 - - [18/May/2025 11:22:14] "POST /socket.io/?EIO=4&transport=polling&t=PRYV8d8&sid=aHUGki2xXQN7nE7SAAAV HTTP/1.1" 200 -
+2025-05-18 11:22:14,758 INFO: 127.0.0.1 - - [18/May/2025 11:22:14] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:22:14,784 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:22:14,792 INFO: 127.0.0.1 - - [18/May/2025 11:22:14] "GET /socket.io/?EIO=4&transport=polling&t=PRYV8dB&sid=aHUGki2xXQN7nE7SAAAV HTTP/1.1" 200 -
+2025-05-18 11:22:14,810 INFO: 127.0.0.1 - - [18/May/2025 11:22:14] "GET /service-worker.js?v=1747556534696 HTTP/1.1" 200 -
+2025-05-18 11:22:14,827 INFO: 127.0.0.1 - - [18/May/2025 11:22:14] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:22:14,881 INFO: 127.0.0.1 - - [18/May/2025 11:22:14] "GET / HTTP/1.1" 200 -
+2025-05-18 11:22:14,903 INFO: 127.0.0.1 - - [18/May/2025 11:22:14] "[36mGET /static/js/inventory_management.js HTTP/1.1[0m" 304 -
+2025-05-18 11:22:14,952 INFO: 127.0.0.1 - - [18/May/2025 11:22:14] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-18 11:22:14,966 INFO: 127.0.0.1 - - [18/May/2025 11:22:14] "[36mGET /static/js/reports.js HTTP/1.1[0m" 304 -
+2025-05-18 11:22:14,980 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:22:14,984 INFO: 127.0.0.1 - - [18/May/2025 11:22:14] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:22:15,039 INFO: 127.0.0.1 - - [18/May/2025 11:22:15] "GET / HTTP/1.1" 200 -
+2025-05-18 11:22:16,413 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:22:16,417 INFO: 127.0.0.1 - - [18/May/2025 11:22:16] "GET /service-worker.js?v=1747556534696 HTTP/1.1" 200 -
+2025-05-18 11:22:24,620 INFO: 127.0.0.1 - - [18/May/2025 11:22:24] "GET /socket.io/?EIO=4&transport=websocket&sid=aHUGki2xXQN7nE7SAAAV HTTP/1.1" 200 -
+2025-05-18 11:22:24,721 INFO: 127.0.0.1 - - [18/May/2025 11:22:24] "[32mPOST /admin/delete_staff/6 HTTP/1.1[0m" 302 -
+2025-05-18 11:22:24,781 INFO: 127.0.0.1 - - [18/May/2025 11:22:24] "GET /admin/manage_staff HTTP/1.1" 200 -
+2025-05-18 11:22:24,959 INFO: 127.0.0.1 - - [18/May/2025 11:22:24] "GET /socket.io/?EIO=4&transport=polling&t=PRYVB6m HTTP/1.1" 200 -
+2025-05-18 11:22:25,028 INFO: 127.0.0.1 - - [18/May/2025 11:22:25] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:22:25,037 INFO: 127.0.0.1 - - [18/May/2025 11:22:25] "POST /socket.io/?EIO=4&transport=polling&t=PRYVB7c&sid=2huo5Z4NYxgclYFSAAAX HTTP/1.1" 200 -
+2025-05-18 11:22:25,072 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:22:25,075 INFO: 127.0.0.1 - - [18/May/2025 11:22:25] "GET /socket.io/?EIO=4&transport=polling&t=PRYVB7i&sid=2huo5Z4NYxgclYFSAAAX HTTP/1.1" 200 -
+2025-05-18 11:22:25,085 INFO: 127.0.0.1 - - [18/May/2025 11:22:25] "GET /service-worker.js?v=1747556544968 HTTP/1.1" 200 -
+2025-05-18 11:22:25,117 INFO: 127.0.0.1 - - [18/May/2025 11:22:25] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:22:25,187 INFO: 127.0.0.1 - - [18/May/2025 11:22:25] "GET / HTTP/1.1" 200 -
+2025-05-18 11:22:25,227 INFO: 127.0.0.1 - - [18/May/2025 11:22:25] "[36mGET /static/js/inventory_management.js HTTP/1.1[0m" 304 -
+2025-05-18 11:22:25,236 INFO: 127.0.0.1 - - [18/May/2025 11:22:25] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-05-18 11:22:25,274 INFO: 127.0.0.1 - - [18/May/2025 11:22:25] "[36mGET /static/js/reports.js HTTP/1.1[0m" 304 -
+2025-05-18 11:22:25,293 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:22:25,298 INFO: 127.0.0.1 - - [18/May/2025 11:22:25] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:22:25,341 INFO: 127.0.0.1 - - [18/May/2025 11:22:25] "GET / HTTP/1.1" 200 -
+2025-05-18 11:22:26,654 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:22:26,660 INFO: 127.0.0.1 - - [18/May/2025 11:22:26] "GET /service-worker.js?v=1747556544968 HTTP/1.1" 200 -
+2025-05-18 11:24:03,465 INFO:  * Detected change in 'C:\\Users\\Genius\\Documents\\POS-system1\\app.py', reloading
+2025-05-18 11:24:03,856 INFO:  * Restarting with stat
+2025-05-18 11:24:07,820 INFO: Database tables created successfully
+2025-05-18 11:24:07,824 INFO: Database integrity check passed
+2025-05-18 11:24:07,839 WARNING:  * Debugger is active!
+2025-05-18 11:24:07,845 INFO:  * Debugger PIN: 316-371-929
+2025-05-18 11:24:07,874 INFO: 127.0.0.1 - - [18/May/2025 11:24:07] "GET /socket.io/?EIO=4&transport=polling&t=PRYVZmN HTTP/1.1" 200 -
+2025-05-18 11:24:07,887 INFO: 127.0.0.1 - - [18/May/2025 11:24:07] "POST /socket.io/?EIO=4&transport=polling&t=PRYVaF5&sid=EHrQjEkaRb9yLMhjAAAA HTTP/1.1" 200 -
+2025-05-18 11:24:07,890 INFO: 127.0.0.1 - - [18/May/2025 11:24:07] "GET /socket.io/?EIO=4&transport=polling&t=PRYVaF6&sid=EHrQjEkaRb9yLMhjAAAA HTTP/1.1" 200 -
+2025-05-18 11:24:15,170 INFO:  * Detected change in 'C:\\Users\\Genius\\Documents\\POS-system1\\create_initial_admin.py', reloading
+2025-05-18 11:24:15,393 INFO:  * Restarting with stat
+2025-05-18 11:24:19,233 INFO: Database tables created successfully
+2025-05-18 11:24:19,235 INFO: Database integrity check passed
+2025-05-18 11:24:19,247 WARNING:  * Debugger is active!
+2025-05-18 11:24:19,253 INFO:  * Debugger PIN: 316-371-929
+2025-05-18 11:24:19,278 INFO: 127.0.0.1 - - [18/May/2025 11:24:19] "GET /socket.io/?EIO=4&transport=polling&t=PRYVcS9 HTTP/1.1" 200 -
+2025-05-18 11:24:19,288 INFO: 127.0.0.1 - - [18/May/2025 11:24:19] "POST /socket.io/?EIO=4&transport=polling&t=PRYVd1I&sid=vs-g2m499wuGHqdbAAAA HTTP/1.1" 200 -
+2025-05-18 11:24:19,291 INFO: 127.0.0.1 - - [18/May/2025 11:24:19] "GET /socket.io/?EIO=4&transport=polling&t=PRYVd1J&sid=vs-g2m499wuGHqdbAAAA HTTP/1.1" 200 -
+2025-05-18 11:24:26,032 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:24:26,103 INFO: 127.0.0.1 - - [18/May/2025 11:24:26] "GET /service-worker.js?v=1747556544968 HTTP/1.1" 200 -
+2025-05-18 11:24:33,876 INFO:  * Detected change in 'C:\\Users\\Genius\\Documents\\POS-system1\\setup.py', reloading
+2025-05-18 11:24:34,136 INFO:  * Restarting with stat
+2025-05-18 11:24:37,544 INFO: Database tables created successfully
+2025-05-18 11:24:37,548 INFO: Database integrity check passed
+2025-05-18 11:24:37,565 WARNING:  * Debugger is active!
+2025-05-18 11:24:37,573 INFO:  * Debugger PIN: 316-371-929
+2025-05-18 11:24:37,610 INFO: 127.0.0.1 - - [18/May/2025 11:24:37] "GET /socket.io/?EIO=4&transport=polling&t=PRYVgrP HTTP/1.1" 200 -
+2025-05-18 11:24:37,621 INFO: 127.0.0.1 - - [18/May/2025 11:24:37] "POST /socket.io/?EIO=4&transport=polling&t=PRYVhVl&sid=4zjJFbTsd0WqLy4PAAAA HTTP/1.1" 200 -
+2025-05-18 11:24:37,627 INFO: 127.0.0.1 - - [18/May/2025 11:24:37] "GET /socket.io/?EIO=4&transport=polling&t=PRYVhVm&sid=4zjJFbTsd0WqLy4PAAAA HTTP/1.1" 200 -
+2025-05-18 11:25:44,848 INFO: Database tables created successfully
+2025-05-18 11:25:44,852 INFO: Database integrity check passed
+2025-05-18 11:25:44,884 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.162:5000
+2025-05-18 11:25:44,886 INFO: [33mPress CTRL+C to quit[0m
+2025-05-18 11:25:44,887 INFO:  * Restarting with stat
+2025-05-18 11:25:47,488 INFO: Database tables created successfully
+2025-05-18 11:25:47,491 INFO: Database integrity check passed
+2025-05-18 11:25:47,502 WARNING:  * Debugger is active!
+2025-05-18 11:25:47,508 INFO:  * Debugger PIN: 316-371-929
+2025-05-18 11:25:47,531 INFO: 127.0.0.1 - - [18/May/2025 11:25:47] "GET /socket.io/?EIO=4&transport=polling&t=PRYVyQF HTTP/1.1" 200 -
+2025-05-18 11:25:47,540 INFO: 127.0.0.1 - - [18/May/2025 11:25:47] "POST /socket.io/?EIO=4&transport=polling&t=PRYVyaE&sid=0R1wymSCEOtWoeMXAAAA HTTP/1.1" 200 -
+2025-05-18 11:25:47,543 INFO: 127.0.0.1 - - [18/May/2025 11:25:47] "GET /socket.io/?EIO=4&transport=polling&t=PRYVyaF&sid=0R1wymSCEOtWoeMXAAAA HTTP/1.1" 200 -
+2025-05-18 11:25:53,298 INFO: 127.0.0.1 - - [18/May/2025 11:25:53] "GET /socket.io/?EIO=4&transport=websocket&sid=0R1wymSCEOtWoeMXAAAA HTTP/1.1" 200 -
+2025-05-18 11:25:53,483 INFO: 127.0.0.1 - - [18/May/2025 11:25:53] "GET /admin/manage_staff HTTP/1.1" 200 -
+2025-05-18 11:25:53,799 INFO: 127.0.0.1 - - [18/May/2025 11:25:53] "GET /static/css/style.css?v=&t= HTTP/1.1" 200 -
+2025-05-18 11:25:53,814 INFO: 127.0.0.1 - - [18/May/2025 11:25:53] "GET /static/images/logo.png HTTP/1.1" 200 -
+2025-05-18 11:25:54,008 INFO: 127.0.0.1 - - [18/May/2025 11:25:54] "GET /static/js/app.js?v= HTTP/1.1" 200 -
+2025-05-18 11:25:54,027 INFO: 127.0.0.1 - - [18/May/2025 11:25:54] "GET /static/js/manifest-fix.js HTTP/1.1" 200 -
+2025-05-18 11:25:54,059 INFO: 127.0.0.1 - - [18/May/2025 11:25:54] "GET /static/js/main.js HTTP/1.1" 200 -
+2025-05-18 11:25:54,084 INFO: 127.0.0.1 - - [18/May/2025 11:25:54] "GET /static/js/service-worker-update.js HTTP/1.1" 200 -
+2025-05-18 11:25:54,141 INFO: 127.0.0.1 - - [18/May/2025 11:25:54] "GET /socket.io/?EIO=4&transport=polling&t=PRYV-BP HTTP/1.1" 200 -
+2025-05-18 11:25:54,216 INFO: 127.0.0.1 - - [18/May/2025 11:25:54] "POST /socket.io/?EIO=4&transport=polling&t=PRYV-CG&sid=16Iou_tMAoN0GgFwAAAC HTTP/1.1" 200 -
+2025-05-18 11:25:54,230 INFO: 127.0.0.1 - - [18/May/2025 11:25:54] "GET /socket.io/?EIO=4&transport=polling&t=PRYV-CK&sid=16Iou_tMAoN0GgFwAAAC HTTP/1.1" 200 -
+2025-05-18 11:25:54,276 INFO: 127.0.0.1 - - [18/May/2025 11:25:54] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:25:54,302 INFO: 127.0.0.1 - - [18/May/2025 11:25:54] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:25:54,306 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:25:54,319 INFO: 127.0.0.1 - - [18/May/2025 11:25:54] "GET /service-worker.js?v=1747556754166 HTTP/1.1" 200 -
+2025-05-18 11:25:54,417 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:25:54,421 INFO: 127.0.0.1 - - [18/May/2025 11:25:54] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:25:54,463 INFO: 127.0.0.1 - - [18/May/2025 11:25:54] "GET / HTTP/1.1" 200 -
+2025-05-18 11:25:54,507 INFO: 127.0.0.1 - - [18/May/2025 11:25:54] "GET / HTTP/1.1" 200 -
+2025-05-18 11:25:54,824 INFO: 127.0.0.1 - - [18/May/2025 11:25:54] "[36mGET /static/images/icons/favicon-32x32.png?v= HTTP/1.1[0m" 304 -
+2025-05-18 11:26:26,852 INFO: 127.0.0.1 - - [18/May/2025 11:26:26] "GET /socket.io/?EIO=4&transport=websocket&sid=16Iou_tMAoN0GgFwAAAC HTTP/1.1" 200 -
+2025-05-18 11:26:26,927 INFO: 127.0.0.1 - - [18/May/2025 11:26:26] "GET /admin/manage_staff?_t=1747556755629 HTTP/1.1" 200 -
+2025-05-18 11:26:27,218 INFO: 127.0.0.1 - - [18/May/2025 11:26:27] "GET /socket.io/?EIO=4&transport=polling&t=PRYW6G9 HTTP/1.1" 200 -
+2025-05-18 11:26:27,285 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:26:27,294 INFO: 127.0.0.1 - - [18/May/2025 11:26:27] "GET /service-worker.js?v=1747556787241 HTTP/1.1" 200 -
+2025-05-18 11:26:27,316 INFO: 127.0.0.1 - - [18/May/2025 11:26:27] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:26:27,352 INFO: 127.0.0.1 - - [18/May/2025 11:26:27] "POST /socket.io/?EIO=4&transport=polling&t=PRYW6Hf&sid=bG8BTqyfU-tUARR9AAAE HTTP/1.1" 200 -
+2025-05-18 11:26:27,355 INFO: 127.0.0.1 - - [18/May/2025 11:26:27] "GET /socket.io/?EIO=4&transport=polling&t=PRYW6Hj&sid=bG8BTqyfU-tUARR9AAAE HTTP/1.1" 200 -
+2025-05-18 11:26:27,381 INFO: 127.0.0.1 - - [18/May/2025 11:26:27] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:26:27,405 INFO: 127.0.0.1 - - [18/May/2025 11:26:27] "GET / HTTP/1.1" 200 -
+2025-05-18 11:26:27,421 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:26:27,423 INFO: 127.0.0.1 - - [18/May/2025 11:26:27] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:26:27,452 INFO: 127.0.0.1 - - [18/May/2025 11:26:27] "GET / HTTP/1.1" 200 -
+2025-05-18 11:26:28,951 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:26:28,956 INFO: 127.0.0.1 - - [18/May/2025 11:26:28] "GET /service-worker.js?v=1747556787241 HTTP/1.1" 200 -
+2025-05-18 11:26:29,098 INFO: 127.0.0.1 - - [18/May/2025 11:26:29] "GET /socket.io/?EIO=4&transport=websocket&sid=bG8BTqyfU-tUARR9AAAE HTTP/1.1" 200 -
+2025-05-18 11:26:29,166 INFO: 127.0.0.1 - - [18/May/2025 11:26:29] "GET /admin/monitor?_t=1747556787388 HTTP/1.1" 200 -
+2025-05-18 11:26:29,275 INFO: 127.0.0.1 - - [18/May/2025 11:26:29] "GET /socket.io/?EIO=4&transport=polling&t=PRYW6mJ HTTP/1.1" 200 -
+2025-05-18 11:26:29,359 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:26:29,366 INFO: 127.0.0.1 - - [18/May/2025 11:26:29] "GET /service-worker.js?v=1747556789299 HTTP/1.1" 200 -
+2025-05-18 11:26:29,383 INFO: 127.0.0.1 - - [18/May/2025 11:26:29] "POST /socket.io/?EIO=4&transport=polling&t=PRYW6ne&sid=NenKLYA9PH0f2QYWAAAG HTTP/1.1" 200 -
+2025-05-18 11:26:29,406 INFO: 127.0.0.1 - - [18/May/2025 11:26:29] "GET /socket.io/?EIO=4&transport=polling&t=PRYW6ng&sid=NenKLYA9PH0f2QYWAAAG HTTP/1.1" 200 -
+2025-05-18 11:26:29,423 INFO: 127.0.0.1 - - [18/May/2025 11:26:29] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:26:29,486 INFO: 127.0.0.1 - - [18/May/2025 11:26:29] "GET / HTTP/1.1" 200 -
+2025-05-18 11:26:29,497 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:26:29,499 INFO: 127.0.0.1 - - [18/May/2025 11:26:29] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:26:29,533 INFO: 127.0.0.1 - - [18/May/2025 11:26:29] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:26:29,539 INFO: 127.0.0.1 - - [18/May/2025 11:26:29] "GET /admin/monitor_staff HTTP/1.1" 200 -
+2025-05-18 11:26:29,562 INFO: 127.0.0.1 - - [18/May/2025 11:26:29] "GET / HTTP/1.1" 200 -
+2025-05-18 11:26:31,071 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:26:31,076 INFO: 127.0.0.1 - - [18/May/2025 11:26:31] "GET /service-worker.js?v=1747556789299 HTTP/1.1" 200 -
+2025-05-18 11:26:50,332 INFO: 127.0.0.1 - - [18/May/2025 11:26:50] "GET /admin/staff_activity/5 HTTP/1.1" 200 -
+2025-05-18 11:26:51,316 INFO: 127.0.0.1 - - [18/May/2025 11:26:51] "GET /admin/staff_activity/5 HTTP/1.1" 200 -
+2025-05-18 11:26:52,299 INFO: 127.0.0.1 - - [18/May/2025 11:26:52] "GET /admin/staff_activity/5 HTTP/1.1" 200 -
+2025-05-18 11:26:53,296 INFO: 127.0.0.1 - - [18/May/2025 11:26:53] "GET /admin/staff_activity/5 HTTP/1.1" 200 -
+2025-05-18 11:26:54,338 INFO: 127.0.0.1 - - [18/May/2025 11:26:54] "GET /admin/staff_activity/5 HTTP/1.1" 200 -
+2025-05-18 11:26:55,315 INFO: 127.0.0.1 - - [18/May/2025 11:26:55] "GET /admin/staff_activity/5 HTTP/1.1" 200 -
+2025-05-18 11:26:56,304 INFO: 127.0.0.1 - - [18/May/2025 11:26:56] "GET /admin/staff_activity/5 HTTP/1.1" 200 -
+2025-05-18 11:26:59,372 INFO: 127.0.0.1 - - [18/May/2025 11:26:59] "GET /admin/monitor_staff HTTP/1.1" 200 -
+2025-05-18 11:27:03,014 INFO: 127.0.0.1 - - [18/May/2025 11:27:03] "GET /socket.io/?EIO=4&transport=websocket&sid=NenKLYA9PH0f2QYWAAAG HTTP/1.1" 200 -
+2025-05-18 11:27:03,237 INFO: 127.0.0.1 - - [18/May/2025 11:27:03] "GET /admin?_t=1747556822581 HTTP/1.1" 200 -
+2025-05-18 11:27:03,417 INFO: 127.0.0.1 - - [18/May/2025 11:27:03] "GET /socket.io/?EIO=4&transport=polling&t=PRYWF5o HTTP/1.1" 200 -
+2025-05-18 11:27:03,469 INFO: 127.0.0.1 - - [18/May/2025 11:27:03] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:27:03,497 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:27:03,506 INFO: 127.0.0.1 - - [18/May/2025 11:27:03] "GET /service-worker.js?v=1747556823428 HTTP/1.1" 200 -
+2025-05-18 11:27:03,568 INFO: 127.0.0.1 - - [18/May/2025 11:27:03] "GET /get_cart_count HTTP/1.1" 200 -
+2025-05-18 11:27:03,587 INFO: 127.0.0.1 - - [18/May/2025 11:27:03] "POST /socket.io/?EIO=4&transport=polling&t=PRYWF8E&sid=si_9glHqyqSfW9grAAAI HTTP/1.1" 200 -
+2025-05-18 11:27:03,597 INFO: 127.0.0.1 - - [18/May/2025 11:27:03] "GET /socket.io/?EIO=4&transport=polling&t=PRYWF8J&sid=si_9glHqyqSfW9grAAAI HTTP/1.1" 200 -
+2025-05-18 11:27:03,627 INFO: 127.0.0.1 - - [18/May/2025 11:27:03] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:27:03,646 INFO: 127.0.0.1 - - [18/May/2025 11:27:03] "GET /api/admin_stats?_t=1747556823503 HTTP/1.1" 200 -
+2025-05-18 11:27:03,648 INFO: 127.0.0.1 - - [18/May/2025 11:27:03] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:27:03,665 INFO: 127.0.0.1 - - [18/May/2025 11:27:03] "GET / HTTP/1.1" 200 -
+2025-05-18 11:27:03,675 WARNING: Unhandled path requested: templates/offline.html
+2025-05-18 11:27:03,677 INFO: 127.0.0.1 - - [18/May/2025 11:27:03] "[32mGET /templates/offline.html HTTP/1.1[0m" 302 -
+2025-05-18 11:27:03,701 INFO: 127.0.0.1 - - [18/May/2025 11:27:03] "GET / HTTP/1.1" 200 -
+2025-05-18 11:27:05,414 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:27:05,432 INFO: 127.0.0.1 - - [18/May/2025 11:27:05] "GET /service-worker.js?v=1747556823428 HTTP/1.1" 200 -
+2025-05-18 11:27:33,994 INFO: 127.0.0.1 - - [18/May/2025 11:27:33] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:27:34,000 INFO: 127.0.0.1 - - [18/May/2025 11:27:34] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:27:34,012 INFO: 127.0.0.1 - - [18/May/2025 11:27:34] "GET /api/admin_stats?_t=1747556853906 HTTP/1.1" 200 -
+2025-05-18 11:28:04,007 INFO: 127.0.0.1 - - [18/May/2025 11:28:04] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:28:04,014 INFO: 127.0.0.1 - - [18/May/2025 11:28:04] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:28:04,022 INFO: 127.0.0.1 - - [18/May/2025 11:28:04] "GET /api/admin_stats?_t=1747556883909 HTTP/1.1" 200 -
+2025-05-18 11:28:33,958 INFO: 127.0.0.1 - - [18/May/2025 11:28:33] "GET /api/admin_stats?_t=1747556913911 HTTP/1.1" 200 -
+2025-05-18 11:28:34,000 INFO: 127.0.0.1 - - [18/May/2025 11:28:34] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:28:34,005 INFO: 127.0.0.1 - - [18/May/2025 11:28:34] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:28:43,392 INFO:  * Detected change in 'C:\\Users\\Genius\\Documents\\POS-system1\\app.py', reloading
+2025-05-18 11:28:43,680 INFO:  * Restarting with stat
+2025-05-18 11:28:46,432 WARNING:  * Debugger is active!
+2025-05-18 11:28:46,437 INFO:  * Debugger PIN: 316-371-929
+2025-05-18 11:28:46,459 INFO: 127.0.0.1 - - [18/May/2025 11:28:46] "GET /socket.io/?EIO=4&transport=polling&t=PRYWe7H HTTP/1.1" 200 -
+2025-05-18 11:28:46,466 INFO: 127.0.0.1 - - [18/May/2025 11:28:46] "POST /socket.io/?EIO=4&transport=polling&t=PRYWeFz&sid=TLfn_skZebtqdLdQAAAA HTTP/1.1" 200 -
+2025-05-18 11:28:46,469 INFO: 127.0.0.1 - - [18/May/2025 11:28:46] "GET /socket.io/?EIO=4&transport=polling&t=PRYWeF-&sid=TLfn_skZebtqdLdQAAAA HTTP/1.1" 200 -
+2025-05-18 11:28:53,825 INFO:  * Detected change in 'C:\\Users\\Genius\\Documents\\POS-system1\\create_initial_admin.py', reloading
+2025-05-18 11:28:54,123 INFO:  * Restarting with stat
+2025-05-18 11:28:57,358 WARNING:  * Debugger is active!
+2025-05-18 11:28:57,367 INFO:  * Debugger PIN: 316-371-929
+2025-05-18 11:28:57,403 INFO: 127.0.0.1 - - [18/May/2025 11:28:57] "GET /socket.io/?EIO=4&transport=polling&t=PRYWgZU HTTP/1.1" 200 -
+2025-05-18 11:28:57,419 INFO: 127.0.0.1 - - [18/May/2025 11:28:57] "POST /socket.io/?EIO=4&transport=polling&t=PRYWgx0&sid=TxFk9vW1_NFQCCvNAAAA HTTP/1.1" 200 -
+2025-05-18 11:28:57,423 INFO: 127.0.0.1 - - [18/May/2025 11:28:57] "GET /socket.io/?EIO=4&transport=polling&t=PRYWgx1&sid=TxFk9vW1_NFQCCvNAAAA HTTP/1.1" 200 -
+2025-05-18 11:29:03,977 INFO: 127.0.0.1 - - [18/May/2025 11:29:03] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:29:03,979 INFO: 127.0.0.1 - - [18/May/2025 11:29:03] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:29:04,005 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:29:04,009 INFO: 127.0.0.1 - - [18/May/2025 11:29:04] "GET /api/admin_stats?_t=1747556943910 HTTP/1.1" 200 -
+2025-05-18 11:29:04,083 INFO: 127.0.0.1 - - [18/May/2025 11:29:04] "GET /service-worker.js?v=1747556823428 HTTP/1.1" 200 -
+2025-05-18 11:29:09,858 INFO:  * Detected change in 'C:\\Users\\Genius\\Documents\\POS-system1\\setup.py', reloading
+2025-05-18 11:29:10,137 INFO:  * Restarting with stat
+2025-05-18 11:29:13,144 WARNING:  * Debugger is active!
+2025-05-18 11:29:13,149 INFO:  * Debugger PIN: 316-371-929
+2025-05-18 11:29:13,178 INFO: 127.0.0.1 - - [18/May/2025 11:29:13] "GET /socket.io/?EIO=4&transport=polling&t=PRYWkTW HTTP/1.1" 200 -
+2025-05-18 11:29:13,192 INFO: 127.0.0.1 - - [18/May/2025 11:29:13] "POST /socket.io/?EIO=4&transport=polling&t=PRYWknU&sid=sDESUqvJLWQB6pR7AAAA HTTP/1.1" 200 -
+2025-05-18 11:29:13,195 INFO: 127.0.0.1 - - [18/May/2025 11:29:13] "GET /socket.io/?EIO=4&transport=polling&t=PRYWknV&sid=sDESUqvJLWQB6pR7AAAA HTTP/1.1" 200 -
+2025-05-18 11:29:33,983 INFO: 127.0.0.1 - - [18/May/2025 11:29:33] "GET /api/admin_stats?_t=1747556973899 HTTP/1.1" 200 -
+2025-05-18 11:29:33,992 INFO: 127.0.0.1 - - [18/May/2025 11:29:33] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:29:34,027 INFO: 127.0.0.1 - - [18/May/2025 11:29:34] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:30:03,957 INFO: 127.0.0.1 - - [18/May/2025 11:30:03] "GET /api/admin_stats?_t=1747557003901 HTTP/1.1" 200 -
+2025-05-18 11:30:03,997 INFO: 127.0.0.1 - - [18/May/2025 11:30:03] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:30:04,007 INFO: 127.0.0.1 - - [18/May/2025 11:30:04] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:31:03,924 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:31:03,989 INFO: 127.0.0.1 - - [18/May/2025 11:31:03] "GET /service-worker.js?v=1747556823428 HTTP/1.1" 200 -
+2025-05-18 11:31:33,013 INFO: 127.0.0.1 - - [18/May/2025 11:31:33] "GET /api/admin_stats?_t=1747557092920 HTTP/1.1" 200 -
+2025-05-18 11:31:33,021 INFO: 127.0.0.1 - - [18/May/2025 11:31:33] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:31:33,053 INFO: 127.0.0.1 - - [18/May/2025 11:31:33] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:32:32,984 INFO: 127.0.0.1 - - [18/May/2025 11:32:32] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:32:33,021 INFO: 127.0.0.1 - - [18/May/2025 11:32:33] "GET /api/admin_stats?_t=1747557152913 HTTP/1.1" 200 -
+2025-05-18 11:32:33,024 INFO: 127.0.0.1 - - [18/May/2025 11:32:33] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:33:03,940 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:33:03,944 INFO: 127.0.0.1 - - [18/May/2025 11:33:03] "GET /service-worker.js?v=1747556823428 HTTP/1.1" 200 -
+2025-05-18 11:33:32,982 INFO: 127.0.0.1 - - [18/May/2025 11:33:32] "GET /api/admin_stats?_t=1747557212900 HTTP/1.1" 200 -
+2025-05-18 11:33:33,001 INFO: 127.0.0.1 - - [18/May/2025 11:33:33] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:33:33,017 INFO: 127.0.0.1 - - [18/May/2025 11:33:33] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:34:32,968 INFO: 127.0.0.1 - - [18/May/2025 11:34:32] "GET /api/admin_stats?_t=1747557272900 HTTP/1.1" 200 -
+2025-05-18 11:34:33,010 INFO: 127.0.0.1 - - [18/May/2025 11:34:33] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:34:33,018 INFO: 127.0.0.1 - - [18/May/2025 11:34:33] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:35:03,925 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:35:03,930 INFO: 127.0.0.1 - - [18/May/2025 11:35:03] "GET /service-worker.js?v=1747556823428 HTTP/1.1" 200 -
+2025-05-18 11:35:14,470 INFO:  * Detected change in 'C:\\Users\\Genius\\Documents\\POS-system1\\health_check.py', reloading
+2025-05-18 11:35:14,763 INFO:  * Restarting with stat
+2025-05-18 11:35:18,060 WARNING:  * Debugger is active!
+2025-05-18 11:35:18,069 INFO:  * Debugger PIN: 316-371-929
+2025-05-18 11:35:18,099 INFO: 127.0.0.1 - - [18/May/2025 11:35:18] "GET /socket.io/?EIO=4&transport=polling&t=PRYY7aX HTTP/1.1" 200 -
+2025-05-18 11:35:18,112 INFO: 127.0.0.1 - - [18/May/2025 11:35:18] "POST /socket.io/?EIO=4&transport=polling&t=PRYY7tM&sid=hP1AY6XKta1eeIogAAAA HTTP/1.1" 200 -
+2025-05-18 11:35:18,114 INFO: 127.0.0.1 - - [18/May/2025 11:35:18] "GET /socket.io/?EIO=4&transport=polling&t=PRYY7tO&sid=hP1AY6XKta1eeIogAAAA HTTP/1.1" 200 -
+2025-05-18 11:35:22,288 INFO:  * Detected change in 'C:\\Users\\Genius\\Documents\\POS-system1\\backup_db.py', reloading
+2025-05-18 11:35:22,673 INFO:  * Restarting with stat
+2025-05-18 11:35:25,913 WARNING:  * Debugger is active!
+2025-05-18 11:35:25,920 INFO:  * Debugger PIN: 316-371-929
+2025-05-18 11:35:25,948 INFO: 127.0.0.1 - - [18/May/2025 11:35:25] "GET /socket.io/?EIO=4&transport=polling&t=PRYY9I0 HTTP/1.1" 200 -
+2025-05-18 11:35:25,961 INFO: 127.0.0.1 - - [18/May/2025 11:35:25] "POST /socket.io/?EIO=4&transport=polling&t=PRYY9o0&sid=GxLvk3l-OYH066FqAAAA HTTP/1.1" 200 -
+2025-05-18 11:35:25,965 INFO: 127.0.0.1 - - [18/May/2025 11:35:25] "GET /socket.io/?EIO=4&transport=polling&t=PRYY9o2&sid=GxLvk3l-OYH066FqAAAA HTTP/1.1" 200 -
+2025-05-18 11:35:33,017 INFO: 127.0.0.1 - - [18/May/2025 11:35:33] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:35:33,061 INFO: 127.0.0.1 - - [18/May/2025 11:35:33] "GET /api/admin_stats?_t=1747557332908 HTTP/1.1" 200 -
+2025-05-18 11:35:33,064 INFO: 127.0.0.1 - - [18/May/2025 11:35:33] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:36:32,974 INFO: 127.0.0.1 - - [18/May/2025 11:36:32] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:36:32,980 INFO: 127.0.0.1 - - [18/May/2025 11:36:32] "GET /api/admin_stats?_t=1747557392896 HTTP/1.1" 200 -
+2025-05-18 11:36:33,007 INFO: 127.0.0.1 - - [18/May/2025 11:36:33] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:37:03,922 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:37:04,038 INFO: 127.0.0.1 - - [18/May/2025 11:37:04] "GET /service-worker.js?v=1747556823428 HTTP/1.1" 200 -
+2025-05-18 11:37:32,996 INFO: 127.0.0.1 - - [18/May/2025 11:37:32] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:37:33,004 INFO: 127.0.0.1 - - [18/May/2025 11:37:33] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:37:33,014 INFO: 127.0.0.1 - - [18/May/2025 11:37:33] "GET /api/admin_stats?_t=1747557452910 HTTP/1.1" 200 -
+2025-05-18 11:38:32,986 INFO: 127.0.0.1 - - [18/May/2025 11:38:32] "GET /api/admin_stats?_t=1747557512906 HTTP/1.1" 200 -
+2025-05-18 11:38:33,017 INFO: 127.0.0.1 - - [18/May/2025 11:38:33] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:38:33,026 INFO: 127.0.0.1 - - [18/May/2025 11:38:33] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:39:03,920 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:39:03,925 INFO: 127.0.0.1 - - [18/May/2025 11:39:03] "GET /service-worker.js?v=1747556823428 HTTP/1.1" 200 -
+2025-05-18 11:39:33,036 INFO: 127.0.0.1 - - [18/May/2025 11:39:33] "GET /api/admin_stats?_t=1747557572914 HTTP/1.1" 200 -
+2025-05-18 11:39:33,040 INFO: 127.0.0.1 - - [18/May/2025 11:39:33] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:39:33,047 INFO: 127.0.0.1 - - [18/May/2025 11:39:33] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:40:32,982 INFO: 127.0.0.1 - - [18/May/2025 11:40:32] "GET /api/admin_stats?_t=1747557632898 HTTP/1.1" 200 -
+2025-05-18 11:40:33,039 INFO: 127.0.0.1 - - [18/May/2025 11:40:33] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:40:33,046 INFO: 127.0.0.1 - - [18/May/2025 11:40:33] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:41:32,967 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:41:32,972 INFO: 127.0.0.1 - - [18/May/2025 11:41:32] "GET /service-worker.js?v=1747556823428 HTTP/1.1" 200 -
+2025-05-18 11:41:33,042 INFO: 127.0.0.1 - - [18/May/2025 11:41:33] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:41:33,050 INFO: 127.0.0.1 - - [18/May/2025 11:41:33] "GET /api/admin_stats?_t=1747557692900 HTTP/1.1" 200 -
+2025-05-18 11:41:33,057 INFO: 127.0.0.1 - - [18/May/2025 11:41:33] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:42:33,007 INFO: 127.0.0.1 - - [18/May/2025 11:42:33] "GET /api/admin_stats?_t=1747557752897 HTTP/1.1" 200 -
+2025-05-18 11:42:33,011 INFO: 127.0.0.1 - - [18/May/2025 11:42:33] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:42:33,015 INFO: 127.0.0.1 - - [18/May/2025 11:42:33] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:43:03,996 INFO: 127.0.0.1 - - [18/May/2025 11:43:03] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:43:04,040 INFO: 127.0.0.1 - - [18/May/2025 11:43:04] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:43:04,059 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:43:04,067 INFO: 127.0.0.1 - - [18/May/2025 11:43:04] "GET /api/admin_stats?_t=1747557783899 HTTP/1.1" 200 -
+2025-05-18 11:43:04,071 INFO: 127.0.0.1 - - [18/May/2025 11:43:04] "GET /service-worker.js?v=1747556823428 HTTP/1.1" 200 -
+2025-05-18 11:43:33,979 INFO: 127.0.0.1 - - [18/May/2025 11:43:33] "GET /api/admin_stats?_t=1747557813899 HTTP/1.1" 200 -
+2025-05-18 11:43:34,023 INFO: 127.0.0.1 - - [18/May/2025 11:43:34] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:43:34,026 INFO: 127.0.0.1 - - [18/May/2025 11:43:34] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:44:32,955 INFO: 127.0.0.1 - - [18/May/2025 11:44:32] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:44:32,969 INFO: 127.0.0.1 - - [18/May/2025 11:44:32] "GET /api/admin_stats?_t=1747557872896 HTTP/1.1" 200 -
+2025-05-18 11:44:32,991 INFO: 127.0.0.1 - - [18/May/2025 11:44:32] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:45:32,966 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:45:32,970 INFO: 127.0.0.1 - - [18/May/2025 11:45:32] "GET /service-worker.js?v=1747556823428 HTTP/1.1" 200 -
+2025-05-18 11:45:33,008 INFO: 127.0.0.1 - - [18/May/2025 11:45:33] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:45:33,028 INFO: 127.0.0.1 - - [18/May/2025 11:45:33] "GET /api/admin_stats?_t=1747557932896 HTTP/1.1" 200 -
+2025-05-18 11:45:33,036 INFO: 127.0.0.1 - - [18/May/2025 11:45:33] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:46:32,993 INFO: 127.0.0.1 - - [18/May/2025 11:46:32] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:46:33,000 INFO: 127.0.0.1 - - [18/May/2025 11:46:33] "GET /api/admin_stats?_t=1747557992907 HTTP/1.1" 200 -
+2025-05-18 11:46:33,031 INFO: 127.0.0.1 - - [18/May/2025 11:46:33] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:47:32,939 INFO: 127.0.0.1 - - [18/May/2025 11:47:32] "GET /api/admin_stats?_t=1747558052898 HTTP/1.1" 200 -
+2025-05-18 11:47:32,998 WARNING: Unhandled path requested: service-worker.js
+2025-05-18 11:47:33,002 INFO: 127.0.0.1 - - [18/May/2025 11:47:33] "GET /service-worker.js?v=1747556823428 HTTP/1.1" 200 -
+2025-05-18 11:47:33,009 INFO: 127.0.0.1 - - [18/May/2025 11:47:33] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:47:33,018 INFO: 127.0.0.1 - - [18/May/2025 11:47:33] "GET /api/stock_movements HTTP/1.1" 200 -
+2025-05-18 11:48:32,951 INFO: 127.0.0.1 - - [18/May/2025 11:48:32] "GET /api/admin_stats?_t=1747558112902 HTTP/1.1" 200 -
+2025-05-18 11:48:32,979 INFO: 127.0.0.1 - - [18/May/2025 11:48:32] "GET /api/products HTTP/1.1" 200 -
+2025-05-18 11:48:32,982 INFO: 127.0.0.1 - - [18/May/2025 11:48:32] "GET /api/stock_movements HTTP/1.1" 200 -

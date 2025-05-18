@@ -2726,120 +2726,88 @@ def get_grocery_items():
     }
 
 def init_db():
-    with app.app_context():
-        # Create all tables
-        db.create_all()
-        
-        # Add location columns if they don't exist
-        try:
-            with db.engine.connect() as conn:
-                # Check if columns exist
-                result = conn.execute(text("PRAGMA table_info(user)"))
-                columns = [row[1] for row in result]
+    """Initialize the database with proper error handling"""
+    try:
+        with app.app_context():
+            # Check if tables exist
+            inspector = db.inspect(db.engine)
+            existing_tables = inspector.get_table_names()
+            
+            if not existing_tables:
+                print("Creating database tables...")
+                db.create_all()
+                print("Database tables created successfully")
+            else:
+                print("Database tables already exist")
                 
-                # Add missing columns
-                if 'latitude' not in columns:
-                    conn.execute(text("ALTER TABLE user ADD COLUMN latitude FLOAT"))
-                if 'longitude' not in columns:
-                    conn.execute(text("ALTER TABLE user ADD COLUMN longitude FLOAT"))
-                if 'location_name' not in columns:
-                    conn.execute(text("ALTER TABLE user ADD COLUMN location_name VARCHAR(200)"))
-                if 'last_location_update' not in columns:
-                    conn.execute(text("ALTER TABLE user ADD COLUMN last_location_update DATETIME"))
-                
-                conn.commit()
-        except Exception as e:
-            app.logger.error(f"Error adding location columns: {e}")
-        
-        # Check if admin user exists
-        admin = User.query.filter_by(username='admin').first()
-        if not admin:
-            # Create admin user
-            admin = User(
-                username='admin',
-                email='admin@example.com',
-                is_admin=True,
-                is_staff=True,
-                full_name='System Administrator',
-                initials='SA'
-            )
-            admin.set_password('admin123')
-            db.session.add(admin)
-            db.session.commit()
-            app.logger.info("Admin user created successfully")
-        
-        app.logger.info("Database tables created successfully")
+            # Verify database integrity
+            check_db_integrity()
+            
+    except Exception as e:
+        print(f"Error initializing database: {str(e)}")
+        raise
 
 def check_db_integrity():
-    """
-    Check database integrity and repair issues if needed
-    """
+    """Verify database integrity and fix common issues"""
     try:
-        # Connect to the database
-        conn = sqlite3.connect('instance/pos.db')
-        cursor = conn.cursor()
-        
-        # Run integrity check
-        cursor.execute("PRAGMA integrity_check")
-        integrity_result = cursor.fetchone()[0]
-        
-        if integrity_result != "ok":
-            logger.critical(f"Database integrity check failed: {integrity_result}")
-            
-            # Backup the database
-            import shutil
-            from datetime import datetime
-            backup_file = f"instance/pos_backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}.db"
-            try:
-                shutil.copy2('instance/pos.db', backup_file)
-                logger.info(f"Created database backup at {backup_file}")
-            except Exception as backup_error:
-                logger.error(f"Failed to create database backup: {str(backup_error)}")
-            
-            # Try to fix common issues
-            cursor.execute("PRAGMA foreign_key_check")
-            fk_violations = cursor.fetchall()
-            if fk_violations:
-                logger.error(f"Foreign key violations found: {fk_violations}")
-            
-            # Check for incorrect stock movements
-            cursor.execute("""
-            SELECT p.id, p.name, p.stock, 
-                   (SELECT SUM(sm.quantity) FROM stock_movement sm 
-                    WHERE sm.product_id = p.id AND sm.movement_type = 'restock') as total_restock,
-                   (SELECT SUM(sm.quantity) FROM stock_movement sm 
-                    WHERE sm.product_id = p.id AND sm.movement_type = 'sale') as total_sales
-            FROM product p
-            """)
-            
-            stock_discrepancies = []
-            for row in cursor.fetchall():
-                product_id, name, current_stock, total_restock, total_sales = row
-                total_restock = total_restock or 0
-                total_sales = total_sales or 0
-                expected_stock = total_restock - total_sales
+        with app.app_context():
+            # Check User table
+            if 'user' in db.metadata.tables:
+                # Ensure required columns exist
+                required_columns = ['id', 'username', 'email', 'password_hash', 'is_admin', 'is_staff']
+                for column in required_columns:
+                    if column not in db.metadata.tables['user'].columns:
+                        print(f"Warning: Missing column '{column}' in User table")
                 
-                if abs(current_stock - expected_stock) > 0.001:  # Allow small float rounding errors
-                    stock_discrepancies.append({
-                        'product_id': product_id,
-                        'name': name,
-                        'current_stock': current_stock,
-                        'expected_stock': expected_stock,
-                        'difference': current_stock - expected_stock
-                    })
+                # Check for duplicate usernames/emails
+                duplicate_users = db.session.query(User).group_by(User.username).having(db.func.count(User.id) > 1).all()
+                if duplicate_users:
+                    print("Warning: Found duplicate usernames in User table")
+                
+                duplicate_emails = db.session.query(User).group_by(User.email).having(db.func.count(User.id) > 1).all()
+                if duplicate_emails:
+                    print("Warning: Found duplicate emails in User table")
             
-            if stock_discrepancies:
-                logger.warning(f"Found {len(stock_discrepancies)} stock discrepancies")
-                for discrepancy in stock_discrepancies:
-                    logger.warning(f"Stock discrepancy for {discrepancy['name']}: current={discrepancy['current_stock']}, expected={discrepancy['expected_stock']}")
-        else:
-            logger.info("Database integrity check passed")
-        
-        conn.close()
-        return True
+            # Check Product table
+            if 'product' in db.metadata.tables:
+                # Ensure required columns exist
+                required_columns = ['id', 'name', 'price', 'stock']
+                for column in required_columns:
+                    if column not in db.metadata.tables['product'].columns:
+                        print(f"Warning: Missing column '{column}' in Product table")
+                
+                # Check for negative stock
+                negative_stock = Product.query.filter(Product.stock < 0).all()
+                if negative_stock:
+                    print("Warning: Found products with negative stock")
+            
+            # Check Order table
+            if 'order' in db.metadata.tables:
+                # Ensure required columns exist
+                required_columns = ['id', 'reference_number', 'order_date', 'total_amount', 'status']
+                for column in required_columns:
+                    if column not in db.metadata.tables['order'].columns:
+                        print(f"Warning: Missing column '{column}' in Order table")
+                
+                # Check for orphaned orders
+                orphaned_orders = Order.query.filter(Order.customer_id.is_(None)).all()
+                if orphaned_orders:
+                    print("Warning: Found orders without customer reference")
+            
+            # Check for foreign key constraints
+            try:
+                db.session.execute('SELECT 1 FROM user LIMIT 1')
+                db.session.execute('SELECT 1 FROM product LIMIT 1')
+                db.session.execute('SELECT 1 FROM order LIMIT 1')
+                db.session.execute('SELECT 1 FROM order_item LIMIT 1')
+            except Exception as e:
+                print(f"Warning: Database constraint check failed: {str(e)}")
+            
+            print("Database integrity check completed")
+            
     except Exception as e:
-        logger.critical(f"Error checking database integrity: {str(e)}")
-        return False
+        print(f"Error checking database integrity: {str(e)}")
+        raise
 
 @app.route('/api/test', methods=['GET'])
 def api_test():

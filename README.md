@@ -1,5 +1,8 @@
 # POS System
 
+**License Notice:**
+This software is proprietary and not for public use or distribution without written permission from the owner (Ssemwanga Haruna Moses / arisegenius). All rights reserved.
+
 A comprehensive Point of Sale (POS) system built with Flask, featuring both online and offline functionality with Progressive Web App (PWA) capabilities.
 
 ## Features
@@ -321,4 +324,84 @@ This POS system is a Progressive Web App (PWA). You can install it on your phone
 
 ---
 
-For more details, see the full documentation in `STOCK_SYSTEM_README.md`. 
+For more details, see the full documentation in `STOCK_SYSTEM_README.md`.
+
+## Production Deployment Checklist
+
+### Environment & Security
+- [ ] Set `FLASK_ENV=production` and `DEBUG=False` in your `.env` file.
+- [ ] Set a strong, unique `SECRET_KEY` in your `.env`.
+- [ ] Change all default passwords (admin, staff, etc.).
+- [ ] Restrict admin and database credentials to trusted personnel.
+- [ ] Use HTTPS (SSL/TLS) for all web traffic.
+- [ ] Configure a proper mail server for notifications.
+
+### Application & Server
+- [ ] Use a production-ready WSGI server (e.g., Gunicorn, uWSGI, or Waitress for Windows).
+- [ ] Set up a reverse proxy (e.g., Nginx or Apache) in front of your Flask app.
+- [ ] Ensure all static files (JS, CSS, images, favicon) are present and correctly referenced.
+- [ ] Set up logging (rotate logs, store in `logs/` directory).
+- [ ] Set up error monitoring (e.g., Sentry, Rollbar, or email alerts).
+
+### Database
+- [ ] Ensure the database file (`instance/pos.db`) is not world-readable.
+- [ ] Regularly back up the database (see below).
+- [ ] Run `python init_db.py` and `python create_initial_admin.py` to verify DB health and admin access.
+
+### Backups & Recovery
+- [ ] Automate daily backups of `instance/pos.db` and `uploads/` (if you store user files).
+- [ ] Store backups offsite or in cloud storage.
+- [ ] Test restoring from backup before going live.
+
+### Testing
+- [ ] Run all automated tests and health checks (see below).
+- [ ] Manually test all critical workflows (login, order, checkout, admin, email, etc.).
+- [ ] Test on both desktop and mobile devices.
+
+### Documentation
+- [ ] Update this `README.md` with deployment, usage, and troubleshooting instructions.
+- [ ] Provide a contact email for support.
+
+---
+
+## Health Check
+
+Run the health check script to verify database, admin user, and email:
+
+```
+python health_check.py
+```
+
+---
+
+## Backups
+
+To back up your database and uploads directory, run:
+
+```
+python backup_db.py
+```
+
+Backups will be stored in the `backups/` directory with timestamped filenames.
+
+To restore, stop the app and replace `instance/pos.db` with a backup copy. For uploads, restore the relevant backup folder to `uploads/`.
+
+---
+
+## Recovery
+
+1. Stop the application.
+2. Copy the desired backup file from `backups/` to `instance/pos.db` (overwrite the existing file).
+3. If needed, restore uploads from the corresponding backup folder.
+4. Restart the application.
+
+---
+
+## Health & Automated Testing
+
+- Use `python health_check.py` for a quick system check.
+- For more comprehensive testing, consider adding `pytest` or `unittest` tests for all major features.
+
+---
+
+For support, contact: givenwholesalers1@gmail.com 
