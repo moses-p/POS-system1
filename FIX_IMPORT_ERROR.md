@@ -47,5 +47,5 @@ If the rebuild script doesn't work, you can manually fix the issue:
 
 If you need further assistance with this issue:
 
-- **Email:** arisegeniusug@gmail.com
-- **Phone:** +256743232445 
+- **Email:** givenwholesalers1@gmail.com
+- **Phone:** 0782 413668 

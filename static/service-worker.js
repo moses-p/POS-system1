@@ -126,6 +126,11 @@ self.addEventListener('activate', event => {
 
 // Fetch event - serve from cache or fetch from network
 self.addEventListener('fetch', event => {
+    // Bypass Socket.IO requests
+    if (event.request.url.includes('/socket.io/')) {
+        return;
+    }
+
     event.respondWith(
         caches.match(event.request)
             .then(response => {

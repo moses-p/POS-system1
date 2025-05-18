@@ -649,17 +649,26 @@
     function updateDailyTable(data) {
         const tbody = document.querySelector('#dailyTable tbody');
         tbody.innerHTML = '';
-        
+
+        // Defensive: check for required arrays
+        if (!data || !Array.isArray(data.dates) || !Array.isArray(data.sales) || !Array.isArray(data.profit)) {
+            console.error("updateDailyTable: Missing or invalid data arrays.");
+            tbody.innerHTML = '<tr><td colspan="3" class="text-center text-muted">No data available.</td></tr>';
+            document.getElementById('dailySalesTotal').textContent = 'UGX 0.00';
+            document.getElementById('dailyProfitTotal').textContent = 'UGX 0.00';
+            return;
+        }
+
         let totalSales = 0;
         let totalProfit = 0;
-        
+
         data.dates.forEach((date, index) => {
-            const sales = data.sales[index];
-            const profit = data.profit[index];
-            
+            const sales = Array.isArray(data.sales) && data.sales[index] !== undefined ? data.sales[index] : 0;
+            const profit = Array.isArray(data.profit) && data.profit[index] !== undefined ? data.profit[index] : 0;
+
             totalSales += sales;
             totalProfit += profit;
-            
+
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${date}</td>
@@ -668,7 +677,7 @@
             `;
             tbody.appendChild(row);
         });
-        
+
         document.getElementById('dailySalesTotal').textContent = 'UGX ' + totalSales.toLocaleString('en-US', {minimumFractionDigits: 2});
         document.getElementById('dailyProfitTotal').textContent = 'UGX ' + totalProfit.toLocaleString('en-US', {minimumFractionDigits: 2});
     }
@@ -676,17 +685,26 @@
     function updateWeeklyTable(data) {
         const tbody = document.querySelector('#weeklyTable tbody');
         tbody.innerHTML = '';
-        
+
+        // Defensive: check for required arrays
+        if (!data || !Array.isArray(data.weeks) || !Array.isArray(data.sales) || !Array.isArray(data.profit)) {
+            console.error("updateWeeklyTable: Missing or invalid data arrays.");
+            tbody.innerHTML = '<tr><td colspan="3" class="text-center text-muted">No data available.</td></tr>';
+            document.getElementById('weeklySalesTotal').textContent = 'UGX 0.00';
+            document.getElementById('weeklyProfitTotal').textContent = 'UGX 0.00';
+            return;
+        }
+
         let totalSales = 0;
         let totalProfit = 0;
-        
+
         data.weeks.forEach((week, index) => {
-            const sales = data.sales[index];
-            const profit = data.profit[index];
-            
+            const sales = Array.isArray(data.sales) && data.sales[index] !== undefined ? data.sales[index] : 0;
+            const profit = Array.isArray(data.profit) && data.profit[index] !== undefined ? data.profit[index] : 0;
+
             totalSales += sales;
             totalProfit += profit;
-            
+
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${week}</td>
@@ -695,7 +713,7 @@
             `;
             tbody.appendChild(row);
         });
-        
+
         document.getElementById('weeklySalesTotal').textContent = 'UGX ' + totalSales.toLocaleString('en-US', {minimumFractionDigits: 2});
         document.getElementById('weeklyProfitTotal').textContent = 'UGX ' + totalProfit.toLocaleString('en-US', {minimumFractionDigits: 2});
     }
@@ -703,17 +721,26 @@
     function updateMonthlyTable(data) {
         const tbody = document.querySelector('#monthlyTable tbody');
         tbody.innerHTML = '';
-        
+
+        // Defensive: check for required arrays
+        if (!data || !Array.isArray(data.months) || !Array.isArray(data.sales) || !Array.isArray(data.profit)) {
+            console.error("updateMonthlyTable: Missing or invalid data arrays.");
+            tbody.innerHTML = '<tr><td colspan="3" class="text-center text-muted">No data available.</td></tr>';
+            document.getElementById('monthlySalesTotal').textContent = 'UGX 0.00';
+            document.getElementById('monthlyProfitTotal').textContent = 'UGX 0.00';
+            return;
+        }
+
         let totalSales = 0;
         let totalProfit = 0;
-        
+
         data.months.forEach((month, index) => {
-            const sales = data.sales[index];
-            const profit = data.profit[index];
-            
+            const sales = Array.isArray(data.sales) && data.sales[index] !== undefined ? data.sales[index] : 0;
+            const profit = Array.isArray(data.profit) && data.profit[index] !== undefined ? data.profit[index] : 0;
+
             totalSales += sales;
             totalProfit += profit;
-            
+
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${month}</td>
@@ -722,7 +749,7 @@
             `;
             tbody.appendChild(row);
         });
-        
+
         document.getElementById('monthlySalesTotal').textContent = 'UGX ' + totalSales.toLocaleString('en-US', {minimumFractionDigits: 2});
         document.getElementById('monthlyProfitTotal').textContent = 'UGX ' + totalProfit.toLocaleString('en-US', {minimumFractionDigits: 2});
     }
@@ -730,17 +757,26 @@
     function updateYearlyTable(data) {
         const tbody = document.querySelector('#yearlyTable tbody');
         tbody.innerHTML = '';
-        
+
+        // Defensive: check for required arrays
+        if (!data || !Array.isArray(data.years) || !Array.isArray(data.sales) || !Array.isArray(data.profit)) {
+            console.error("updateYearlyTable: Missing or invalid data arrays.");
+            tbody.innerHTML = '<tr><td colspan="3" class="text-center text-muted">No data available.</td></tr>';
+            document.getElementById('yearlySalesTotal').textContent = 'UGX 0.00';
+            document.getElementById('yearlyProfitTotal').textContent = 'UGX 0.00';
+            return;
+        }
+
         let totalSales = 0;
         let totalProfit = 0;
-        
+
         data.years.forEach((year, index) => {
-            const sales = data.sales[index];
-            const profit = data.profit[index];
-            
+            const sales = Array.isArray(data.sales) && data.sales[index] !== undefined ? data.sales[index] : 0;
+            const profit = Array.isArray(data.profit) && data.profit[index] !== undefined ? data.profit[index] : 0;
+
             totalSales += sales;
             totalProfit += profit;
-            
+
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${year}</td>
@@ -749,7 +785,7 @@
             `;
             tbody.appendChild(row);
         });
-        
+
         document.getElementById('yearlySalesTotal').textContent = 'UGX ' + totalSales.toLocaleString('en-US', {minimumFractionDigits: 2});
         document.getElementById('yearlyProfitTotal').textContent = 'UGX ' + totalProfit.toLocaleString('en-US', {minimumFractionDigits: 2});
     }

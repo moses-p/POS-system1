@@ -8,137 +8,134 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h4>{{ 'Edit' if product else 'Add' }} Product</h4>
+                    <h4 class="mb-0">Edit Product</h4>
                 </div>
                 <div class="card-body">
-                    <form method="POST">
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Product Name</label>
-                            <input type="text" 
-                                   class="form-control" 
-                                   id="name" 
-                                   name="name" 
-                                   value="{{ product.name if product else '' }}"
-                                   required>
+                    <form method="POST" enctype="multipart/form-data">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="name" class="form-label">Product Name</label>
+                                <input type="text" class="form-control" id="name" name="name" 
+                                       value="{{ product.name }}" required>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="category" class="form-label">Category</label>
+                                <select class="form-select" id="category" name="category">
+                                    <option value="">Select Category</option>
+                                    {% for category in categories %}
+                                    <option value="{{ category }}" {% if product.category == category %}selected{% endif %}>
+                                        {{ category }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="col-12">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" name="description" 
+                                          rows="3">{{ product.description }}</textarea>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="price" class="form-label">Selling Price</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="price" name="price" 
+                                           value="{{ product.price }}" step="0.01" required>
+                                    <select class="form-select" id="currency" name="currency" style="max-width: 100px;">
+                                        {% for code, name in currencies %}
+                                        <option value="{{ code }}" {% if product.currency == code %}selected{% endif %}>{{ code }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="buying_price" class="form-label">Buying Price (Cost)</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="buying_price" name="buying_price" 
+                                           value="{{ product.buying_price }}" step="0.01" required>
+                                    <select class="form-select" id="currency" name="currency" style="max-width: 100px;">
+                                        {% for code, name in currencies %}
+                                        <option value="{{ code }}" {% if product.currency == code %}selected{% endif %}>{{ code }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label for="stock" class="form-label">Current Stock</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="stock" name="stock" 
+                                           value="{{ product.stock }}" step="0.01" required>
+                                    <select class="form-select" id="unit" name="unit" style="max-width: 100px;">
+                                        {% for unit in units %}
+                                        <option value="{{ unit }}" {% if product.unit == unit %}selected{% endif %}>
+                                            {{ unit }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label for="max_stock" class="form-label">Maximum Stock</label>
+                                <input type="number" class="form-control" id="max_stock" name="max_stock" 
+                                       value="{{ product.max_stock }}" step="0.01" required>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label for="reorder_point" class="form-label">Reorder Point</label>
+                                <input type="number" class="form-control" id="reorder_point" name="reorder_point" 
+                                       value="{{ product.reorder_point }}" step="0.01" required>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="barcode" class="form-label">Barcode</label>
+                                <input type="text" class="form-control" id="barcode" name="barcode" 
+                                       value="{{ product.barcode }}">
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="image" class="form-label">Product Image</label>
+                                <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                                {% if product.image_url %}
+                                <div class="mt-2">
+                                    <img src="{{ url_for('serve_images', filename=product.image_url) }}" 
+                                         alt="{{ product.name }}" class="img-thumbnail" style="max-height: 100px;">
+                                </div>
+                                {% endif %}
+                            </div>
                         </div>
-
-                        <div class="mb-3">
-                            <label for="description" class="form-label">Description</label>
-                            <textarea class="form-control" 
-                                      id="description" 
-                                      name="description" 
-                                      rows="3">{{ product.description if product else '' }}</textarea>
+                        
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <a href="{{ url_for('inventory_management') }}" class="btn btn-secondary">Cancel</a>
                         </div>
-
-                        <div class="mb-3">
-                            <label for="price" class="form-label">Price (UGX)</label>
-                            <input type="number" 
-                                   class="form-control" 
-                                   id="price" 
-                                   name="price" 
-                                   step="100" 
-                                   min="0" 
-                                   value="{{ product.price if product else '' }}"
-                                   required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="unit" class="form-label">Unit</label>
-                            <select class="form-control" id="unit" name="unit" required>
-                                <option value="">Select unit</option>
-                                <option value="kgs" {% if product and product.unit == 'kgs' %}selected{% endif %}>Kilograms (kgs)</option>
-                                <option value="ltrs" {% if product and product.unit == 'ltrs' %}selected{% endif %}>Liters (ltrs)</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="stock" class="form-label">Current Stock</label>
-                            <input type="number" 
-                                   class="form-control" 
-                                   id="stock" 
-                                   name="stock" 
-                                   step="0.01" 
-                                   min="0" 
-                                   value="{{ "%.2f"|format(product.stock) if product else '0.00' }}"
-                                   required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="max_stock" class="form-label">Maximum Stock Capacity</label>
-                            <input type="number" 
-                                   class="form-control" 
-                                   id="max_stock" 
-                                   name="max_stock" 
-                                   step="0.01" 
-                                   min="0" 
-                                   value="{{ "%.2f"|format(product.max_stock) if product else '' }}"
-                                   required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="reorder_point" class="form-label">Reorder Point</label>
-                            <input type="number" 
-                                   class="form-control" 
-                                   id="reorder_point" 
-                                   name="reorder_point" 
-                                   step="0.01" 
-                                   min="0" 
-                                   value="{{ "%.2f"|format(product.reorder_point) if product else '' }}"
-                                   required>
-                            <div class="form-text">Stock level at which you want to be alerted to reorder</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="category" class="form-label">Category</label>
-                            <input type="text" 
-                                   class="form-control" 
-                                   id="category" 
-                                   name="category" 
-                                   value="{{ product.category if product else '' }}">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="image_url" class="form-label">Image URL</label>
-                            <input type="url" 
-                                   class="form-control" 
-                                   id="image_url" 
-                                   name="image_url" 
-                                   value="{{ product.image_url if product else '' }}">
-                        </div>
-
-                        <button type="submit" class="btn btn-primary">{{ 'Update' if product else 'Add' }} Product</button>
-                        <a href="{{ url_for('admin') }}" class="btn btn-secondary">Cancel</a>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
-{% endblock %}
 
 {% block scripts %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Validate that reorder point is less than max stock
+    // Set max_stock and reorder_point to match stock if they're 0
+    const stockInput = document.getElementById('stock');
     const maxStockInput = document.getElementById('max_stock');
     const reorderPointInput = document.getElementById('reorder_point');
     
-    function validateStockLevels() {
-        const maxStock = parseFloat(maxStockInput.value);
-        const reorderPoint = parseFloat(reorderPointInput.value);
-        
-        if (reorderPoint >= maxStock) {
-            reorderPointInput.setCustomValidity('Reorder point must be less than maximum stock');
-        } else {
-            reorderPointInput.setCustomValidity('');
+    stockInput.addEventListener('change', function() {
+        if (maxStockInput.value === '0') {
+            maxStockInput.value = this.value;
         }
-    }
-    
-    maxStockInput.addEventListener('input', validateStockLevels);
-    reorderPointInput.addEventListener('input', validateStockLevels);
-    
-    // Initial validation
-    validateStockLevels();
+        if (reorderPointInput.value === '0') {
+            reorderPointInput.value = Math.floor(this.value * 0.2); // 20% of stock as reorder point
+        }
+    });
 });
 </script>
+{% endblock %}
 {% endblock %} 

@@ -156,6 +156,7 @@
                         <div class="card-body">
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item d-flex justify-content-between"><span>Order Date:</span><span class="text-muted">{{ order.order_date|localtime if order.order_date else 'N/A' }}</span></li>
+                                <li class="list-group-item d-flex justify-content-between"><span>Processed By:</span><span class="text-muted">{{ order.created_by.username if order.created_by and order.created_by.username else 'System' }}</span></li>
                                 <li class="list-group-item d-flex justify-content-between"><span>Order Type:</span><span class="badge bg-secondary">{{ order.order_type|capitalize }}</span></li>
                                 <li class="list-group-item d-flex justify-content-between"><span>Status:</span>{% if order.status == 'pending' %}<span class="badge bg-warning">Pending</span>{% elif order.status == 'processing' %}<span class="badge bg-info">Processing</span>{% elif order.status == 'completed' %}<span class="badge bg-success">Completed</span>{% elif order.status == 'cancelled' %}<span class="badge bg-danger">Cancelled</span>{% else %}<span class="badge bg-secondary">{{ order.status|capitalize }}</span>{% endif %}</li>
                                 <li class="list-group-item d-flex justify-content-between"><span>Payment Method:</span><span class="text-muted">{{ order.payment_method|default('Cash')|capitalize }}</span></li>
@@ -170,18 +171,18 @@
 </div>
 
 <!-- Update Status Modal -->
-<div class="modal fade" id="updateStatusModal" tabindex="-1" aria-labelledby="updateStatusModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade" id="updateStatusModal" tabindex="-1" role="dialog" aria-labelledby="updateStatusModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="updateStatusModalLabel">Update Order Status</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ staff_update_order_status_url }}" method="POST">
-                <div class="modal-body">
+            <div class="modal-body">
+                <form action="{{ staff_update_order_status_url }}" method="POST" role="form" aria-label="Update Order Status Form">
                     <div class="mb-3">
                         <label for="status" class="form-label">New Status</label>
-                        <select name="status" id="status" class="form-select" required>
+                        <select name="status" id="status" class="form-select" required aria-required="true">
                             <option value="">Select status</option>
                             {% if order.status == 'pending' %}
                                 <option value="processing">Processing</option>
@@ -194,15 +195,15 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="notes" class="form-label">Notes (Optional)</label>
+                        <label for="notes" class="form-label">Notes <span class="visually-hidden">(optional)</span></label>
                         <textarea name="notes" id="notes" class="form-control" rows="3"></textarea>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Update Status</button>
-                </div>
-            </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Update Status</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

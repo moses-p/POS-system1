@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Edit Expense</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <input type="text" class="form-control" id="description" name="description" 
+                                   value="{{ expense.description }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="amount" class="form-label">Amount</label>
+                            <input type="number" class="form-control" id="amount" name="amount" 
+                                   value="{{ expense.amount }}" step="0.01" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Category</label>
+                            <select class="form-select" id="category" name="category" required>
+                                <option value="">Select Category</option>
+                                <option value="rent" {% if expense.category == 'rent' %}selected{% endif %}>Rent</option>
+                                <option value="utilities" {% if expense.category == 'utilities' %}selected{% endif %}>Utilities</option>
+                                <option value="salaries" {% if expense.category == 'salaries' %}selected{% endif %}>Salaries</option>
+                                <option value="supplies" {% if expense.category == 'supplies' %}selected{% endif %}>Supplies</option>
+                                <option value="maintenance" {% if expense.category == 'maintenance' %}selected{% endif %}>Maintenance</option>
+                                <option value="marketing" {% if expense.category == 'marketing' %}selected{% endif %}>Marketing</option>
+                                <option value="other" {% if expense.category == 'other' %}selected{% endif %}>Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="notes" class="form-label">Notes</label>
+                            <textarea class="form-control" id="notes" name="notes" rows="3">{{ expense.notes }}</textarea>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('manage_expenses') }}" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

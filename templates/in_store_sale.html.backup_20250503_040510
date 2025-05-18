@@ -3,6 +3,8 @@
 {% block title %}In-Store Sale{% endblock %}
 
 {% block content %}
+<!-- DEBUG_MARKER_BACKUP -->
+<div style="color: blue; font-weight: bold;">DEBUG_MARKER_BACKUP</div>
 <div class="container mt-4">
     <!-- Online Orders Alert -->
     <div id="onlineOrdersAlert" class="alert alert-warning alert-dismissible fade d-none" role="alert">

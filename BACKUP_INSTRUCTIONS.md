@@ -70,5 +70,5 @@ If backups are not working:
 4. Review `backup_log.txt` for any error messages
 
 For persistent issues, please contact technical support:
-- Email: arisegeniusug@gmail.com
-- Phone: +256743232445 
+- Email: givenwholesalers1@gmail.com
+- Phone: 0782 413668 

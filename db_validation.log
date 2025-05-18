@@ -1,0 +1,36 @@
+2025-05-17 06:24:35,458 INFO: Starting database validation
+2025-05-17 06:24:35,476 INFO: Database backed up to instance/pos_backup_20250517_062435.db
+2025-05-17 06:24:35,479 INFO: Deleted 0 orphaned order items
+2025-05-17 06:24:35,480 INFO: Deleted 0 orphaned cart items
+2025-05-17 06:24:35,480 INFO: Deleted 0 orphaned stock movements
+2025-05-17 06:24:35,487 INFO: Updated inventory counts for 2 products
+2025-05-17 06:24:35,494 INFO: Created or verified index for product name
+2025-05-17 06:24:35,498 INFO: Created or verified index for product category
+2025-05-17 06:24:35,502 INFO: Created or verified index for product barcode
+2025-05-17 06:24:35,506 INFO: Created or verified index for order date
+2025-05-17 06:24:35,510 INFO: Created or verified index for order status
+2025-05-17 06:24:35,514 INFO: Created or verified index for order customer
+2025-05-17 06:24:35,519 INFO: Created or verified index for order viewed status
+2025-05-17 06:24:35,523 INFO: Created or verified index for stock movement product
+2025-05-17 06:24:35,528 INFO: Created or verified index for cart user
+2025-05-17 06:24:35,532 INFO: Created or verified index for order item product
+2025-05-17 06:24:35,536 INFO: Created or verified index for order item order
+2025-05-17 06:24:35,539 INFO: Database validation and fixes completed
+2025-05-17 06:26:27,227 INFO: Starting database validation
+2025-05-17 06:26:27,244 INFO: Database backed up to instance/pos_backup_20250517_062627.db
+2025-05-17 06:26:27,246 INFO: Deleted 0 orphaned order items
+2025-05-17 06:26:27,247 INFO: Deleted 0 orphaned cart items
+2025-05-17 06:26:27,247 INFO: Deleted 0 orphaned stock movements
+2025-05-17 06:26:27,249 INFO: Updated inventory counts for 2 products
+2025-05-17 06:26:27,251 INFO: Created or verified index for product name
+2025-05-17 06:26:27,251 INFO: Created or verified index for product category
+2025-05-17 06:26:27,252 INFO: Created or verified index for product barcode
+2025-05-17 06:26:27,253 INFO: Created or verified index for order date
+2025-05-17 06:26:27,253 INFO: Created or verified index for order status
+2025-05-17 06:26:27,254 INFO: Created or verified index for order customer
+2025-05-17 06:26:27,254 INFO: Created or verified index for order viewed status
+2025-05-17 06:26:27,255 INFO: Created or verified index for stock movement product
+2025-05-17 06:26:27,256 INFO: Created or verified index for cart user
+2025-05-17 06:26:27,256 INFO: Created or verified index for order item product
+2025-05-17 06:26:27,257 INFO: Created or verified index for order item order
+2025-05-17 06:26:27,259 INFO: Database validation and fixes completed

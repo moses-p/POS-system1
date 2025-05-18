@@ -95,58 +95,37 @@
                 </div>
                 <div class="card-body">
                     {% if recent_sales %}
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Order #</th>
-                                    <th>Date</th>
-                                    <th>Customer</th>
-                                    <th>Amount</th>
-                                    <th>Status</th>
-                                    <th class="text-end">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for order in recent_sales %}
-                                <tr>
-                                    <td><a href="{{ url_for('my_sales_order_detail', order_id=order.id) }}" class="text-decoration-none">#{{ order.id }}</a></td>
-                                    <td>{{ order.order_date.strftime('%d %b %Y, %H:%M') if order.order_date else 'N/A' }}</td>
-                                    <td>
-                                        {% if order.customer_name %}
-                                            {{ order.customer_name }}
-                                        {% elif order.customer %}
-                                            {{ order.customer.name }}
-                                        {% else %}
-                                            <span class="text-muted">Guest</span>
-                                        {% endif %}
-                                    </td>
-                                    <td><span class="fw-bold">UGX {{ "{:,.0f}".format(order.total_amount) }}</span></td>
-                                    <td>
-                                        {% if order.status == 'pending' %}
-                                            <span class="badge bg-warning text-dark">Pending</span>
-                                        {% elif order.status == 'processing' %}
-                                            <span class="badge bg-info text-dark">Processing</span>
-                                        {% elif order.status == 'completed' %}
-                                            <span class="badge bg-success">Completed</span>
-                                        {% elif order.status == 'cancelled' %}
-                                            <span class="badge bg-danger">Cancelled</span>
-                                        {% else %}
-                                            <span class="badge bg-secondary">{{ order.status|capitalize }}</span>
-                                        {% endif %}
-                                    </td>
-                                    <td class="text-end">
+                    <div class="accordion" id="salesAccordion">
+                        {% for order in recent_sales %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading{{ order.id }}">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ order.id }}" aria-expanded="false" aria-controls="collapse{{ order.id }}">
+                                    <span class="me-3">#{{ order.id }}</span>
+                                    <span class="me-3">{{ order.order_date.strftime('%d %b %Y, %H:%M') if order.order_date else 'N/A' }}</span>
+                                    <span class="me-3">{% if order.customer_name %}{{ order.customer_name }}{% elif order.customer %}{{ order.customer.name }}{% else %}<span class="text-muted">Guest</span>{% endif %}</span>
+                                    <span class="fw-bold">UGX {{ order.total_amount|int }}</span>
+                                    <span class="badge bg-{% if order.status == 'pending' %}warning text-dark{% elif order.status == 'processing' %}info text-dark{% elif order.status == 'completed' %}success{% elif order.status == 'cancelled' %}danger{% else %}secondary{% endif %} me-2">{{ order.status|capitalize }}</span>
+                                </button>
+                            </h2>
+                            <div id="collapse{{ order.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ order.id }}" data-bs-parent="#salesAccordion">
+                                <div class="accordion-body">
+                                    <div><strong>Order #:</strong> {{ order.id }}</div>
+                                    <div><strong>Date:</strong> {{ order.order_date.strftime('%d %b %Y, %H:%M') if order.order_date else 'N/A' }}</div>
+                                    <div><strong>Customer:</strong> {% if order.customer_name %}{{ order.customer_name }}{% elif order.customer %}{{ order.customer.name }}{% else %}<span class="text-muted">Guest</span>{% endif %}</div>
+                                    <div><strong>Amount:</strong> UGX {{ order.total_amount|int }}</div>
+                                    <div><strong>Status:</strong> {{ order.status|capitalize }}</div>
+                                    <div class="mt-2 text-end">
                                         <a href="{{ url_for('my_sales_order_detail', order_id=order.id) }}" class="btn btn-sm btn-outline-primary me-1" title="View Details">
-                                            <i class="bi bi-eye"></i>
+                                            <i class="bi bi-eye"></i> View Details
                                         </a>
                                         <a href="{{ url_for('print_receipt', order_id=order.id) }}" class="btn btn-sm btn-outline-secondary" target="_blank" title="Print Receipt">
-                                            <i class="bi bi-printer"></i>
+                                            <i class="bi bi-printer"></i> Print Receipt
                                         </a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
                     </div>
                     {% else %}
                     <div class="alert alert-info">

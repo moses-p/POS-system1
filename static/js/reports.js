@@ -167,7 +167,7 @@ function refreshDailyReport() {
     .then(data => {
         if (typeof updateDailyChart === 'function') {
             updateDailyChart(data);
-            updateDailyTable(data);
+            safeUpdateDailyTable(data);
             
             // Flash feedback that data was updated
             const reportCard = document.querySelector('#daily .card');
@@ -319,4 +319,21 @@ function refreshYearlyReport() {
     .catch(error => {
         console.error('Error refreshing yearly report:', error);
     });
+}
+
+// Defensive wrapper for updateDailyTable
+function safeUpdateDailyTable(data) {
+    if (!data || !Array.isArray(data.dates) || data.dates.length === 0) {
+        console.error("No daily report data available or data format invalid.");
+        // Optionally, update the UI to show 'No data available.'
+        const tableBody = document.querySelector('#dailyReportTable tbody');
+        if (tableBody) {
+            tableBody.innerHTML = '<tr><td colspan="100%" class="text-center text-muted">No data available.</td></tr>';
+        }
+        return;
+    }
+    // Call the original updateDailyTable if it exists
+    if (typeof updateDailyTable === 'function') {
+        updateDailyTable(data);
+    }
 } 

@@ -161,5 +161,5 @@ The system automatically switches to offline mode when internet connection is lo
 
 ### Getting Help
 - Contact system administrator
-- Email support: arisegeniusug@gmail.com
-- Phone: +256743232445 
+- Email support: givenwholesalers1@gmail.com
+- Phone: 0782 413668 
