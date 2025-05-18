@@ -3422,21 +3422,24 @@ def send_email(subject, recipients, body, html=None):
 @app.route('/test_email')
 def test_email():
     try:
-        msg = Message('Test Email from POS System',
+        user_name = getattr(current_user, 'full_name', None) or getattr(current_user, 'username', 'Valued User')
+        msg = Message('Arise Genius POS System Notification',
                       sender=app.config['MAIL_DEFAULT_SENDER'],
                       recipients=[app.config['MAIL_DEFAULT_SENDER']])
-        msg.body = """
-        Hello!
+        msg.body = f"""
+        Hello {user_name},
 
-        Thank you for using our system. We appreciate your trust and hope you find it helpful for your business.
+        Thank you for using Arise Genius POS System. We appreciate your trust and hope you find it helpful for your business.
+
+        If you have any questions or need support, please contact us.
 
         Best regards,
-        Your POS System Team
+        Arise Genius POS System Team
         """
         mail.send(msg)
-        return 'Test email sent successfully!'
+        return 'Notification email sent successfully!'
     except Exception as e:
-        return f'Failed to send test email: {str(e)}'
+        return f'Failed to send notification email: {str(e)}'
 
 def safe_user_id():
     from flask_login import current_user

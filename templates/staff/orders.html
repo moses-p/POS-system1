@@ -51,8 +51,8 @@
         </div>
         <div class="card-body p-0">
             <div class="accordion" id="ordersAccordion">
-                {% if orders %}
-                    {% for order in orders %}
+                        {% if orders %}
+                            {% for order in orders %}
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="heading{{ order.id }}">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ order.id }}" aria-expanded="false" aria-controls="collapse{{ order.id }}">
@@ -67,8 +67,8 @@
                                     {% elif order.status == 'cancelled' %}bg-danger
                                     {% else %}bg-secondary
                                     {% endif %} me-2">
-                                    {{ order.status|title }}
-                                </span>
+                                        {{ order.status|title }}
+                                    </span>
                                 <span class="fw-bold">UGX {{ order.total_amount|int }}</span>
                             </button>
                         </h2>
@@ -86,10 +86,10 @@
                             </div>
                         </div>
                     </div>
-                    {% endfor %}
-                {% else %}
+                            {% endfor %}
+                        {% else %}
                     <div class="p-4 text-center text-muted">No orders found.</div>
-                {% endif %}
+                        {% endif %}
             </div>
         </div>
     </div>
@@ -105,9 +105,9 @@
             {% endif %}
             
             {% for p in range(1, total_pages + 1) %}
-            <li class="page-item {% if p == page %}active{% endif %}">
-                <a class="page-link" href="{{ url_for('staff_orders', page=p, status=status_filter, order_type=order_type_filter) }}">{{ p }}</a>
-            </li>
+                <li class="page-item {% if p == page %}active{% endif %}">
+                    <a class="page-link" href="{{ url_for('staff_orders', page=p, status=status_filter, order_type=order_type_filter) }}">{{ p }}</a>
+                </li>
             {% endfor %}
             
             {% if page < total_pages %}
