@@ -8,6 +8,8 @@ import time
 import logging
 import socket
 import psutil
+import webview
+from app import app, db, init_db, check_db_integrity
 # Patch sys.stdout and sys.stderr if running in a frozen (PyInstaller) windowed app
 if hasattr(sys, 'frozen'):
     if sys.stdout is None:
@@ -58,26 +60,73 @@ def find_free_port(start_port=5000, max_tries=20):
         port += 1
     raise RuntimeError("No free port found in range.")
 
-if __name__ == '__main__':
+def run_flask():
+    """Run the Flask application in a separate thread"""
     try:
-        logger.info("Starting POS system...")
-        run_checks()
-
-        port = 5000
-        if is_port_in_use(port):
-            logger.warning(f"Port {port} is in use. Attempting to kill old process...")
-            kill_process_on_port(port)
-            time.sleep(1)
-            if is_port_in_use(port):
-                logger.warning(f"Port {port} is still in use. Searching for a free port...")
-                port = find_free_port(5000)
-
-        def open_browser_dynamic():
-            time.sleep(1.5)
-            webbrowser.open(f'http://localhost:{port}')
-        threading.Thread(target=open_browser_dynamic).start()
-        logger.info(f"Starting Flask server on port {port}...")
-        app.run(debug=False, threaded=True, port=port)
+        # Initialize database if needed
+        with app.app_context():
+            if not os.path.exists('instance/pos.db'):
+                logger.info("Initializing database...")
+                init_db()
+            else:
+                logger.info("Checking database integrity...")
+                check_db_integrity()
+        
+        # Run Flask app
+        app.run(host='127.0.0.1', port=5000, debug=False)
     except Exception as e:
-        logger.error(f"Error during startup: {str(e)}")
-        sys.exit(1) 
+        logger.error(f"Error running Flask: {e}")
+        sys.exit(1)
+
+def wait_for_server(host='127.0.0.1', port=5000, timeout=30):
+    """Wait for the Flask server to become available"""
+    start_time = time.time()
+    while time.time() - start_time < timeout:
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(1)
+            result = sock.connect_ex((host, port))
+            sock.close()
+            if result == 0:
+                logger.info("Server is ready!")
+                return True
+        except Exception as e:
+            logger.debug(f"Waiting for server... {e}")
+        time.sleep(1)
+    logger.error("Server failed to start within timeout period")
+    return False
+
+def main():
+    """Main function to start the application"""
+    try:
+        # Start Flask in a separate thread
+        flask_thread = threading.Thread(target=run_flask)
+        flask_thread.daemon = True
+        flask_thread.start()
+
+        # Wait for server to be ready
+        if not wait_for_server():
+            logger.error("Failed to start server")
+            sys.exit(1)
+
+        # Create and start the window
+        window = webview.create_window(
+            'POS System',
+            'http://127.0.0.1:5000',
+            width=1200,
+            height=800,
+            resizable=True,
+            min_size=(800, 600),
+            text_select=True,
+            confirm_close=True
+        )
+        
+        # Start the GUI event loop
+        webview.start(debug=False)
+        
+    except Exception as e:
+        logger.error(f"Error starting application: {e}")
+        sys.exit(1)
+
+if __name__ == '__main__':
+    main() 

@@ -1,0 +1,378 @@
+[2025-05-20 14:37:12,187] WARNING in __init__: WebSocket transport not available. Install gevent-websocket for improved performance.
+[2025-05-20 14:37:12,187] WARNING in __init__: WebSocket transport not available. Install gevent-websocket for improved performance.
+[2025-05-20 14:37:12,187] WARNING in __init__: WebSocket transport not available. Install gevent-websocket for improved performance.
+[2025-05-20 14:37:12,187] WARNING in __init__: WebSocket transport not available. Install gevent-websocket for improved performance.
+[2025-05-20 14:37:15,313] WARNING in __init__: WebSocket transport not available. Install gevent-websocket for improved performance.
+[2025-05-20 14:37:15,313] WARNING in __init__: WebSocket transport not available. Install gevent-websocket for improved performance.
+[2025-05-20 14:37:15,313] WARNING in __init__: WebSocket transport not available. Install gevent-websocket for improved performance.
+[2025-05-20 14:37:15,313] WARNING in __init__: WebSocket transport not available. Install gevent-websocket for improved performance.
+[2025-05-21 10:10:35,241] WARNING in app: Unhandled path requested: None
+[2025-05-21 10:10:35,241] WARNING in app: Unhandled path requested: None
+[2025-05-21 10:10:35,904] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 10:10:35,904] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 10:10:36,554] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 10:10:36,554] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 10:10:36,903] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 10:10:36,903] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 10:10:51,990] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 10:10:51,990] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 10:10:52,338] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 10:10:52,338] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 10:10:53,570] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 10:10:53,570] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 10:11:44,667] WARNING in app: Unhandled path requested: None
+[2025-05-21 10:11:44,667] WARNING in app: Unhandled path requested: None
+[2025-05-21 10:12:21,445] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 10:12:21,445] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 10:12:22,139] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 10:12:22,139] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 10:12:22,979] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 10:12:22,979] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 10:14:22,601] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 10:14:22,601] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 10:16:22,324] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 10:16:22,324] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 10:18:22,618] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 10:18:22,618] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 10:20:22,312] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 10:20:22,312] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 10:22:22,618] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 10:22:22,618] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 10:24:22,318] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 10:24:22,318] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 10:27:10,636] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 10:27:10,636] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 10:29:10,663] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 10:29:10,663] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 10:30:43,096] INFO in check_and_init_db: Starting database checks
+[2025-05-21 10:30:43,096] INFO in check_and_init_db: Starting database checks
+[2025-05-21 10:30:43,134] WARNING in check_and_init_db: Admin user does not exist
+[2025-05-21 10:30:43,134] WARNING in check_and_init_db: Admin user does not exist
+[2025-05-21 10:30:43,134] INFO in check_and_init_db: Creating admin user
+[2025-05-21 10:30:43,134] INFO in check_and_init_db: Creating admin user
+[2025-05-21 10:30:43,533] INFO in check_and_init_db: Applying cart page fixes
+[2025-05-21 10:30:43,533] INFO in check_and_init_db: Applying cart page fixes
+[2025-05-21 10:30:43,533] INFO in fix_cart_issue: Starting cart issue fix
+[2025-05-21 10:30:43,533] INFO in fix_cart_issue: Starting cart issue fix
+[2025-05-21 10:30:43,533] INFO in fix_cart_issue: Cart query test successful
+[2025-05-21 10:30:43,533] INFO in fix_cart_issue: Cart query test successful
+[2025-05-21 10:30:43,567] INFO in fix_cart_issue: Database views refreshed successfully
+[2025-05-21 10:30:43,567] INFO in fix_cart_issue: Database views refreshed successfully
+[2025-05-21 10:30:43,567] INFO in fix_cart_issue: Cart issue fix completed
+[2025-05-21 10:30:43,567] INFO in fix_cart_issue: Cart issue fix completed
+[2025-05-21 10:30:43,567] INFO in check_and_init_db: Running database validation and fixes
+[2025-05-21 10:30:43,567] INFO in check_and_init_db: Running database validation and fixes
+[2025-05-21 10:30:43,567] INFO in validate_db: Starting database validation
+[2025-05-21 10:30:43,567] INFO in validate_db: Starting database validation
+[2025-05-21 10:30:43,567] INFO in validate_db: Database backed up to instance/pos_backup_20250521_103043.db
+[2025-05-21 10:30:43,567] INFO in validate_db: Database backed up to instance/pos_backup_20250521_103043.db
+[2025-05-21 10:30:43,567] INFO in validate_db: Deleted 0 orphaned order items
+[2025-05-21 10:30:43,567] INFO in validate_db: Deleted 0 orphaned order items
+[2025-05-21 10:30:43,579] INFO in validate_db: Deleted 0 orphaned cart items
+[2025-05-21 10:30:43,579] INFO in validate_db: Deleted 0 orphaned cart items
+[2025-05-21 10:30:43,580] INFO in validate_db: Deleted 0 orphaned stock movements
+[2025-05-21 10:30:43,580] INFO in validate_db: Deleted 0 orphaned stock movements
+[2025-05-21 10:30:43,582] ERROR in validate_db: Error resetting inventory counts: CHECK constraint failed: check_stock_nonnegative
+[2025-05-21 10:30:43,582] ERROR in validate_db: Error resetting inventory counts: CHECK constraint failed: check_stock_nonnegative
+[2025-05-21 10:30:49,010] WARNING in validate_db: Error creating index for product name: database is locked
+[2025-05-21 10:30:49,010] WARNING in validate_db: Error creating index for product name: database is locked
+[2025-05-21 10:30:54,436] WARNING in validate_db: Error creating index for product category: database is locked
+[2025-05-21 10:30:54,436] WARNING in validate_db: Error creating index for product category: database is locked
+[2025-05-21 10:30:59,895] WARNING in validate_db: Error creating index for product barcode: database is locked
+[2025-05-21 10:30:59,895] WARNING in validate_db: Error creating index for product barcode: database is locked
+[2025-05-21 10:31:05,373] WARNING in validate_db: Error creating index for order date: database is locked
+[2025-05-21 10:31:05,373] WARNING in validate_db: Error creating index for order date: database is locked
+[2025-05-21 10:31:10,847] WARNING in validate_db: Error creating index for order status: database is locked
+[2025-05-21 10:31:10,847] WARNING in validate_db: Error creating index for order status: database is locked
+[2025-05-21 10:31:16,044] ERROR in app: Unhandled Exception: (sqlite3.OperationalError) database is locked
+[SQL: UPDATE user SET last_seen=? WHERE user.id = ?]
+[parameters: ('2025-05-21 07:31:10.611358', 1)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2025-05-21 10:31:16,044] ERROR in app: Unhandled Exception: (sqlite3.OperationalError) database is locked
+[SQL: UPDATE user SET last_seen=? WHERE user.id = ?]
+[parameters: ('2025-05-21 07:31:10.611358', 1)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2025-05-21 10:31:16,062] ERROR in app: Template rendering error: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlite3.OperationalError) database is locked
+[SQL: UPDATE user SET last_seen=? WHERE user.id = ?]
+[parameters: ('2025-05-21 07:31:10.611358', 1)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) (Background on this error at: https://sqlalche.me/e/20/7s2a)
+[2025-05-21 10:31:16,062] ERROR in app: Template rendering error: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlite3.OperationalError) database is locked
+[SQL: UPDATE user SET last_seen=? WHERE user.id = ?]
+[parameters: ('2025-05-21 07:31:10.611358', 1)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) (Background on this error at: https://sqlalche.me/e/20/7s2a)
+[2025-05-21 10:31:16,144] ERROR in app: Unhandled Exception: (sqlite3.OperationalError) database is locked
+[SQL: UPDATE user SET last_seen=? WHERE user.id = ?]
+[parameters: ('2025-05-21 07:31:10.614339', 1)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2025-05-21 10:31:16,144] ERROR in app: Unhandled Exception: (sqlite3.OperationalError) database is locked
+[SQL: UPDATE user SET last_seen=? WHERE user.id = ?]
+[parameters: ('2025-05-21 07:31:10.614339', 1)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2025-05-21 10:31:16,144] ERROR in app: Template rendering error: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlite3.OperationalError) database is locked
+[SQL: UPDATE user SET last_seen=? WHERE user.id = ?]
+[parameters: ('2025-05-21 07:31:10.614339', 1)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) (Background on this error at: https://sqlalche.me/e/20/7s2a)
+[2025-05-21 10:31:16,144] ERROR in app: Template rendering error: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlite3.OperationalError) database is locked
+[SQL: UPDATE user SET last_seen=? WHERE user.id = ?]
+[parameters: ('2025-05-21 07:31:10.614339', 1)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) (Background on this error at: https://sqlalche.me/e/20/7s2a)
+[2025-05-21 10:31:16,262] WARNING in validate_db: Error creating index for order customer: database is locked
+[2025-05-21 10:31:16,262] WARNING in validate_db: Error creating index for order customer: database is locked
+[2025-05-21 10:31:21,701] WARNING in validate_db: Error creating index for order viewed status: database is locked
+[2025-05-21 10:31:21,701] WARNING in validate_db: Error creating index for order viewed status: database is locked
+[2025-05-21 10:31:23,701] ERROR in app: Unhandled Exception: (sqlite3.OperationalError) database is locked
+[SQL: UPDATE user SET last_seen=? WHERE user.id = ?]
+[parameters: ('2025-05-21 07:31:18.294953', 1)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2025-05-21 10:31:23,701] ERROR in app: Unhandled Exception: (sqlite3.OperationalError) database is locked
+[SQL: UPDATE user SET last_seen=? WHERE user.id = ?]
+[parameters: ('2025-05-21 07:31:18.294953', 1)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2025-05-21 10:31:23,701] ERROR in app: Template rendering error: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlite3.OperationalError) database is locked
+[SQL: UPDATE user SET last_seen=? WHERE user.id = ?]
+[parameters: ('2025-05-21 07:31:18.294953', 1)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) (Background on this error at: https://sqlalche.me/e/20/7s2a)
+[2025-05-21 10:31:23,701] ERROR in app: Template rendering error: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlite3.OperationalError) database is locked
+[SQL: UPDATE user SET last_seen=? WHERE user.id = ?]
+[parameters: ('2025-05-21 07:31:18.294953', 1)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) (Background on this error at: https://sqlalche.me/e/20/7s2a)
+[2025-05-21 10:31:27,149] WARNING in validate_db: Error creating index for stock movement product: database is locked
+[2025-05-21 10:31:27,149] WARNING in validate_db: Error creating index for stock movement product: database is locked
+[2025-05-21 10:31:31,115] ERROR in app: Unhandled Exception: (sqlite3.OperationalError) database is locked
+[SQL: UPDATE user SET last_seen=? WHERE user.id = ?]
+[parameters: ('2025-05-21 07:31:25.603493', 1)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2025-05-21 10:31:31,115] ERROR in app: Unhandled Exception: (sqlite3.OperationalError) database is locked
+[SQL: UPDATE user SET last_seen=? WHERE user.id = ?]
+[parameters: ('2025-05-21 07:31:25.603493', 1)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2025-05-21 10:31:31,121] ERROR in app: Template rendering error: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlite3.OperationalError) database is locked
+[SQL: UPDATE user SET last_seen=? WHERE user.id = ?]
+[parameters: ('2025-05-21 07:31:25.603493', 1)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) (Background on this error at: https://sqlalche.me/e/20/7s2a)
+[2025-05-21 10:31:31,121] ERROR in app: Template rendering error: This Session's transaction has been rolled back due to a previous exception during flush. To begin a new transaction with this Session, first issue Session.rollback(). Original exception was: (sqlite3.OperationalError) database is locked
+[SQL: UPDATE user SET last_seen=? WHERE user.id = ?]
+[parameters: ('2025-05-21 07:31:25.603493', 1)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8) (Background on this error at: https://sqlalche.me/e/20/7s2a)
+[2025-05-21 10:31:32,592] WARNING in validate_db: Error creating index for cart user: database is locked
+[2025-05-21 10:31:32,592] WARNING in validate_db: Error creating index for cart user: database is locked
+[2025-05-21 10:31:38,060] WARNING in validate_db: Error creating index for order item product: database is locked
+[2025-05-21 10:31:38,060] WARNING in validate_db: Error creating index for order item product: database is locked
+[2025-05-21 10:31:43,500] WARNING in validate_db: Error creating index for order item order: database is locked
+[2025-05-21 10:31:43,500] WARNING in validate_db: Error creating index for order item order: database is locked
+[2025-05-21 10:31:43,506] INFO in validate_db: Database validation and fixes completed
+[2025-05-21 10:31:43,506] INFO in validate_db: Database validation and fixes completed
+[2025-05-21 10:31:43,507] INFO in check_and_init_db: Database checks completed
+[2025-05-21 10:31:43,507] INFO in check_and_init_db: Database checks completed
+[2025-05-21 11:17:07,811] INFO in check_and_init_db: Starting database checks
+[2025-05-21 11:17:07,811] INFO in check_and_init_db: Starting database checks
+[2025-05-21 11:17:07,856] INFO in check_and_init_db: Applying cart page fixes
+[2025-05-21 11:17:07,856] INFO in check_and_init_db: Applying cart page fixes
+[2025-05-21 11:17:07,857] INFO in fix_cart_issue: Starting cart issue fix
+[2025-05-21 11:17:07,857] INFO in fix_cart_issue: Starting cart issue fix
+[2025-05-21 11:17:07,858] INFO in fix_cart_issue: Cart query test successful
+[2025-05-21 11:17:07,858] INFO in fix_cart_issue: Cart query test successful
+[2025-05-21 11:17:07,870] INFO in fix_cart_issue: Database views refreshed successfully
+[2025-05-21 11:17:07,870] INFO in fix_cart_issue: Database views refreshed successfully
+[2025-05-21 11:17:07,871] INFO in fix_cart_issue: Cart issue fix completed
+[2025-05-21 11:17:07,871] INFO in fix_cart_issue: Cart issue fix completed
+[2025-05-21 11:17:07,871] INFO in check_and_init_db: Running database validation and fixes
+[2025-05-21 11:17:07,871] INFO in check_and_init_db: Running database validation and fixes
+[2025-05-21 11:17:07,873] INFO in validate_db: Starting database validation
+[2025-05-21 11:17:07,873] INFO in validate_db: Starting database validation
+[2025-05-21 11:17:07,873] INFO in validate_db: Database backed up to instance/pos_backup_20250521_111707.db
+[2025-05-21 11:17:07,873] INFO in validate_db: Database backed up to instance/pos_backup_20250521_111707.db
+[2025-05-21 11:17:07,878] INFO in validate_db: Deleted 0 orphaned order items
+[2025-05-21 11:17:07,878] INFO in validate_db: Deleted 0 orphaned order items
+[2025-05-21 11:17:07,879] INFO in validate_db: Deleted 0 orphaned cart items
+[2025-05-21 11:17:07,879] INFO in validate_db: Deleted 0 orphaned cart items
+[2025-05-21 11:17:07,880] INFO in validate_db: Deleted 0 orphaned stock movements
+[2025-05-21 11:17:07,880] INFO in validate_db: Deleted 0 orphaned stock movements
+[2025-05-21 11:17:07,881] ERROR in validate_db: Error resetting inventory counts: CHECK constraint failed: check_stock_nonnegative
+[2025-05-21 11:17:07,881] ERROR in validate_db: Error resetting inventory counts: CHECK constraint failed: check_stock_nonnegative
+[2025-05-21 11:17:13,339] WARNING in validate_db: Error creating index for product name: database is locked
+[2025-05-21 11:17:13,339] WARNING in validate_db: Error creating index for product name: database is locked
+[2025-05-21 11:17:18,839] WARNING in validate_db: Error creating index for product category: database is locked
+[2025-05-21 11:17:18,839] WARNING in validate_db: Error creating index for product category: database is locked
+[2025-05-21 11:17:24,260] WARNING in validate_db: Error creating index for product barcode: database is locked
+[2025-05-21 11:17:24,260] WARNING in validate_db: Error creating index for product barcode: database is locked
+[2025-05-21 11:17:29,704] WARNING in validate_db: Error creating index for order date: database is locked
+[2025-05-21 11:17:29,704] WARNING in validate_db: Error creating index for order date: database is locked
+[2025-05-21 11:17:35,148] WARNING in validate_db: Error creating index for order status: database is locked
+[2025-05-21 11:17:35,148] WARNING in validate_db: Error creating index for order status: database is locked
+[2025-05-21 11:17:40,639] WARNING in validate_db: Error creating index for order customer: database is locked
+[2025-05-21 11:17:40,639] WARNING in validate_db: Error creating index for order customer: database is locked
+[2025-05-21 11:17:46,070] WARNING in validate_db: Error creating index for order viewed status: database is locked
+[2025-05-21 11:17:46,070] WARNING in validate_db: Error creating index for order viewed status: database is locked
+[2025-05-21 11:17:51,542] WARNING in validate_db: Error creating index for stock movement product: database is locked
+[2025-05-21 11:17:51,542] WARNING in validate_db: Error creating index for stock movement product: database is locked
+[2025-05-21 11:17:56,974] WARNING in validate_db: Error creating index for cart user: database is locked
+[2025-05-21 11:17:56,974] WARNING in validate_db: Error creating index for cart user: database is locked
+[2025-05-21 11:18:02,443] WARNING in validate_db: Error creating index for order item product: database is locked
+[2025-05-21 11:18:02,443] WARNING in validate_db: Error creating index for order item product: database is locked
+[2025-05-21 11:18:07,912] WARNING in validate_db: Error creating index for order item order: database is locked
+[2025-05-21 11:18:07,912] WARNING in validate_db: Error creating index for order item order: database is locked
+[2025-05-21 11:18:07,912] INFO in validate_db: Database validation and fixes completed
+[2025-05-21 11:18:07,912] INFO in validate_db: Database validation and fixes completed
+[2025-05-21 11:18:07,912] INFO in check_and_init_db: Database checks completed
+[2025-05-21 11:18:07,912] INFO in check_and_init_db: Database checks completed
+[2025-05-21 11:20:36,208] WARNING in __init__: WebSocket transport not available. Install gevent-websocket for improved performance.
+[2025-05-21 11:20:36,208] WARNING in __init__: WebSocket transport not available. Install gevent-websocket for improved performance.
+[2025-05-21 11:20:36,208] WARNING in __init__: WebSocket transport not available. Install gevent-websocket for improved performance.
+[2025-05-21 11:20:36,208] WARNING in __init__: WebSocket transport not available. Install gevent-websocket for improved performance.
+[2025-05-21 11:20:39,790] WARNING in __init__: WebSocket transport not available. Install gevent-websocket for improved performance.
+[2025-05-21 11:20:39,790] WARNING in __init__: WebSocket transport not available. Install gevent-websocket for improved performance.
+[2025-05-21 11:20:39,790] WARNING in __init__: WebSocket transport not available. Install gevent-websocket for improved performance.
+[2025-05-21 11:20:39,790] WARNING in __init__: WebSocket transport not available. Install gevent-websocket for improved performance.
+[2025-05-21 11:23:21,930] WARNING in app: Unhandled path requested: None
+[2025-05-21 11:23:21,930] WARNING in app: Unhandled path requested: None
+[2025-05-21 11:23:22,543] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:23:22,543] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:23:22,734] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:23:22,734] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:23:24,299] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:23:24,299] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:23:50,098] WARNING in app: Unhandled path requested: None
+[2025-05-21 11:23:50,098] WARNING in app: Unhandled path requested: None
+[2025-05-21 11:23:50,152] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:23:50,152] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:23:50,381] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:23:50,381] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:23:51,930] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:23:51,930] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:23:52,701] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:23:52,701] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:23:52,776] WARNING in app: Unhandled path requested: None
+[2025-05-21 11:23:52,776] WARNING in app: Unhandled path requested: None
+[2025-05-21 11:23:52,787] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:23:52,787] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:23:52,875] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:23:52,875] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:23:52,905] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:23:52,905] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:23:54,437] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:23:54,437] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:23:54,966] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:23:54,966] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:23:55,034] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:23:55,034] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:23:56,581] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:23:56,581] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:25:21,762] INFO in app: Email sent to ['givenwholesalers1@gmail.com'] with subject 'User Login Notification: Eddy Mutwe'
+[2025-05-21 11:25:21,762] INFO in app: Email sent to ['givenwholesalers1@gmail.com'] with subject 'User Login Notification: Eddy Mutwe'
+[2025-05-21 11:25:21,762] INFO in app: Email sent to ['givenwholesalers1@gmail.com'] with subject 'User Login Notification: Eddy Mutwe'
+[2025-05-21 11:25:21,762] INFO in app: Email sent to ['givenwholesalers1@gmail.com'] with subject 'User Login Notification: Eddy Mutwe'
+[2025-05-21 11:25:22,216] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:25:22,216] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:25:22,511] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:25:22,511] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:25:24,097] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:25:24,097] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:26:04,217] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:26:04,217] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:26:04,338] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:26:04,338] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:26:05,930] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:26:05,930] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:12,883] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:12,883] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:13,059] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:27:13,059] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:27:14,593] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:14,593] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:19,819] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:19,819] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:20,044] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:27:20,044] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:27:21,818] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:21,818] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:23,299] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:23,299] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:23,398] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:27:23,398] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:27:27,177] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:27,177] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:27,310] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:27,310] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:27,393] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:27:27,393] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:27:28,977] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:28,977] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:31,372] WARNING in app: Unhandled path requested: None
+[2025-05-21 11:27:31,372] WARNING in app: Unhandled path requested: None
+[2025-05-21 11:27:31,493] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:31,493] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:31,783] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:27:31,783] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:27:33,305] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:33,305] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:41,356] WARNING in app: Unhandled path requested: None
+[2025-05-21 11:27:41,356] WARNING in app: Unhandled path requested: None
+[2025-05-21 11:27:41,397] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:41,397] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:41,479] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:27:41,479] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:27:42,300] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:42,300] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:42,395] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:27:42,395] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:27:42,464] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:42,464] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:42,501] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:27:42,501] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:27:43,018] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:43,018] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:44,062] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:44,062] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:46,378] WARNING in app: Unhandled path requested: None
+[2025-05-21 11:27:46,378] WARNING in app: Unhandled path requested: None
+[2025-05-21 11:27:47,644] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:47,644] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:47,746] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:27:47,746] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:27:49,345] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:27:49,345] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:28:11,637] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:28:11,637] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:28:14,330] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:28:14,330] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:28:14,478] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:28:14,478] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:28:16,000] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:28:16,000] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:28:19,343] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:28:19,343] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:28:19,516] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:28:19,516] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:28:20,837] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:28:20,837] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:28:20,926] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:28:20,926] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:28:21,246] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:28:21,246] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:28:22,552] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:28:22,552] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:29:16,828] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:29:16,828] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:29:17,038] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:29:17,038] WARNING in app: Unhandled path requested: templates/offline.html
+[2025-05-21 11:29:18,615] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:29:18,615] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:31:17,659] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:31:17,659] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:33:17,314] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:33:17,314] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:35:19,151] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:35:19,151] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:37:17,327] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:37:17,327] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:39:17,625] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:39:17,625] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:41:17,631] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:41:17,631] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:44:10,799] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:44:10,799] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:46:10,398] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:46:10,398] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:48:10,340] WARNING in app: Unhandled path requested: service-worker.js
+[2025-05-21 11:48:10,340] WARNING in app: Unhandled path requested: service-worker.js

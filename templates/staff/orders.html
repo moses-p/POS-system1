@@ -57,6 +57,7 @@
                         <h2 class="accordion-header" id="heading{{ order.id }}">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ order.id }}" aria-expanded="false" aria-controls="collapse{{ order.id }}">
                                 <span class="me-3">#{{ order.id }}</span>
+                                <span class="me-3 user-initials-avatar">{{ order.created_by_initials }}</span>
                                 <span class="me-3">{{ order.order_date|localtime }}</span>
                                 <span class="me-3">{{ order.customer_name or 'Anonymous Customer' }}</span>
                                 <span class="badge bg-{% if order.order_type == 'online' %}info{% else %}primary{% endif %} me-2">{{ order.order_type|replace('-', ' ')|title }}</span>
@@ -160,6 +161,7 @@
             <h2 class="accordion-header" id="heading${order.id}">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${order.id}" aria-expanded="false" aria-controls="collapse${order.id}">
                     <span class="me-3">#${order.id}</span>
+                    <span class="me-3 user-initials-avatar">${order.created_by_initials}</span>
                     <span class="me-3">${formatDate(order.order_date)}</span>
                     <span class="me-3">${order.customer_name || 'Anonymous Customer'}</span>
                     <span class="badge bg-${order.order_type==='online'?'info':'primary'} me-2">${order.order_type.replace('-',' ').replace(/\b\w/g,c=>c.toUpperCase())}</span>

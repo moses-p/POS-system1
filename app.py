@@ -1,4 +1,3 @@
-print('HELLO FROM FLASK')
 import os
 import uuid
 import json
@@ -20,7 +19,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from flask_bcrypt import Bcrypt
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.urls import url_parse
-from sqlalchemy import text, func
+from sqlalchemy import text, func, CheckConstraint
 from werkzeug.utils import secure_filename
 from functools import wraps
 from itsdangerous import URLSafeTimedSerializer, BadSignature
@@ -35,6 +34,10 @@ import pytz
 from sqlalchemy import event
 from flask_mail import Mail, Message
 from flask_socketio import SocketIO, emit
+from logging.handlers import RotatingFileHandler
+
+# Create logger instance
+logger = logging.getLogger(__name__)
 
 # Define what's available for import
 __all__ = ['app', 'init_db', 'db']
@@ -44,6 +47,46 @@ APP_VERSION = str(uuid.uuid4())[:8]
 # Use a stable timestamp that only changes when the server restarts
 APP_TIMESTAMP = str(int(datetime.now().timestamp()))
 
+# Initialize Flask app first
+app = Flask(__name__)
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your-secret-key-here')
+
+# Configure logging
+def setup_logging():
+    if getattr(sys, 'frozen', False):
+        # If the application is run as a bundle
+        application_path = os.path.dirname(sys.executable)
+    else:
+        # If the application is run from a Python interpreter
+        application_path = os.path.dirname(os.path.abspath(__file__))
+    
+    # Create logs directory if it doesn't exist
+    logs_path = os.path.join(application_path, 'logs')
+    if not os.path.exists(logs_path):
+        os.makedirs(logs_path)
+    
+    # Configure logging
+    log_file = os.path.join(logs_path, 'pos_system.log')
+    handler = RotatingFileHandler(log_file, maxBytes=10000000, backupCount=5)
+    handler.setFormatter(logging.Formatter(
+        '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
+    ))
+    
+    # Set up root logger
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.INFO)
+    root_logger.addHandler(handler)
+    
+    # Set up Flask logger
+    app.logger.setLevel(logging.INFO)
+    app.logger.addHandler(handler)
+    
+    # Suppress Werkzeug's logging
+    logging.getLogger('werkzeug').setLevel(logging.ERROR)
+
+# Move setup_logging() here, after app is defined
+setup_logging()
+
 # Simple relativedelta alternative to add months
 def add_months(dt, months):
     month = dt.month - 1 + months
@@ -51,14 +94,6 @@ def add_months(dt, months):
     month = month % 12 + 1
     day = min(dt.day, [31, 29 if year % 4 == 0 and (year % 100 != 0 or year % 400 == 0) else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month-1])
     return dt.replace(year=year, month=month, day=day)
-
-# Configure logging
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]',
-    handlers=[logging.StreamHandler(sys.stdout)]
-)
-logger = logging.getLogger(__name__)
 
 def admin_required(f):
     @wraps(f)
@@ -76,15 +111,38 @@ def staff_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your-secret-key-here')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.abspath('instance/pos.db')
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath('.'), relative_path)
+
+# Update database configuration
+def get_db_path():
+    if getattr(sys, 'frozen', False):
+        # If the application is run as a bundle
+        application_path = os.path.dirname(sys.executable)
+    else:
+        # If the application is run from a Python interpreter
+        application_path = os.path.dirname(os.path.abspath(__file__))
+    
+    # Create instance folder if it doesn't exist
+    instance_path = os.path.join(application_path, 'instance')
+    if not os.path.exists(instance_path):
+        os.makedirs(instance_path)
+    
+    return os.path.join(instance_path, 'pos.db')
+
+# Update the database configuration
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{get_db_path()}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SESSION_TYPE'] = 'filesystem'  # Store sessions in files
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=5)  # Session expiration time
 
-# Ensure static files are found correctly
-app.static_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
+# Call setup_logging after app is initialized
+setup_logging()
+
+# Ensure static files are found correctly (support PyInstaller)
+app.static_folder = resource_path('static')
 app.static_url_path = '/static'
 
 # Enable CORS for all routes
@@ -266,6 +324,10 @@ def receive_before_update(mapper, connection, target):
         target.update_initials()
 
 class Product(db.Model):
+    __tablename__ = 'product'
+    __table_args__ = (
+        CheckConstraint('stock >= 0', name='check_stock_nonnegative'),
+    )
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=True)
@@ -3523,14 +3585,14 @@ def staff_orders():
         
         order_data = cursor.fetchall()
         
-        # Get staff names for created_by_id
+        # Get staff names and initials for created_by_id
         staff_dict = {}
         staff_ids = [row[7] for row in order_data if row[7] is not None]
         if staff_ids:
             placeholders = ','.join(['?'] * len(staff_ids))
-            cursor.execute(f"SELECT id, username FROM user WHERE id IN ({placeholders})", staff_ids)
-            for staff_id, username in cursor.fetchall():
-                staff_dict[staff_id] = username
+            cursor.execute(f"SELECT id, username, initials FROM user WHERE id IN ({placeholders})", staff_ids)
+            for staff_id, username, initials in cursor.fetchall():
+                staff_dict[staff_id] = {'username': username, 'initials': initials}
         
         # Create a list of SimpleNamespace objects to mimic ORM
         orders = []
@@ -3541,13 +3603,9 @@ def staff_orders():
                 try:
                     order_date = datetime.fromisoformat(order_date.replace('Z', '+00:00'))
                 except (ValueError, AttributeError):
-                    # If conversion fails, use current time as fallback
                     order_date = datetime.utcnow()
-            
-            # Get staff name
             created_by_id = order_row[7]
-            created_by = staff_dict.get(created_by_id, 'System') if created_by_id else 'System'
-            
+            created_by = staff_dict.get(created_by_id, {'username': 'System', 'initials': ''}) if created_by_id else {'username': 'System', 'initials': ''}
             order = SimpleNamespace(
                 id=order_row[0],
                 customer_name=order_row[1],
@@ -3556,7 +3614,8 @@ def staff_orders():
                 status=order_row[4],
                 order_type=order_row[5],
                 viewed=order_row[6],
-                created_by=created_by
+                created_by=created_by['username'],
+                created_by_initials=created_by['initials']
             )
             orders.append(order)
         
@@ -3790,7 +3849,32 @@ def staff_update_order_status(order_id):
         flash(f"Error updating order: {str(e)}", "error")
         return redirect(url_for('staff_order_detail', order_id=order_id))
 
-socketio = SocketIO(app)
+def choose_async_mode():
+    import sys
+    if getattr(sys, 'frozen', False):
+        # In packaged app, use threading for best compatibility
+        return 'threading'
+    try:
+        import gevent
+        return 'gevent'
+    except ImportError:
+        pass
+    try:
+        import eventlet
+        return 'eventlet'
+    except ImportError:
+        pass
+    return 'threading'
+
+async_mode = choose_async_mode()
+print(f"Using async_mode: {async_mode}")
+
+try:
+    socketio = SocketIO(app, async_mode=async_mode, cors_allowed_origins="*")
+except ValueError as e:
+    print(f"SocketIO init failed with async_mode={async_mode}: {e}")
+    print("Falling back to 'threading' mode.")
+    socketio = SocketIO(app, async_mode='threading', cors_allowed_origins="*")
 
 @socketio.on('ping_last_seen')
 def handle_ping_last_seen():
@@ -3812,4 +3896,4 @@ if __name__ == '__main__':
     
     # Run app with permissive host to allow access from all IPs in local network
     # This can help with network-related 403 errors
-    socketio.run(app, host='0.0.0.0', port=5000, debug=True) 
+    socketio.run(app, host='0.0.0.0', port=5000, debug=True, allow_unsafe_werkzeug=True) 

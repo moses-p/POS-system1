@@ -9,7 +9,69 @@ if exist "build" rmdir /s /q "build"
 
 REM Run PyInstaller
 echo Running PyInstaller...
-python -m PyInstaller --onefile --windowed --name "POS System" --add-data "templates;templates" --add-data "static;static" --add-data "instance;instance" --add-data "migrations;migrations" --add-data ".env;." --add-data "check_and_init_db.py;." --add-data "Install.bat;." pos_launcher.py
+python -m PyInstaller --onefile --windowed ^
+    --hidden-import=eventlet.hubs.epolls ^
+    --hidden-import=eventlet.hubs.kqueue ^
+    --hidden-import=eventlet.hubs.selects ^
+    --hidden-import=eventlet.hubs.polls ^
+    --hidden-import=dns ^
+    --hidden-import=dns.rdtypes ^
+    --hidden-import=dns.rdtypes.ANY ^
+    --hidden-import=dns.rdtypes.IN ^
+    --hidden-import=dns.rdatatype ^
+    --hidden-import=dns.rdataclass ^
+    --hidden-import=dns.name ^
+    --hidden-import=dns.exception ^
+    --hidden-import=dns.inet ^
+    --hidden-import=dns.ipv4 ^
+    --hidden-import=dns.ipv6 ^
+    --hidden-import=dns.resolver ^
+    --hidden-import=dns.query ^
+    --hidden-import=dns.dnssec ^
+    --hidden-import=dns.zone ^
+    --hidden-import=dns.message ^
+    --hidden-import=dns.tsigkeyring ^
+    --hidden-import=dns.update ^
+    --hidden-import=dns.tsig ^
+    --hidden-import=dns.e164 ^
+    --hidden-import=dns.reversename ^
+    --hidden-import=dns.tokenizer ^
+    --hidden-import=dns.asyncquery ^
+    --hidden-import=dns.asyncresolver ^
+    --hidden-import=dns.namedict ^
+    --hidden-import=dns._compat ^
+    --hidden-import=dns._asyncbackend ^
+    --hidden-import=dns._socket ^
+    --hidden-import=dns._udp ^
+    --hidden-import=dns._tcp ^
+    --hidden-import=dns._tls ^
+    --hidden-import=dns._http ^
+    --hidden-import=dns._https ^
+    --hidden-import=dns._network ^
+    --hidden-import=dns._version ^
+    --hidden-import=dns._immutable ^
+    --hidden-import=dns._python ^
+    --hidden-import=dns._dnssec ^
+    --hidden-import=dns._edns ^
+    --hidden-import=dns._rdata ^
+    --hidden-import=dns._rrset ^
+    --hidden-import=dns._tokenizer ^
+    --hidden-import=dns._tsig ^
+    --hidden-import=dns._update ^
+    --hidden-import=dns._wiredata ^
+    --hidden-import=dns._zone ^
+    --name "POS System" ^
+    --add-data "templates;templates" ^
+    --add-data "static;static" ^
+    --add-data "instance;instance" ^
+    --add-data "migrations;migrations" ^
+    --add-data ".env;." ^
+    --add-data "check_and_init_db.py;." ^
+    --add-data "Install.bat;." ^
+    pos_launcher.py
+
+REM Create distribution directory if it doesn't exist
+if not exist "dist\POS System" mkdir "dist\POS System"
 
 REM Copy the Install.bat file to the distribution folder
 echo Copying installation script...

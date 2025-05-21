@@ -2,6 +2,9 @@
 Direct line fix for app.py indentation issues
 """
 import shutil
+import sqlite3
+import os
+from datetime import datetime
 
 # Make a backup
 shutil.copy('app.py', 'app.py.direct_backup')
@@ -71,4 +74,41 @@ except py_compile.PyCompileError as e:
     print(f"Syntax errors still exist: {str(e)}")
     print("Restoring from backup...")
     shutil.copy('app.py.direct_backup', 'app.py')
-    print("Original file restored") 
+    print("Original file restored")
+
+def fix_database():
+    # Backup the database first
+    if os.path.exists('instance/pos.db'):
+        backup_file = f'instance/pos_backup_{datetime.now().strftime("%Y%m%d_%H%M%S")}.db'
+        shutil.copy2('instance/pos.db', backup_file)
+        print(f"Created backup at {backup_file}")
+
+    # Connect to the database
+    conn = sqlite3.connect('instance/pos.db')
+    cursor = conn.cursor()
+
+    try:
+        # Fix negative stock values
+        cursor.execute("UPDATE product SET stock = 0 WHERE stock < 0")
+        print("Fixed negative stock values")
+
+        # Delete orphaned records
+        cursor.execute("DELETE FROM order_item WHERE order_id NOT IN (SELECT id FROM [order])")
+        cursor.execute("DELETE FROM cart_item WHERE cart_id NOT IN (SELECT id FROM cart)")
+        cursor.execute("DELETE FROM stock_movement WHERE product_id NOT IN (SELECT id FROM product)")
+        print("Cleaned up orphaned records")
+
+        # Commit changes
+        conn.commit()
+        print("Database fixes applied successfully!")
+
+    except Exception as e:
+        print(f"Error fixing database: {e}")
+        conn.rollback()
+    finally:
+        conn.close()
+
+if __name__ == "__main__":
+    print("Starting direct database fix...")
+    fix_database()
+    print("Database fix completed!") 
